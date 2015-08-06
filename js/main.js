@@ -44,7 +44,6 @@ $(function(){
 				url : urls,
 				type : "post"
 			}).then(function(result) {
-		        ga('send', 'event', 'link', 'click', 'ArticleMore');
 				$(result).replaceAll('#articleMore');
 	        });
 	    });

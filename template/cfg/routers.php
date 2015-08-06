@@ -79,7 +79,7 @@ function mainPageMoreCtrl() {
             "menu.extension_id" => 2
         ),
         "ORDER" => "content.publish_up DESC",
-        "LIMIT" => array(10, 100)
+        "LIMIT" => array(3, 100)
     ));
 
     // echo $db->last_query();
