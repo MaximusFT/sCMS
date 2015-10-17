@@ -28,7 +28,7 @@ class AltoRouter {
 		$this->addMatchTypes($matchTypes);
 		$this->db = new medoo();
 	}
-	
+
 	/**
 	 * Retrieves all routes.
 	 * Useful if you want to process or display routes.
@@ -64,6 +64,8 @@ class AltoRouter {
 	 */
 	public function setBasePath($basePath) {
 		$this->basePath = $basePath;
+		$this->lang = substr($basePath, 1);
+		// echo '<pre>'; print_r($this->lang); echo '</pre>';
 	}
 
 	/**
@@ -117,7 +119,7 @@ class AltoRouter {
 
 		// Replace named parameters
 		$route = $this->namedRoutes[$routeName];
-		
+
 		// prepend base path to route url again
 		$url = $this->basePath . $route;
 
@@ -160,7 +162,12 @@ class AltoRouter {
 		}
 
 		// strip base path from request url
-		$requestUrl = substr($requestUrl, strlen($this->basePath));
+		$pos2 = stripos($requestUrl, $this->basePath);
+		if ($pos2 !== false) {
+			$requestUrl = substr($requestUrl, strlen($this->basePath));
+		} else {
+			$notLng = true;
+		}
 
 		// Strip query string (?a=b) from Request Url
 		if (($strpos = strpos($requestUrl, '?')) !== false) {
@@ -230,6 +237,11 @@ class AltoRouter {
 			}
 
 			if(($match == true || $match > 0)) {
+				if ($notLng == true) {
+					return [
+						'header' => 301,
+					];
+				}
 
 				if($params) {
 					foreach($params as $key => $value) {
@@ -239,28 +251,34 @@ class AltoRouter {
 
 				$resMenus = $this->db->select("menutype", '*');
 				foreach ($resMenus as $key => $value) {
-					$qTmp = $this->db->select("menu", '*', array(
-						"AND" => array(
+					$qTmp = $this->db->select("menu", '*', [
+						"AND" => [
 							"menutype_id"=>$value['id'],
+							"lang"=>$this->lang,
+							"level"=>1,
 							"published" => 1
-							)
-						)
+							],
+						"ORDER" => ['pos ASC']
+						]
 					);
 					$Menus[$value['name']] = $qTmp;
 				}
-				$resMenu = $this->db->get("menu", '*', array(
-					"AND" => array(
+				$resMenu = $this->db->get("menu", '*', [
+					"AND" => [
 						"id"=>$id,
 						"published" => 1
-						)
-					)
+						]
+					]
 				);
-				$resMenu['extension'] = $this->db->get("extension", '*', array("id"=>$resMenu['extension_id']));
+
+				$resMenu['extension'] = $this->db->get("extension", '*', ["id"=>$resMenu['extension_id']]);
 
 				$resMenu['extension']['params'] = json_decode($resMenu['extension']['params']);
-				$resContent = $this->db->get("content", '*', array("id"=>$resMenu['link_id']));
+				$resContent = $this->db->get("content", '*', [
+					"id"=>$resMenu['link_id']
+				]);
 
-				return array(
+				return [
 					'target' => $target,
 					'params' => $params,
 					'name' => $name,
@@ -268,10 +286,27 @@ class AltoRouter {
 					'qCont' => $resContent,
 					'qContId' => $resMenu['link_id'],
 					'qMenus' => $Menus,
-				);
+				];
 			}
 		}
-		return false;
+		$resMenus = $this->db->select("menutype", '*');
+		foreach ($resMenus as $key => $value) {
+			$qTmp = $this->db->select("menu", '*', [
+				"AND" => [
+					"menutype_id"=>$value['id'],
+					"lang"=>$this->lang,
+					"level"=>1,
+					"published" => 1
+					],
+				"ORDER" => ['pos ASC']
+				]
+			);
+			$Menus[$value['name']] = $qTmp;
+		}
+
+		return [
+			'qMenus' => $Menus,
+		];
 	}
 
 	/**
@@ -308,15 +343,15 @@ class AltoRouter {
 	}
 
 	public function mapdb() {
-		$res = $this->db->select("menu", '*', array(
-			"AND" => array(
-				"id[>]" => 1,
+		$res = $this->db->select("menu", '*', [
+			"AND" => [
+				"lang"=>$this->lang,
 				"published" => 1
-				)
-			)
+				]
+			]
 		);
 	    foreach ($res as $value) {
-			$this->routes[] = array($value['method'], $value['path'], $value['function'], '', $value['id']);
+			$this->routes[] = [$value['method'], $value['path'], $value['function'], '', $value['id']];
 	    }
 
 		return;

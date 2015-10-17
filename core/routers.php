@@ -5,8 +5,11 @@
  */
 
 $router = new AltoRouter();
+$router->setBasePath('/'.$langUser);
 $router->mapdb();
-$res = json_decode(json_encode($router->match()), FALSE);
+$res = new stdClass();
+$resDecode = json_decode(json_encode($router->match()), FALSE);
+$res = ($resDecode == '')? (new stdClass()):$resDecode;
 $res->addToHead = '';
 $res->fileName = P_VIEW.$res->qCont->fileName.'.php';
 
@@ -20,9 +23,9 @@ function mainPageCtrl() {
     global $res;
     global $db;
 
-    $qListContent = $db->select("menu", array(
-        "[>]content" => array("link_id" => "id")
-    ), array(
+    $qListContent = $db->select("menu", [
+        "[>]content" => ["link_id" => "id"]
+    ], [
         "menu.id",
         "menu.path",
         "menu.title",
@@ -36,21 +39,21 @@ function mainPageCtrl() {
         "content.h1Description(content_h1Description)",
         "content.alias(content_alias)",
         "content.publish_up(content_publish_up)"
-    ), array(
-        "AND" => array(
+    ], [
+        "AND" => [
             "menu.published" => 1,
             "content.published" => 1,
             "menu.extension_id" => 2
-        ),
+        ],
         "ORDER" => "content.publish_up DESC",
         "LIMIT" => 3
-    ));
+    ]);
 
     // echo $db->last_query();
     // var_dump($db->error());
 
     $res->qListContent = json_decode(json_encode($qListContent), FALSE);
-    
+
     return;
 }
 
@@ -58,9 +61,9 @@ function mainPageMoreCtrl() {
     global $res;
     global $db;
 
-    $qListContent = $db->select("menu", array(
-        "[>]content" => array("link_id" => "id")
-    ), array(
+    $qListContent = $db->select("menu", [
+        "[>]content" => ["link_id" => "id"]
+    ], [
         "menu.id",
         "menu.path",
         "menu.alias",
@@ -73,20 +76,20 @@ function mainPageMoreCtrl() {
         "content.h1Description(content_h1Description)",
         "content.alias(content_alias)",
         "content.publish_up(content_publish_up)"
-    ), array(
-        "AND" => array(
+    ], [
+        "AND" => [
             "menu.published" => 1,
             "menu.extension_id" => 2
-        ),
+        ],
         "ORDER" => "content.publish_up DESC",
         "LIMIT" => array(3, 100)
-    ));
+    ]);
 
     // echo $db->last_query();
     // var_dump($db->error());
 
     $res->qListContent = json_decode(json_encode($qListContent), FALSE);
-    
+
     return;
 }
 
@@ -96,16 +99,16 @@ function subscribeCtrl() {
 
     $email = $_POST['sEmail'];
     $param = $_POST['sParams'];
-    
+
     $qqq = explode('|', $param);
-    
-    $qComment = $db->insert("comment", array(
+
+    $qComment = $db->insert("comment", [
         "url" => $qqq[0],
         "content_id" => $qqq[1],
         "email" => $email,
         "type" => 'subscribe',
-    ));
-    
+    ]);
+
     exit();
 }
 
@@ -113,7 +116,7 @@ function unsubscribeCtrl() {
     global $res;
 
     $res->addToHead .= '<meta name="robots" content="noindex, follow" />';
-    
+
     return;
 }
 
@@ -130,7 +133,7 @@ function askingDoCtrl() {
     @$print = $_POST['aPrint'];
     $param = $_POST['aParams'];
 
-    $qComment = $db->insert("comment", array(
+    $qComment = $db->insert("comment", [
         "url" => $qqq[0],
         "content_id" => $qqq[1],
         "name" => $name,
@@ -138,8 +141,8 @@ function askingDoCtrl() {
         "email" => $email,
         "type" => 'asking',
         "comment" => $question
-    ));
-    
+    ]);
+
     echo '<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button><strong>Успех!</strong> Ваш вопрос был нами получин, как только специалист подготовит ответ на вопрос, мы сообщим вам на ваш электронный почтовый адрес</div>';
     exit();
 }
@@ -148,9 +151,9 @@ function sitemapCtrl() {
     global $res;
     global $db;
 
-    $qListContent = $db->select("menu", array(
-        "[>]content" => array("link_id" => "id")
-    ), array(
+    $qListContent = $db->select("menu", [
+        "[>]content" => ["link_id" => "id"]
+    ], [
         "menu.id",
         "menu.path",
         "menu.alias",
@@ -161,14 +164,14 @@ function sitemapCtrl() {
         "content.h1Small(content_h1Small)",
         "content.alias(content_alias)",
         "content.publish_up(content_publish_up)"
-    ), array(
-        "AND" => array(
+    ], [
+        "AND" => [
             "menu.published" => 1,
             "menu.extension_id" => 2
-        ),
+        ],
         "ORDER" => "content.publish_up DESC"
-    ));
-    
+    ]);
+
     $res->qListContent = json_decode(json_encode($qListContent), FALSE);
     return;
 }
@@ -179,9 +182,9 @@ function sitemapXMLCtrl() {
 
     header ("content-type: text/xml");
 
-    $qListContent = $db->select("menu", array(
-        "[>]content" => array("link_id" => "id")
-    ), array(
+    $qListContent = $db->select("menu", [
+        "[>]content" => ["link_id" => "id"]
+    ], [
         "menu.id",
         "menu.path",
         "menu.alias",
@@ -192,16 +195,16 @@ function sitemapXMLCtrl() {
         "content.h1Small(content_h1Small)",
         "content.alias(content_alias)",
         "content.publish_up(content_publish_up)"
-    ), array(
-        "AND" => array(
+    ], [
+        "AND" => [
             "menu.id[!]" => array(2,3,9,19),
             "menu.published" => 1,
             "menu.extension_id" => array(1, 2)
-        ),
+        ],
         "ORDER" => "content.publish_up DESC"
-    ));
+    ]);
     // echo $db->last_query();
-    
+
     $res->qListContent = json_decode(json_encode($qListContent), FALSE);
 
     return;
@@ -211,9 +214,9 @@ function articlesPageCtrl() {
     global $res;
     global $db;
 
-    $qListContent = $db->select("menu", array(
-        "[>]content" => array("link_id" => "id")
-    ), array(
+    $qListContent = $db->select("menu", [
+        "[>]content" => ["link_id" => "id"]
+    ], [
         "menu.id",
         "menu.path",
         "menu.alias",
@@ -225,14 +228,14 @@ function articlesPageCtrl() {
         "content.h1Small(content_h1Small)",
         "content.alias(content_alias)",
         "content.publish_up(content_publish_up)"
-    ), array(
-        "AND" => array(
+    ], [
+        "AND" => [
             "menu.published" => 1,
             "menu.extension_id" => 2
-        ),
+        ],
         "ORDER" => "content.publish_up DESC"
-    ));
-    
+    ]);
+
     $res->qListContent = json_decode(json_encode($qListContent), FALSE);
     return;
 }
@@ -251,7 +254,7 @@ function commentCtrl() {
 
     $qqq = explode('|', $param);
 
-    $qComment = $db->insert("comment", array(
+    $qComment = $db->insert("comment", [
         "url" => $qqq[0],
         "content_id" => $qqq[1],
         "name" => $name,
@@ -259,8 +262,8 @@ function commentCtrl() {
         "email" => $email,
         "type" => 'comment',
         "comment" => $question
-    ));
-    
+    ]);
+
     echo '<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button><strong>Спасибо!</strong> Ваш комментарий был нами получин, как только модератор проверит его, он будет опубликован</div>';
     exit();
 }
@@ -269,27 +272,27 @@ function commonPageCtrl() {
     global $res;
     global $db;
 
-    $qCom = $db->select("comment", array(
+    $qCom = $db->select("comment", [
         "title",
         "name",
         "comment",
         "timecreate"
-    ), array(
-        "AND" => array(
+    ], [
+        "AND" => [
             "content_id" => $res->qCont->id,
             "type" => 'comment',
             "active" => 1
-        )
-    ));
-    
-    $qCount = $db->count("comment", array(
-        "AND" => array(
+        ]
+    ]);
+
+    $qCount = $db->count("comment", [
+        "AND" => [
             "content_id" => $res->qCont->id,
             "type" => 'comment',
             "active" => 1
-        )
-    ));
-    
+        ]
+    ]);
+
     $res->qComm = json_decode(json_encode($qCom), FALSE);
     $res->qCommCount = json_decode(json_encode($qCount), FALSE);
 
@@ -304,9 +307,22 @@ if($res && is_callable($res->target)) {
     $resFunc = call_user_func_array($res->target, $res->params);
     $resFunc = json_decode(json_encode($resFunc), FALSE);
 } else {
+    if ($res->header == 301) {
+        header('HTTP/1.1 301 Moved Permanently');
+        header('Location: '.S_URLh.$langUser.$_SERVER['REQUEST_URI']);
+        exit();
+    }
     header( $_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
+    /*
     require_once P_TMP."_head.php";
     require_once P_SITE.'404.php';
     require_once P_TMP."_ender.php";
-    exit();
+
+    if (isset($_GET['d'])) {
+        echo '<div class="debug"><pre>';
+        print_r($res);
+        echo '</pre></div>';
+    }
+    */
+    $res->fileName = P_VIEW.'404.php';
 }

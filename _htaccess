@@ -63,8 +63,7 @@
   RewriteRule ^(.*)index\.php$ http://%{HTTP_HOST}%1 [R=301,L]
   
   RewriteCond %{THE_REQUEST} ^.*/index.php 
-  RewriteRule ^(.*)index.php$ http://%{HTTP_HOST}%1 [R=301,L]
-  # RewriteRule ^(.*)index.php$ http://you_site.com [R=301,L]
+  RewriteRule ^(.*)index.php$ http://you_site.com [R=301,L]
 </IfModule>
 
 

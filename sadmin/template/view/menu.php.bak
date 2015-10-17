@@ -10,9 +10,7 @@
             <tr class="active">
                 <th></th>
                 <th><span data-toggle="tooltip" title="Тип меню">MT</span></th>
-                <th width="1%"><span data-toggle="tooltip" title="Опубликовать">P</span></th>
-                <th width="1%"><span data-toggle="tooltip" title="Язык">LN</span></th>
-                <th width="1%"><span data-toggle="tooltip" title="Порядок">O</span></th>
+                <th><span data-toggle="tooltip" title="Опубликовать">Pub</span></th>
                 <th><span data-toggle="tooltip" title="Название пункта меню">Title</span></th>
                 <th><span data-toggle="tooltip" title="Alias">Alias</span></th>
                 <th><span data-toggle="tooltip" title="Page URL path">Path</span></th>
@@ -35,8 +33,6 @@
                 data-select="menutype|name|<?=$r['menutype_id'];?>"
                 data-params="menu|menutype_id|<?=$r['id'];?>|menutype|name"><?=$r['menutype_name'];?></td>
             <td><input class="jedCheck" type="checkbox" data-params="menu|published|<?=$r['id'];?>"<?=(($r['published'] == true)?' checked="checked"':'');?>></td>
-            <td class="edit_row" data-params="menu|lang|<?=$r['id'];?>"><?=$r['lang'];?></td>
-            <td class="edit_row" data-params="menu|pos|<?=$r['id'];?>"><?=$r['pos'];?></td>
             <td class="edit_row" data-params="menu|title|<?=$r['id'];?>"><?=$r['title'];?></td>
             <td>
                 <span class="edit_row" data-params="menu|alias|<?=$r['id'];?>"><?=$r['alias'];?></span>

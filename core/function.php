@@ -87,11 +87,11 @@ function ModAdv($position, $type, $addCss = '') {
  */
 function qToDB($match){
     global $db;
-    $qRes = $db->select("page", array(
+    $qRes = $db->select("page", [
         "params"
-    ), array(
+    ], [
         "alias[=]" => $match['name']
-    ));
+    ]);
     return json_decode($qRes['0']['params'], true);
 }
 
@@ -126,7 +126,7 @@ function csv_to_array($filename='', $delimiter=',') {
  * @return [type]     [description]
  */
 function translit($st, $ru = true) {
-    $translit = array(
+    $translit = [
         'а' => 'a',     'б' => 'b',     'в' => 'v',
         'г' => 'g',     'д' => 'd',     'е' => 'e',
         'ё' => 'yo',    'ж' => 'zh',    'з' => 'z',
@@ -149,7 +149,7 @@ function translit($st, $ru = true) {
         'Ч' => 'Ch',    'Ш' => 'Sh',    'Щ' => 'Shc',
         'Ь' => '\'',    'Ы' => 'Y\'',   'Ъ' => '',
         'Э' => 'E\'',   'Ю' => 'Yu',    'Я' => 'Ya',
-    );
+    ];
     if ($ru == true) {
         $res = strtr($st, $translit);
     } else {
@@ -159,7 +159,7 @@ function translit($st, $ru = true) {
   return $res;
 }
 function translitlow($st, $ru = true) {
-    $translit = array(
+    $translit = [
         'а' => 'a',     'б' => 'b',     'в' => 'v',
         'г' => 'g',     'д' => 'd',     'е' => 'e',
         'ё' => 'yo',    'ж' => 'zh',    'з' => 'z',
@@ -186,7 +186,7 @@ function translitlow($st, $ru = true) {
         '"' => '',      '“' => '',      '”' => '',
         '«' => '',      '»' => '',      '.' => '',
         '?' => '',      '!' => '',      '$' => ''
-    );
+    ];
     if ($ru == true) {
         $res = strtr($st, $translit);
     } else {
@@ -209,27 +209,27 @@ function Analyze() {
 	$page = getenv("HTTP_REFERER");
     $time = date("Y-m-d G:i:s", time()); 
     
-    $qR = $db->select("statistics", "*", array(
+    $qR = $db->select("statistics", "*", [
         "ip[=]" => $ip,
         "ORDER" => "id DESC",
         "LIMIT" => 1
-    ));
+    ]);
 	
 	$diffTime = strtotime($time) - strtotime($qR[0]['date']);
 
     if ($diffTime > 600) {
-	    $db->insert("statistics", array(
+	    $db->insert("statistics", [
 	        "#date" => 'NOW()',
 	        "ip" => $ip,
 	        "os" => $os,
 	        "host" => $host,
 	        "page" => $page
-	    ));
-		$db->update("content", array(
+	    ]);
+		$db->update("content", [
 			"hits[+]" => 1
-		), array(
+		], [
 		    "id" => $res->qContId
-		));
+		]);
     }
 }
 
@@ -281,4 +281,8 @@ function inverseHex($color) {
     $b = (strlen($b)>1)?$b:'0'.$b;
 
     return ($prependHash?'#':NULL).$r.$g.$b;
+}
+function linkBuilder($url){
+    global $langUser;
+    return '/'.$langUser.$url;
 }

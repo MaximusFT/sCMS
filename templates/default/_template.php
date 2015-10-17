@@ -36,21 +36,21 @@ require_once P_TMP."_head.php";
             <?}?>
             <h1><?php echo $res->qCont->h1;?><?php echo ((!empty($res->qCont->h1Small))?' <small>'.$res->qCont->h1Small.'</small>':'');?></h1>
             <?php echo ((!empty($res->qCont->introText))?'<p class="well well-sm text-primary">'.$res->qCont->introText.'</p>':'');?>
-            
+
             <?php echo funPos('module', 'page-header-bottom');?>
 
         <?php echo funPos('module', 'breadcrumb');?>
         </div>
     </div>
-    
+
     <div class="container">
-        
+
         <?php echo funPos('module', 'container-top');?>
-        
+
         <div class="row">
             <?php if ($res->qMenuCurr->extension->params->aside == 'left') include P_TMP."aside.php";?>
             <div class="col-sm-8 col-md-9">
-                
+
                 <?php echo funPos('module', 'before-content-1');?>
                 <?php echo funPos('module', 'before-content-2');?>
 
@@ -61,13 +61,13 @@ require_once P_TMP."_head.php";
             </div>
             <?php if ($res->qMenuCurr->extension->params->aside == 'right') include P_TMP."aside.php";?>
         </div>
-        
+
         <?php echo funPos('module', 'container-bottom');?>
 
     </div>
-    
+
     <?php echo funPos('module', 'after-container');?>
-    
+
     <footer>
         <div class="container">
             <div id="copyright" class="row">
@@ -92,18 +92,8 @@ require_once P_TMP."_head.php";
             </div>
         </div>
     </footer>
-    
+
     <?php echo funPos('module', 'after-footer');?>
 
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <?php /* Подключается по необходимости
-	
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
-    */?>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    
-    <script src="/js/plugins.js"></script>
-    <script src="/js/main.js"></script>
 </body>
 </html>
