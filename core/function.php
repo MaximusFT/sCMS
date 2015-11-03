@@ -282,7 +282,9 @@ function inverseHex($color) {
 
     return ($prependHash?'#':NULL).$r.$g.$b;
 }
-function linkBuilder($url){
+function linkBuilder($url, $langInv = false){
     global $langUser;
-    return '/'.$langUser.$url;
+    global $langUserInv;
+    $ln = ($langInv === true)?$langUserInv:$langUser;
+    return '/'.$ln.$url;
 }

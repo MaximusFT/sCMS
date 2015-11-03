@@ -10,7 +10,10 @@
     <title><?php echo $res->qCont->metaTitle;?></title>
     <meta name="description" content="<?php echo $res->qCont->metaDescription;?>">
     <meta name="keywords" content="<?php echo $res->qCont->metaKeywords;?>">
-    <meta name="viewport" content="width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <meta name="author" content="Sofona.com">
     <?php echo $metaAdd;?>
 
     <!-- Facebook Meta Tags -->
