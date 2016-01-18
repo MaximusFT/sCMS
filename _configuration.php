@@ -48,9 +48,9 @@ define('S_A_JS',			S_URLs . '/sadmin/js/');
 
 define('ADVIS', 			false);
 
-define('SQL_db', 			't');
-define('SQL_name', 			'test');
-define('SQL_pass', 			'123qweasd');
+define('SQL_db', 			'SQL_db');
+define('SQL_name', 			'SQL_name');
+define('SQL_pass', 			'SQL_pass');
 $SQL_array = [
 	'user' => SQL_name,
 	'pass' => SQL_pass,
