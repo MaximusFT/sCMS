@@ -1,6 +1,0 @@
-User-agent: * 
-Allow: / 
-Disallow: /tempate/
-
-Host: your_site.com
-Sitemap: http://your_site.com/sitemap.xml

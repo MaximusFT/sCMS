@@ -10,7 +10,6 @@ switch ($_GET['params']) {
 	case 'extension-type':
 		$array['component'] =  'component';
 		$array['module']    =  'module';
-		$array['snippet']    =  'snippet';
 		break;
 	
 	case 'module-position':

@@ -11,6 +11,7 @@ $res = new stdClass();
 $resDecode = json_decode(json_encode($router->match()), FALSE);
 $res = ($resDecode == '')? (new stdClass()):$resDecode;
 $res->addToHead = '';
+$res->fileName = P_VIEW.$res->qCont->fileName.'.php';
 
 /**
  * Тут можно вставлять кастомные роутеры
@@ -226,7 +227,6 @@ function articlesPageCtrl() {
         "content.h1(content_h1)",
         "content.h1Small(content_h1Small)",
         "content.alias(content_alias)",
-        "content.full_text(content_full_text)",
         "content.publish_up(content_publish_up)"
     ], [
         "AND" => [
@@ -237,8 +237,6 @@ function articlesPageCtrl() {
     ]);
 
     $res->qListContent = json_decode(json_encode($qListContent), FALSE);
-    $res->fileName = $qListContent->content_full_text;
-
     return;
 }
 

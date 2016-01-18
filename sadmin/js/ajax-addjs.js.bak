@@ -55,23 +55,6 @@ $(function() {
         submit      : 'OK',
         event       : 'click'
     });
-    $('.edit_snippet').editable('/sadmin/ajax/save-to-db.php', {
-        type        : 'textarea',
-        callback    : function(value) {
-            $.jGrowl('Новое значение поля = ' + value, {
-                theme: 'lightness',
-                header: "Состояние запроса:",
-                life: 1500
-            });
-        },
-        submitdata: {
-            params: $(this).data('params')
-        },
-        height      : '150',
-        width       : '94%',
-        submit      : '<div class="col-md-8"></div><div class="col-md-4"><input class="btn btn-primary btn-block" type="button" value="Сохранить"></div>',
-        event       : 'click'
-    });
     $(".edit_row").editable("/sadmin/ajax/save-to-db.php", {
         callback: function(value) {
             $.jGrowl('Новое значение поля = ' + value, {

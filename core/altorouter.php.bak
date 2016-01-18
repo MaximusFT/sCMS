@@ -274,18 +274,9 @@ class AltoRouter {
 				$resMenu['extension'] = $this->db->get("extension", '*', ["id"=>$resMenu['extension_id']]);
 
 				$resMenu['extension']['params'] = json_decode($resMenu['extension']['params']);
-
 				$resContent = $this->db->get("content", '*', [
 					"id"=>$resMenu['link_id']
 				]);
-
-				$resSnippet = $this->db->select("extension", '*', ["AND"=>["type" => "snippet","enabled"=>"1"]]);
-
-				foreach ($resSnippet as $snippet) {
-
-					$resContent['full_text'] = str_replace("{{".$snippet['fileName']."}}","<script>".$snippet['params']."</script>", $resContent['full_text']);
-					
-				}	
 
 				return [
 					'target' => $target,

@@ -54,9 +54,7 @@ require_once P_TMP."_head.php";
                 <?php echo funPos('module', 'before-content-1');?>
                 <?php echo funPos('module', 'before-content-2');?>
 
-                <article>
-                    <?echo $res->qCont->full_text;?>
-                </article>
+                <?include $res->fileName;?>
 
                 <?php echo funPos('module', 'after-content-1');?>
                 <?php echo funPos('module', 'after-content-2');?>
