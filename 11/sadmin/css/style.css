@@ -1,0 +1,99 @@
+body {
+}
+.adv {
+	margin: 20px 0;
+}
+#articleMore {
+	margin-top: 20px;
+}
+footer {
+	margin-top: 20px;
+	background-color: #eee;
+}
+#copyright {
+	height: 40px;
+}
+#copyright > div {
+	line-height: 50px
+}
+#copyright p {
+	margin-bottom: 0;
+}
+
+dd {
+	margin-left: 20px;
+}
+
+#readmore .media {
+	margin-top: 15px;
+}
+
+.page-header h1 + p {
+	border-radius: 8px;
+}
+article ul li{
+    color: #317eac;
+}
+article ul li span {
+    color: #555555;
+}
+
+#addInfo {
+	min-height: 39px;
+	line-height: 49px;
+}
+#addInfo .label {
+	margin-left: 30px;
+	padding: .2em .3em .1em;
+	font-size: 18px;
+	font-weight: normal;
+	line-height: 1;
+	color: #555555;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: baseline;
+	border-radius: .25em;
+}
+#addInfo .label + .label {
+	margin-left: 0px;
+}
+#addInfo .label i {
+	color: #317eac;
+}
+
+table tr th {
+}
+.form_datetime {
+	width: 180px;
+}
+
+#toc {
+	background-color: #fff;
+	z-index: 2000;
+}
+.toc ul {
+	padding-left: 0;
+	list-style: none;
+}
+.toc ul li a {
+	padding: 5px 0;
+}
+
+.toc-active {
+	background-color: #
+}
+
+.affix {
+	top: 20px;
+	width: 263px;
+}
+.affix-top {}
+.affix-bottom {}
+
+@media (max-width: 991px) {
+	.media .media-left {
+		display: block;
+	}
+}
+@media only screen and (min-width: 1024px) {
+}
