@@ -52,7 +52,8 @@
 			}
 		}
 		var html = $(this).html();
-		return html && html.replace(/(<br>|\s|<div><br><\/div>|&nbsp;)*$/, '');
+		//html.replace(/&nbsp;/gi, '&#160;');
+		return html && html.replace(/(<br>|\s|<div><br><\/div>|&nbsp;)*$/, ' ');
 	};
 	$.fn.wysiwyg = function (userOptions) {
 		var editor = this,

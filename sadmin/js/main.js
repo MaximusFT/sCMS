@@ -165,7 +165,7 @@ $(function() {
      * @return {[type]} [description]
      */
     $("body").on('click', '.contentEdit', function(event) {
-        //event.preventDefault();
+        event.preventDefault();
         var $this = $(this),
             id = $this.data('id'),
             $ACont = $("#ajaxContent");
@@ -181,7 +181,7 @@ $(function() {
             $ACont.html(result);
         });
     });
-    $("body").on('click', '.articleEdit', function(event) {
+    /*$("body").on('click', '.articleEdit', function(event) {
         event.preventDefault();
         var $this = $(this),
             id = $this.data('id'),
@@ -200,9 +200,9 @@ $(function() {
             $ACont.html(result);
             $('input[id=file]').data('id', id);
         });
-    });
-    $("body").on('click', '.ToTranslit', function() {
-        //event.preventDefault();
+    });*/
+    $("body").on('click', '.ToTranslit', function(event) {
+        event.preventDefault();
         var $this = $(this),
             id = $this.data('id');
         $.ajax({
@@ -232,11 +232,11 @@ $(function() {
      */
     $("[data-toggle='popover']").popover();
     $("[data-toggle='tooltip']").tooltip();
-    $("body").on('click', '#RowAdd', function() {
+    $("body").on('click', '#RowAdd', function(event) {
         var $this = $(this),
             promises;
         
-        //event.preventDefault();
+        event.preventDefault();
         promises = $.map([$this.attr('href')], function(urls) {
             return $.ajax({
                 url : urls,
@@ -251,11 +251,11 @@ $(function() {
             })
         });
     });
-    $("body").on('click', '.RowDel', function() {
+    $("body").on('click', '.RowDel', function(event) {
         var $this = $(this),
             promises;
 
-        //event.preventDefault();
+        event.preventDefault();
         if ($this.parent().prev().find('input').prop('checked') === false) {return false;};
         promises = $.map([$this.attr('href')], function(urls) {
             return $.ajax({

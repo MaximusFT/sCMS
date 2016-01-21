@@ -95,13 +95,13 @@ CREATE TABLE `link` (
 DROP TABLE IF EXISTS `menu`;
 CREATE TABLE `menu` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `menutype_id` int(11) NOT NULL,
-  `extension_id` int(11) NOT NULL COMMENT 'The type of link: Component, URL, Alias, Separator',
+  `menutype_id` int(11) NOT NULL DEFAULT '1',
+  `extension_id` int(11) NOT NULL DEFAULT '2' COMMENT 'The type of link: Component, URL, Alias, Separator',
   `link_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'FK to #__extensions.id',
   `title` varchar(255) NOT NULL COMMENT 'The display title of the menu item.',
   `alias` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT 'The SEF alias of the menu item.',
   `path` varchar(1024) NOT NULL COMMENT 'The computed path of the menu item based on the alias field.',
-  `method` varchar(1024) NOT NULL COMMENT 'The actually link the menu item refers to.',
+  `method` varchar(1024) NOT NULL DEFAULT 'GET' COMMENT 'The actually link the menu item refers to.',
   `function` varchar(255) NOT NULL DEFAULT 'commonPageCtrl',
   `published` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'The published state of the menu link.',
   `img` varchar(255) NOT NULL COMMENT 'The image of the menu item.',
@@ -199,7 +199,7 @@ INSERT INTO `extension` VALUES ('10', 'Комментарии', 'module', 'comme
 INSERT INTO `extension` VALUES ('11', 'Custom HTML', 'module', 'custom-html', '1', '');
 INSERT INTO `extension` VALUES ('12', 'SitemapXML', 'component', '', '1', '');
 INSERT INTO `extension` VALUES ('13', 'Table of Content', 'module', 'toc', '1', '');
-INSERT INTO `extension` VALUES ('14', 'Google Adv', 'snippet', 'google-adv', '1', '<script>alert("google-adv");</script>');
+INSERT INTO `extension` VALUES ('14', 'Google Adv', 'snippet', 'google-adv', '1', 'alert("google-adv");');
 
 -- ----------------------------
 -- Records of link

@@ -1,6 +1,6 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT']."/configuration.php";
-
+// ini_set('display_errors', 1);
 /**
  * Functions Routing
  */
@@ -35,6 +35,7 @@ function MenuCrtl() {
         "menu.link_id",
         "menu.published",
         "menu.params",
+        "menu.lang",
         "menutype.name(menutype_name)",
         "extension.title(extension_title)",
     ), array(
@@ -53,6 +54,21 @@ function ContentCrtl() {
     global $db;
 
     $qContent = $db->select("content", "*");
+
+    return array(
+        'qContent'        => $qContent,
+        'params'          => qToDB($match),
+        'pageContent'     => A_VIEW.$match['name'].'.php'
+    );
+}
+
+function ContentOneCrtl($id) {
+    global $match;
+    global $db;
+
+    $qContent = $db->select("content", "*", [
+        'id' => $id
+        ]);
 
     return array(
         'qContent'        => $qContent,
@@ -427,6 +443,7 @@ $router->setBasePath('/sadmin');
 // 
 $router->map( 'GET', '/', 'AdminCrtl', 'sadmin');
 $router->map( 'GET', '/content/', 'ContentCrtl', 'content');
+$router->map( 'GET', '/content/[i:id]/', 'ContentOneCrtl', 'contentone');
 $router->map( 'GET', '/module/', 'ModuleCrtl', 'module');
 $router->map( 'GET', '/extension/', 'ExtensionCrtl', 'extension');
 $router->map( 'GET', '/comments/', 'CommentsCrtl', 'comments');
@@ -483,4 +500,13 @@ require_once A_TMP."x-header.php";
 <?php
 require_once A_TMP."x-footer.php";
 require_once A_TMP."x-ender.php";
+
+/* Debuging */
+if (isset($_GET['d'])) {
+    echo '<div class="debug"><pre>';
+    print_r($res);
+    echo '</pre></div>';
+}
+/**/
+
 ?>

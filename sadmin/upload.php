@@ -38,6 +38,6 @@ if(isset($_FILES["file"]) && isset($_GET["id"]))
 	  	$ret[]= $fileName;
 	  }
 	}
-    echo '../../images/'.$_GET['id'].'/'.$ret[0];
+    echo '../../../images/'.$_GET['id'].'/'.$ret[0];
  }
  ?>
