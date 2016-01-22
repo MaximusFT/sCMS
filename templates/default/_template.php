@@ -97,5 +97,8 @@ require_once P_TMP."_head.php";
 
     <?php echo funPos('module', 'after-footer');?>
 
+<?php
+require_once P_TMP."_ender.php";
+?>
 </body>
 </html>
