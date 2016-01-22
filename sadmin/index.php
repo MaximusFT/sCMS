@@ -489,8 +489,7 @@ if($match && is_callable($match['target'])) {
 }
 
 
-require_once A_TMP."x-head.php";
-require_once A_TMP."x-header.php";
+require_once A_TMP."_head.php";
 ?>
     <div class="container-fluid">
         <div id="pageContent" data-file="/sadmin/template/view/<?php echo $match['name'].'.php'?>">
@@ -498,8 +497,7 @@ require_once A_TMP."x-header.php";
         </div>
     </div>
 <?php
-require_once A_TMP."x-footer.php";
-require_once A_TMP."x-ender.php";
+require_once A_TMP."_ender.php";
 
 /* Debuging */
 if (isset($_GET['d'])) {
