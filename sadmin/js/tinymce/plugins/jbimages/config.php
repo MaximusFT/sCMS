@@ -40,6 +40,12 @@
 	session_start();
 	$page_id = $_SESSION['id'];
 	$config['img_path'] = '/images/'.$page_id; // Relative to domain name
+	if(!file_exists( $_SERVER['DOCUMENT_ROOT'] .$config['img_path'].'/'))
+ 	 	{
+ 	 		mkdir( $_SERVER['DOCUMENT_ROOT'] .$config['img_path'].'/');
+ 	 	}
+ 	 
+	
 	$config['upload_path'] = $_SERVER['DOCUMENT_ROOT'] . $config['img_path']; // Physical path. [Usually works fine like this]
 
 

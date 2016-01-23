@@ -100,5 +100,3 @@ require_once P_TMP."_head.php";
 <?php
 require_once P_TMP."_ender.php";
 ?>
-</body>
-</html>

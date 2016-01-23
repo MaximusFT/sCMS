@@ -1,6 +1,7 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT']."/configuration.php";
 // ini_set('display_errors', 1);
+
 /**
  * Functions Routing
  */
@@ -10,20 +11,20 @@ function AdminCrtl() {
 
     $qTable = $db->select("page", "*");
 
-    return array(
+    return [
         'params'          => qToDB($match),
         'pageContent'     => A_VIEW.$match['name'].'.php'
-    );
+    ];
 }
 
 function MenuCrtl() {
     global $match;
     global $db;
-    
-    $qMenu = $db->select("menu", array(
+
+    $qMenu = $db->select("menu", [
         "[>]menutype" => array("menutype_id" => "id"),
         "[>]extension" => array("extension_id" => "id"),
-    ), array(
+    ], [
         "menu.id",
         "menu.menutype_id",
         "menu.title",
@@ -38,15 +39,15 @@ function MenuCrtl() {
         "menu.lang",
         "menutype.name(menutype_name)",
         "extension.title(extension_title)",
-    ), array(
+    ], [
         "ORDER" => "menutype_id ASC",
-    ));
+    ]);
 
-    return array(
+    return [
         'qMenu'           => $qMenu,
         'params'          => qToDB($match),
         'pageContent'     => A_VIEW.$match['name'].'.php'
-    );
+    ];
 }
 
 function ContentCrtl() {
@@ -55,11 +56,11 @@ function ContentCrtl() {
 
     $qContent = $db->select("content", "*");
 
-    return array(
+    return [
         'qContent'        => $qContent,
         'params'          => qToDB($match),
         'pageContent'     => A_VIEW.$match['name'].'.php'
-    );
+    ];
 }
 
 function ContentOneCrtl($id) {
@@ -70,20 +71,20 @@ function ContentOneCrtl($id) {
         'id' => $id
         ]);
 
-    return array(
+    return [
         'qContent'        => $qContent,
         'params'          => qToDB($match),
         'pageContent'     => A_VIEW.$match['name'].'.php'
-    );
+    ];
 }
 
 function ModuleCrtl() {
     global $match;
     global $db;
 
-    $qContent = $db->select("module", array(
-        "[>]extension" => array("extension_id" => "id")
-    ), array(
+    $qContent = $db->select("module", [
+        "[>]extension" => ["extension_id" => "id"]
+    ], [
         "module.id",
         "module.extension_id",
         "module.title",
@@ -94,13 +95,13 @@ function ModuleCrtl() {
         "module.visible",
         "module.params",
         "extension.title(extension_title)"
-    ));
+    ]);
 
-    return array(
+    return [
         'qContent'        => $qContent,
         'params'          => qToDB($match),
         'pageContent'     => A_VIEW.$match['name'].'.php'
-    );
+    ];
 }
 
 function ExtensionCrtl() {
@@ -109,20 +110,20 @@ function ExtensionCrtl() {
 
     $qContent = $db->select("extension", "*");
 
-    return array(
+    return [
         'qContent'        => $qContent,
         'params'          => qToDB($match),
         'pageContent'     => A_VIEW.$match['name'].'.php'
-    );
+    ];
 }
 
 function CommentsCrtl() {
     global $match;
     global $db;
 
-    $qContent = $db->select("comment", array(
-        "[>]content" => array("content_id" => "id")
-    ), array(
+    $qContent = $db->select("comment", [
+        "[>]content" => ["content_id" => "id"]
+    ], [
         "comment.id",
         "comment.active",
         "comment.title",
@@ -130,25 +131,25 @@ function CommentsCrtl() {
         "comment.email",
         "comment.comment",
         "content.h1(h1)",
-    ), array(
+    ], [
         "type" => "comment",
         "ORDER"=>"id DESC"
-    ));
+    ]);
 
-    return array(
+    return [
         'qContent'        => $qContent,
         'params'          => qToDB($match),
         'pageContent'     => A_VIEW.$match['name'].'.php'
-    );
+    ];
 }
 
 function SubscribersCrtl() {
     global $match;
     global $db;
 
-    $qContent = $db->select("comment", array(
-        "[>]content" => array("content_id" => "id")
-    ), array(
+    $qContent = $db->select("comment", [
+        "[>]content" => ["content_id" => "id"]
+    ], [
         "comment.id",
         "comment.active",
         "comment.title",
@@ -156,25 +157,25 @@ function SubscribersCrtl() {
         "comment.email",
         "comment.comment",
         "content.h1(h1)",
-    ), array(
+    ], [
         "type" => "subscribe",
         "ORDER"=>"id DESC"
-    ));
+    ]);
 
-    return array(
+    return [
         'qContent'        => $qContent,
         'params'          => qToDB($match),
         'pageContent'     => A_VIEW.$match['name'].'.php'
-    );
+    ];
 }
 
 function AskingsCrtl() {
     global $match;
     global $db;
 
-    $qContent = $db->select("comment", array(
+    $qContent = $db->select("comment", [
         "[>]content" => array("content_id" => "id")
-    ), array(
+    ], [
         "comment.id",
         "comment.active",
         "comment.title",
@@ -182,27 +183,27 @@ function AskingsCrtl() {
         "comment.email",
         "comment.comment",
         "content.h1(h1)",
-    ), array(
+    ], [
         "type" => "asking",
         "ORDER"=>"id DESC"
-    ));
+    ]);
 
-    return array(
+    return [
         'qContent'        => $qContent,
         'params'          => qToDB($match),
         'pageContent'     => A_VIEW.$match['name'].'.php'
-    );
+    ];
 }
 
 function appMysqlToCSV() {
     global $match;
     global $db;
-    
-    $qRes = $db->select("content", array(
+
+    $qRes = $db->select("content", [
         "id", "alias", "h1", "h1Small", "h1Description", "introText",
         "metaTitle", "metaKeywords", "metaDescription", "metaOgTitle",
         "metaOgType", "metaOgSiteName", "metaOgDescription", "metaOgSection", "metaOgTag"
-    ));
+    ]);
 
     $arr = array();
     foreach ($qRes as $key => $value) {
@@ -232,7 +233,7 @@ function appCSVtoMysql() {
 
     $qUpd = csv_to_array($_FILES['csvfile']['tmp_name']);
     foreach ($qUpd as $key => $value) {
-        $db->update("content", array(
+        $db->update("content", [
             'alias' => $value['alias'],
             'h1' => $value['h1'],
             'h1Small' => $value['h1Small'],
@@ -247,14 +248,14 @@ function appCSVtoMysql() {
             'metaOgDescription' => $value['metaOgDescription'],
             'metaOgSection' => $value['metaOgSection'],
             'metaOgTag' => $value['metaOgTag']
-        ), array(
+        ], [
             'id' => $value['id']
-        ));
+        ]);
     }
-    return array(
+    return [
         'params'          => qToDB($match),
         'pageContent'     => A_VIEW.$match['name'].'.php'
-    );
+    ];
 }
 
 
@@ -269,15 +270,15 @@ function saveToDB() {
     if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
     header('Content-Type: application/json;');
 
-    $db->update($_POST['table'], array(
+    $db->update($_POST['table'], [
         $_POST['name'] => $_POST['value']
-    ), array(
+    ], [
         'id' => $_POST['pk']
-    ));
-    $response = array(
-        'msg' => 'Новое значение поля = '
-    );
-    
+    ]);
+    $response = [
+        'msg' => 'Новое значение поля = '.$_POST['value']
+    ];
+
     echo json_encode($response);
     exit();
 }
@@ -290,16 +291,16 @@ function saveToDBCheck() {
 
     $par = explode("|", $_POST['params']);
 
-    $db->update($par[0], array(
+    $db->update($par[0], [
         $par[1] => ((strval($_POST['check']) == 'true')?1:0)
-    ), array(
+    ], [
         'id' => $par[2]
-    ));
+    ]);
 
     $response = array(
-        'msg' => 'Новое значение поля = '
+        'msg' => 'Новое значение поля = '.$_POST['check']
     );
-    
+
     echo json_encode($response);
     exit();
 }
@@ -314,12 +315,11 @@ function getFromDBSelect($table, $table_cond = '', $table_param = '') {
 
     if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
     header('Content-Type: application/json;');
-    
+
     $par = explode("|", $_GET['params']);
     $table_col = $par[1];
     $row_id = $par[2];
 
-    // $result['0'] = "!---!";
     if ($table === 'extension') {
         $res = $db->select($table, array("id", $table_col), array($table_cond => $table_param));
     } else {
@@ -332,7 +332,7 @@ function getFromDBSelect($table, $table_cond = '', $table_param = '') {
     }
 
     print json_encode($result);
-    
+
     exit();
 }
 function getFromDBSelectStatic($title = '') {
@@ -343,26 +343,32 @@ function getFromDBSelectStatic($title = '') {
     header('Content-Type: application/json;');
 
     switch ($title) {
+        case 'lang':
+            $array = [
+                ['value' => 'ru', 'text' => 'ru'],
+                ['value' => 'en', 'text' => 'en'],
+            ];
+            break;
         case 'sex':
-            $array = array(
-                array('value' => 0, 'text' => 'Жен'),
-                array('value' => 1, 'text' => 'Муж'),
-            );
+            $array = [
+                ['value' => 0, 'text' => 'Жен'],
+                ['value' => 1, 'text' => 'Муж'],
+            ];
             break;
         case 'is-young':
-            $array = array(
-                array('value' => 0, 'text' => 'Младше 18'),
-                array('value' => 1, 'text' => 'Старше 18'),
-            );
+            $array = [
+                ['value' => 0, 'text' => 'Младше 18'],
+                ['value' => 1, 'text' => 'Старше 18'],
+            ];
             break;
-        
+
         case 'print-type':
-            $array = array(
-                array('value' => 0, 'text' => 'Список 1'),
-                array('value' => 1, 'text' => 'Список 2'),
-            );
+            $array = [
+                ['value' => 0, 'text' => 'Список 1'],
+                ['value' => 1, 'text' => 'Список 2'],
+            ];
             break;
-        
+
         default:
             break;
     }
@@ -376,13 +382,13 @@ function getTypeAHead($table, $table_col, $table_cond) {
 	if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
     header('Content-Type: application/json;');
 
-    $res = $db->select($table, array(
+    $res = $db->select($table, [
             "id(tokens)",
             $table_col.'(value)'
-        ), array(
+        ], [
             $table_cond.'[~]' => $_GET['q'],
             "LIMIT" => 10
-        ));
+        ]);
 
     print json_encode($res);
     exit();
@@ -393,13 +399,12 @@ function getListDB($table, $tmpl = '') {
 
     if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
     header('Content-Type: application/json; charset=utf-8');
-    
+
     $primaryKey = 'id';
 
     require_once 'list-'.$tmpl.'.php';
-
     require( 'ajax/ssp.class.php' );
-     
+
     echo json_encode(
         SSP::simple( $_POST, SQL_array, $table, $primaryKey, $columns, $tmpl )
     );
@@ -412,23 +417,17 @@ function getFromDB($table, $tmpl = '') {
 
     if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
     header('Content-Type: application/json; charset=utf-8');
-    
+
     $primaryKey = 'id';
 
     require_once 'route-'.$tmpl.'.php';
-
     require( 'ajax/ssp.class.php' );
-     
+
     echo json_encode(
         SSP::simple( $_POST, SQL_array, $table, $primaryKey, $columns, $tmpl )
     );
     exit();
 }
-
-
-
-
-
 
 /**
  * Route settings
@@ -440,7 +439,7 @@ $router->setBasePath('/sadmin');
 
 // $router->map('GET|POST','/', 'home#index', 'home');
 // Example: GET|POST|PATCH|PUT|DELETE
-// 
+
 $router->map( 'GET', '/', 'AdminCrtl', 'sadmin');
 $router->map( 'GET', '/content/', 'ContentCrtl', 'content');
 $router->map( 'GET', '/content/[i:id]/', 'ContentOneCrtl', 'contentone');
@@ -480,11 +479,9 @@ if($match && is_callable($match['target'])) {
     $res = json_decode(json_encode($res), FALSE);
 } else {
     header( $_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
-    require_once A_TMP."x-head.php";
-    require_once A_TMP."x-header.php";
+    require_once A_TMP."_head.php";
     require P_SITE.'404.php';
-    require_once A_TMP."x-footer.php";
-    require_once A_TMP."x-ender.php";
+    require_once A_TMP."_ender.php";
     exit();
 }
 
@@ -506,5 +503,3 @@ if (isset($_GET['d'])) {
     echo '</pre></div>';
 }
 /**/
-
-?>

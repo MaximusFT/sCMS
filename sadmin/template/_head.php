@@ -46,7 +46,16 @@
     <script src="<?=S_A_JS;?>vendor/jquery.tabletojson.min.js"></script>
 
     <script src="<?=S_A_JS;?>vendor/jquery.jgrowl.min.js"></script>
-    <link href="/sadmin/css/jquery.jgrowl.min.css" rel="stylesheet">
+    <link href="<?=S_A_JS;?>../css/jquery.jgrowl.min.css" rel="stylesheet">
+
+    <script src="<?php echo S_A_JS;?>vendor/bootstrap-datetimepicker.min.js"></script>
+    <script src="<?php echo S_A_JS;?>vendor/bootstrap-datetimepicker.ru.js"></script>
+    <script src="<?php echo S_A_JS;?>vendor/jquery.jeditable.js"></script>
+
+    <script src="<?php echo S_A_JS;?>tinymce/tinymce.min.js"></script>
+
+    <script src="<?php echo S_A_JS;?>plugins.js"></script>
+    <script src="<?php echo S_A_JS;?>main.js"></script>
 
     <link href="/sadmin/css/style.css" rel="stylesheet">
     <link href="/sadmin/css/editor.css" rel="stylesheet">

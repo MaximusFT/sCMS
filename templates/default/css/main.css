@@ -3,3 +3,44 @@
  ******************************************** */
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,700,900&subset=latin,cyrillic);
 @import url(https://fonts.googleapis.com/css?family=Ubuntu:400,500,700&subset=latin,cyrillic);
+#toc {
+  background-color: #fff;
+  z-index: 2000; }
+
+.toc ul {
+  padding-left: 0;
+  list-style: none; }
+
+.toc ul li a {
+  padding: 5px 0; }
+
+.affix {
+  top: 20px;
+  width: 263px; }
+
+#addInfo {
+  min-height: 39px;
+  line-height: 49px; }
+
+#addInfo .label {
+  margin-left: 30px;
+  padding: 0.2em 0.3em 0.1em;
+  font-size: 18px;
+  font-weight: normal;
+  line-height: 1;
+  color: #555555;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.25em; }
+
+#addInfo .label + .label {
+  margin-left: 0px; }
+
+#addInfo .label i {
+  color: #317eac; }
+
+legend {
+  font-size: 16px; }
+
+/*# sourceMappingURL=main.css.map */

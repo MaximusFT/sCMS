@@ -235,7 +235,6 @@ $(function() {
     $("body").on('click', '#RowAdd', function(event) {
         var $this = $(this),
             promises;
-        
         event.preventDefault();
         promises = $.map([$this.attr('href')], function(urls) {
             return $.ajax({
@@ -284,7 +283,7 @@ $(function() {
             });
         });
     })
-    $('.edit_sel').editable('/sadmin/ajax/save-to-db-select.php', { 
+    $('.edit_sel').editable('/sadmin/ajax/save-to-db-select.php', {
         type        : 'select',
         loadurl     : '/sadmin/ajax/load-select-from-db.php',
         loaddata    : function(value) {
@@ -306,7 +305,7 @@ $(function() {
         event       : 'click',
         submit      : 'OK'
     });
-    $('.edit_sel_custom').editable('/sadmin/ajax/save-to-db.php', { 
+    $('.edit_sel_custom').editable('/sadmin/ajax/save-to-db.php', {
         type        : 'select',
         loadurl     :  '/sadmin/ajax/select-custom.php',
         loaddata    : function(value) {
@@ -362,14 +361,9 @@ $(function() {
             htmlx = $('.btnWSave').data('htmlx'),
             cid = $('#editor').data('cid'),
             text = $('#editor').html();
-            
+
             if (htmlx === false) {
                 text = $('#editor').text();
-                /*
-                console.log('1' + $('#editor').text());
-                console.log('2' + $('#editor').html());
-                console.log('3' + $('#editor').html($('#editor').text()));
-                */
             };
         $.ajax({
             type: "POST",
@@ -381,13 +375,8 @@ $(function() {
             }
         })
         .done(function(result) {
-            // $this.prev('span').text(result);
-            console.log(1);
             $('#modalContentBodyEdit').modal('hide');
-            //console.log(cid);
-            //console.log(params);
-            //console.log(text);
-            $.jGrowl('Запись успешно изменена.'/*'Новое значение поля = '+result*/, {
+            $.jGrowl('Запись успешно изменена.', {
                 theme: 'lightness',
                 header: "Состояние запроса:",
                 life: 1500

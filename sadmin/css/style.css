@@ -66,29 +66,31 @@ table tr th {
 .form_datetime {
 	width: 180px;
 }
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+	padding: 0;
+	margin-left: -2px;
+	border: none;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+	border: none;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+	border: none;
+}
+table.dataTable tbody th, table.dataTable tbody td {
+	padding: 5px;
+}
+table.dataTable thead > tr > th {
+	padding: 5px;
+}
+td.details-control {
+    background: url('../images/details_open.png') no-repeat center center;
+    cursor: pointer;
+}
+tr.details td.details-control {
+    background: url('../images/details_close.png') no-repeat center center;
+}
 
-#toc {
-	background-color: #fff;
-	z-index: 2000;
-}
-.toc ul {
-	padding-left: 0;
-	list-style: none;
-}
-.toc ul li a {
-	padding: 5px 0;
-}
-
-.toc-active {
-	background-color: #
-}
-
-.affix {
-	top: 20px;
-	width: 263px;
-}
-.affix-top {}
-.affix-bottom {}
 
 @media (max-width: 991px) {
 	.media .media-left {

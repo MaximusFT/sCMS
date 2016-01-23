@@ -69,10 +69,9 @@ require_once P_CFG.'dateout.php'; $rd = new DateOut();
  */
 $metaAdd = '<meta name="robots" content="noindex, nofollow" />';
 
-
 $metaOgUrl = S_URLh
 	.((isset($pageLink) && !empty($pageLink))?$pageLink.'/':'')
 	.((isset($spageLink) && !empty($spageLink))?$spageLink.'/':'')
 	.((isset($sspageLink) && !empty($sspageLink))?$sspageLink.'/':'');
 $metaOgImage = S_URLh.'images/';
-$metaOgLocale = 'ru_RU';
+$metaOgLocale = $langUser.'_'.strtoupper($langUser);
