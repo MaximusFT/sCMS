@@ -28,9 +28,9 @@
 <?php
 if (count($_GET) > 0) {
     echo '
-    <link rel="canonical" href="http://'.$_SERVER["SERVER_NAME"].substr($_SERVER["REQUEST_URI"], 0, strpos($_SERVER["REQUEST_URI"], $_SERVER["QUERY_STRING"]) - 2).'/" />
-    <meta name="robots" content="noindex, follow">'
+    <link rel="canonical" href="http://'.$_SERVER["SERVER_NAME"].substr($_SERVER["REQUEST_URI"], 0, strpos($_SERVER["REQUEST_URI"], $_SERVER["QUERY_STRING"]) - 2).'/" />'
     ;
+    // <meta name="robots" content="noindex, follow">
     // header('Location: http://'.$_SERVER['HOST_NAME'].substr($_SERVER['REQUEST_URL'], 0,strpos($_SERVER['REQUEST_URI'], $_SERVER['QUERY_STRING'])- 2));
 } else {
     echo $res->addToHead;

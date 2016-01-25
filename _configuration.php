@@ -68,7 +68,7 @@ require_once P_CFG.'dateout.php'; $rd = new DateOut();
  * Закоментировать после запуска сайта
  * @var string
  */
-$metaAdd = '<meta name="robots" content="noindex, nofollow" />';
+// $metaAdd = '<meta name="robots" content="noindex, nofollow" />';
 
 $metaOgUrl = S_URLh
 	.((isset($pageLink) && !empty($pageLink))?$pageLink.'/':'')

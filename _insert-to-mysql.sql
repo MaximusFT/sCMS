@@ -75,7 +75,7 @@ CREATE TABLE `extension` (
   KEY `element` (`fileName`),
   KEY `element_folder` (`fileName`,`enabled`),
   KEY `extension` (`type`,`fileName`,`enabled`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for link
@@ -187,8 +187,8 @@ INSERT INTO `content` VALUES ('19', 'sitemap.xml', '1', '0', '0', '0', 'SitemapX
 -- ----------------------------
 -- Records of extension
 -- ----------------------------
-INSERT INTO `extension` VALUES ('1', 'Static', 'component', '', '1', '{\"aside\":\"left\"}');
-INSERT INTO `extension` VALUES ('2', 'Article', 'component', '', '1', '{\"aside\":\"right\"}');
+INSERT INTO `extension` VALUES ('1', 'Static', 'component', 'static_one', '1', '{\"aside\":\"left\"}');
+INSERT INTO `extension` VALUES ('2', 'Article', 'component', 'article_one', '1', '{\"aside\":\"right\"}');
 INSERT INTO `extension` VALUES ('3', 'Полезные ссылки', 'module', 'link-useful', '1', '{\"file\":\"/sadmin/ajax/extension-link-useful.php\"}');
 INSERT INTO `extension` VALUES ('4', 'Избранное', 'module', 'link-favorite', '1', '');
 INSERT INTO `extension` VALUES ('5', 'Подписка', 'module', 'subscribe', '1', '');
@@ -199,7 +199,10 @@ INSERT INTO `extension` VALUES ('10', 'Комментарии', 'module', 'comme
 INSERT INTO `extension` VALUES ('11', 'Custom HTML', 'module', 'custom-html', '1', '');
 INSERT INTO `extension` VALUES ('12', 'SitemapXML', 'component', '', '1', '');
 INSERT INTO `extension` VALUES ('13', 'Table of Content', 'module', 'toc', '1', '');
-INSERT INTO `extension` VALUES ('14', 'Google Adv', 'snippet', 'google-adv', '1', 'alert("google-adv");');
+INSERT INTO `extension` VALUES ('14', 'Google Adv', 'snippet', 'google-adv', '1', 'alert(\"google-adv\");');
+INSERT INTO `extension` VALUES ('15', 'Articles', 'component', 'article_list', '1', '');
+INSERT INTO `extension` VALUES ('16', 'Categories', 'component', 'category_list', '1', '');
+INSERT INTO `extension` VALUES ('17', 'Category', 'component', 'category_one', '1', '');
 
 -- ----------------------------
 -- Records of link
@@ -250,10 +253,10 @@ INSERT INTO `menu` VALUES ('4', '1', '1', '3', 'Статьи', 'articles', '/art
 INSERT INTO `menu` VALUES ('9', '4', '1', '4', 'Подписка', 'subscribe', '/subscribe/', 'POST', 'subscribeCtrl', '1', '', '0', '', '1', '1', '27', '28','ru','0');
 INSERT INTO `menu` VALUES ('10', '2', '1', '5', 'Задать вопрос', 'asking', '/asking/', 'GET', 'askingCtrl', '1', '', '0', '', '1', '1', '31', '32','ru','0');
 INSERT INTO `menu` VALUES ('11', '4', '9', '0', 'Комментарии', 'comment', '/comment/', 'POST', 'commentCtrl', '1', '', '0', '', '1', '1', '13', '14','ru','0');
-INSERT INTO `menu` VALUES ('12', '1', '2', '7', 'Основная первая статья', 'article-1', '/article-1/', 'GET', 'commonPageCtrl', '1', '', '0', '', '1', '2', '7', '8','ru','0');
-INSERT INTO `menu` VALUES ('13', '1', '2', '8', 'Очень интересная и познавательная статья по тематике вашего сайта', 'article-2', '/article-2/', 'GET', 'commonPageCtrl', '1', '', '0', '', '1', '2', '9', '10','ru','0');
-INSERT INTO `menu` VALUES ('14', '1', '2', '9', 'Статья которая раскрывает тематику вашего сайта', 'article-3', '/article-3/', 'GET', 'commonPageCtrl', '1', '', '0', '', '1', '2', '11', '12','ru','0');
-INSERT INTO `menu` VALUES ('15', '1', '2', '10', 'Важные рекомендация для посетителей вашего сайта', 'article-4', '/article-4/', 'GET', 'commonPageCtrl', '1', '', '0', '', '1', '2', '13', '14','ru','0');
+INSERT INTO `menu` VALUES ('12', '1', '1', '7', 'Основная первая статья', 'article-1', '/article-1/', 'GET', 'commonPageCtrl', '1', '', '1', '', '1', '2', '7', '8','ru','0');
+INSERT INTO `menu` VALUES ('13', '1', '1', '8', 'Очень интересная и познавательная статья по тематике вашего сайта', 'article-2', '/article-2/', 'GET', 'commonPageCtrl', '1', '', '0', '', '1', '2', '9', '10','ru','0');
+INSERT INTO `menu` VALUES ('14', '1', '1', '9', 'Статья которая раскрывает тематику вашего сайта', 'article-3', '/article-3/', 'GET', 'commonPageCtrl', '1', '', '0', '', '1', '2', '11', '12','ru','0');
+INSERT INTO `menu` VALUES ('15', '1', '1', '10', 'Важные рекомендация для посетителей вашего сайта', 'article-4', '/article-4/', 'GET', 'commonPageCtrl', '1', '', '0', '', '1', '2', '13', '14','ru','0');
 INSERT INTO `menu` VALUES ('19', '1', '1', '14', 'Отменить подписку', 'unsubscribe', '/unsubscribe/', 'GET', 'unsubscribeCtrl', '1', '', '0', '', '1', '1', '29', '30','ru','0');
 INSERT INTO `menu` VALUES ('29', '4', '9', '18', 'Больше статей', 'articles-more', '/articles/more/', 'POST', 'mainPageMoreCtrl', '1', '', '0', '', '1', '1', '33', '34','ru','0');
 INSERT INTO `menu` VALUES ('30', '4', '9', '0', 'Задать вопрос', 'asking-do', '/asking/do/', 'POST', 'askingDoCtrl', '1', '', '0', '', '1', '0', '0', '0','ru','0');
