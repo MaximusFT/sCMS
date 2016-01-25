@@ -1,5 +1,5 @@
 <?php
-require_once P_TMP."_head.php";
+require_once P_TMP.'_head.php';
 ?>
     <nav class="navbar navbar-default" role="navigation">
         <div class="container">
@@ -26,47 +26,9 @@ require_once P_TMP."_head.php";
 
     <?php echo funPos('module', 'after-nav');?>
 
-    <div class="container">
-        <div class="page-header">
-            <?php if ($res->qCont->catid == 1) {?>
-            <div id="addInfo" class="pull-right">
-                <span class="label"><i class="glyphicon glyphicon-eye-open"></i> <a><?php echo $res->qCont->hits;?></a></span>
-                <span class="label"><i class="glyphicon glyphicon-comment"></i> <a href="#Comments"><?php echo $res->qCommCount;?></a></span>
-            </div>
-            <?}?>
-            <h1><?php echo $res->qCont->h1;?><?php echo ((!empty($res->qCont->h1Small))?' <small>'.$res->qCont->h1Small.'</small>':'');?></h1>
-            <?php echo ((!empty($res->qCont->introText))?'<p class="well well-sm text-primary">'.$res->qCont->introText.'</p>':'');?>
-
-            <?php echo funPos('module', 'page-header-bottom');?>
-
-        <?php echo funPos('module', 'breadcrumb');?>
-        </div>
-    </div>
-
-    <div class="container">
-
-        <?php echo funPos('module', 'container-top');?>
-
-        <div class="row">
-            <?php if ($res->qMenuCurr->extension->params->aside == 'left') include P_TMP."aside.php";?>
-            <div class="col-sm-8 col-md-9">
-
-                <?php echo funPos('module', 'before-content-1');?>
-                <?php echo funPos('module', 'before-content-2');?>
-
-                <article>
-                    <?echo $res->qCont->full_text;?>
-                </article>
-
-                <?php echo funPos('module', 'after-content-1');?>
-                <?php echo funPos('module', 'after-content-2');?>
-            </div>
-            <?php if ($res->qMenuCurr->extension->params->aside == 'right') include P_TMP."aside.php";?>
-        </div>
-
-        <?php echo funPos('module', 'container-bottom');?>
-
-    </div>
+    <?php
+        require_once P_TMP.'html/'.$res->qMenuCurr->extension->fileName.'.php';
+    ?>
 
     <?php echo funPos('module', 'after-container');?>
 
@@ -98,5 +60,5 @@ require_once P_TMP."_head.php";
     <?php echo funPos('module', 'after-footer');?>
 
 <?php
-require_once P_TMP."_ender.php";
+require_once P_TMP.'_ender.php';
 ?>

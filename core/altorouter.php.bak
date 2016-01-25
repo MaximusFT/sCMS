@@ -155,7 +155,6 @@ class AltoRouter {
 
 		$params = array();
 		$match = false;
-		$notLng = false;
 
 		// set Request Url if it isn't passed as parameter
 		if($requestUrl === null) {
@@ -260,7 +259,8 @@ class AltoRouter {
 							"published" => 1
 							],
 						"ORDER" => ['pos ASC']
-					]);
+						]
+					);
 					$Menus[$value['name']] = $qTmp;
 				}
 				$resMenu = $this->db->get("menu", '*', [
@@ -274,6 +274,7 @@ class AltoRouter {
 				$resMenu['extension'] = $this->db->get("extension", '*', ["id"=>$resMenu['extension_id']]);
 
 				$resMenu['extension']['params'] = json_decode($resMenu['extension']['params']);
+
 				$resContent = $this->db->get("content", '*', [
 					"id"=>$resMenu['link_id']
 				]);

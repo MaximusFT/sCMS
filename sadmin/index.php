@@ -36,6 +36,7 @@ function MenuCrtl() {
         "menu.link_id",
         "menu.published",
         "menu.params",
+        "menu.pos",
         "menu.lang",
         "menutype.name(menutype_name)",
         "extension.title(extension_title)",

@@ -21,6 +21,7 @@ if (in_array($langUrl, $langArray)) {
 		$langUser = DEF_LNG;
 	}
 }
+$langUserInv = ($langUser === 'ru')?'en':'ru';
 
 define('S_HTTP',			'http');
 define('S_URLName',			'Your_Site.com');

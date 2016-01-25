@@ -18,6 +18,39 @@ $res->addToHead = '';
  *	$router->map( 'GET', '/module/', 'ModuleCrtl', 'module');
  */
 
+function articlesPageCtrl() {
+    global $res;
+    global $db;
+
+    $qListContent = $db->select("menu", [
+        "[>]content" => ["link_id" => "id"]
+    ], [
+        "menu.id",
+        "menu.path",
+        "menu.alias",
+        "menu.link_id",
+        "menu.published",
+        "content.id(content_id)",
+        "content.catid(catid)",
+        "content.h1(content_h1)",
+        "content.h1Small(content_h1Small)",
+        "content.alias(content_alias)",
+        "content.full_text(content_full_text)",
+        "content.publish_up(content_publish_up)"
+    ], [
+        "AND" => [
+            "menu.published" => 1,
+            "menu.extension_id" => 2
+        ],
+        "ORDER" => "content.publish_up DESC"
+    ]);
+
+    $res->qListContent = json_decode(json_encode($qListContent), FALSE);
+    $res->fileName = $qListContent->content_full_text;
+
+    return;
+}
+
 function mainPageCtrl() {
     global $res;
     global $db;
@@ -205,39 +238,6 @@ function sitemapXMLCtrl() {
     // echo $db->last_query();
 
     $res->qListContent = json_decode(json_encode($qListContent), FALSE);
-
-    return;
-}
-
-function articlesPageCtrl() {
-    global $res;
-    global $db;
-
-    $qListContent = $db->select("menu", [
-        "[>]content" => ["link_id" => "id"]
-    ], [
-        "menu.id",
-        "menu.path",
-        "menu.alias",
-        "menu.link_id",
-        "menu.published",
-        "content.id(content_id)",
-        "content.catid(catid)",
-        "content.h1(content_h1)",
-        "content.h1Small(content_h1Small)",
-        "content.alias(content_alias)",
-        "content.full_text(content_full_text)",
-        "content.publish_up(content_publish_up)"
-    ], [
-        "AND" => [
-            "menu.published" => 1,
-            "menu.extension_id" => 2
-        ],
-        "ORDER" => "content.publish_up DESC"
-    ]);
-
-    $res->qListContent = json_decode(json_encode($qListContent), FALSE);
-    $res->fileName = $qListContent->content_full_text;
 
     return;
 }
