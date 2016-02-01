@@ -316,9 +316,9 @@ if($res && is_callable($res->target)) {
     }
     header( $_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
     /*
-    require_once P_TMP."_head.php";
+    require_once P_TEMP."_head.php";
     require_once P_SITE.'404.php';
-    require_once P_TMP."_ender.php";
+    require_once P_TEMP."_ender.php";
 
     if (isset($_GET['d'])) {
         echo '<div class="debug"><pre>';

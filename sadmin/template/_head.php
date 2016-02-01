@@ -18,10 +18,13 @@
 
     <link href="//cdn.datatables.net/1.10.4/css/jquery.dataTables.css" rel="stylesheet">
     <script src="//cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+
     <link href="//cdn.datatables.net/plug-ins/3cfcc339e89/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet">
     <script src="//cdn.datatables.net/plug-ins/3cfcc339e89/integration/bootstrap/3/dataTables.bootstrap.js"></script>
+
     <link href="//cdn.datatables.net/colvis/1.1.1/css/dataTables.colVis.css" rel="stylesheet">
     <script src="//cdn.datatables.net/colvis/1.1.1/js/dataTables.colVis.min.js"></script>
+
     <link href="//cdn.datatables.net/colreorder/1.1.2/css/dataTables.colReorder.css" rel="stylesheet">
     <script src="//cdn.datatables.net/colreorder/1.1.2/js/dataTables.colReorder.min.js"></script>
 
@@ -39,14 +42,14 @@
     <?/*
     <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.1/inputs-ext/typeaheadjs/lib/typeahead.js"></script>
     */?>
-    <script src="<?=S_A_JS;?>vendor/typeahead.js"></script>
+    <script src="<?php echo S_A_JS;?>vendor/typeahead.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.1/inputs-ext/typeaheadjs/typeaheadjs.js"></script>
-    <script src="<?=S_A_JS;?>vendor/bloodhound.js"></script>
+    <script src="<?php echo S_A_JS;?>vendor/bloodhound.js"></script>
 
-    <script src="<?=S_A_JS;?>vendor/jquery.tabletojson.min.js"></script>
+    <script src="<?php echo S_A_JS;?>vendor/jquery.tabletojson.min.js"></script>
 
-    <script src="<?=S_A_JS;?>vendor/jquery.jgrowl.min.js"></script>
-    <link href="<?=S_A_JS;?>../css/jquery.jgrowl.min.css" rel="stylesheet">
+    <link href="<?php echo A_ROOT;?>css/jquery.jgrowl.min.css" rel="stylesheet">
+    <script src="<?php echo S_A_JS;?>vendor/jquery.jgrowl.min.js"></script>
 
     <script src="<?php echo S_A_JS;?>vendor/bootstrap-datetimepicker.min.js"></script>
     <script src="<?php echo S_A_JS;?>vendor/bootstrap-datetimepicker.ru.js"></script>
@@ -57,10 +60,10 @@
     <script src="<?php echo S_A_JS;?>plugins.js"></script>
     <script src="<?php echo S_A_JS;?>main.js"></script>
 
-    <link href="/sadmin/css/style.css" rel="stylesheet">
-    <link href="/sadmin/css/editor.css" rel="stylesheet">
+    <link href="<?php echo A_ROOT;?>css/style.css" rel="stylesheet">
+    <link href="<?php echo A_ROOT;?>css/editor.css" rel="stylesheet">
 </head>
-<body class="admin ">
+<body class="admin">
     <nav class="navbar navbar-default" role="navigation">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -82,6 +85,10 @@
                     <li<?=($match['name'] == 'subscribers')?' class="active"':'';?>><a href="<?=A_URLh;?>subscribers/">Подписчики</a></li>
                     <li<?=($match['name'] == 'module')?' class="active"':'';?>><a href="<?=A_URLh;?>module/">Модули</a></li>
                     <li<?=($match['name'] == 'extension')?' class="active"':'';?>><a href="<?=A_URLh;?>extension/">Расширения</a></li>
+
+                    <li<?=($match['name'] == 'peoples')?' class="active"':'';?>><a href="<?=A_URLh;?>people/">Люди</a></li>
+                    <li<?=($match['name'] == 'families')?' class="active"':'';?>><a href="<?=A_URLh;?>family/">Семьи</a></li>
+                    <li<?=(($match['name'] == 'prints') || ($match['name'] == 'print'))?' class="active"':'';?>><a href="<?=A_URLh;?>print/">Печать</a></li>
                 </ul>
                 <ul class="nav navbar-nav pull-right">
                     <li><a href="/sadmin/template/media/dialog.php?type=0&lang=ru_RU&popup=0&crossdomain=0&field_id=&relative_url=0&akey=key&fldr=" target="_blank">Media</a></li>

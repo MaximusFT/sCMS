@@ -1,5 +1,5 @@
 <?php
-require_once P_TMP.'_head.php';
+require_once P_TEMP.'_head.php';
 ?>
     <nav class="navbar navbar-default" role="navigation">
         <div class="container">
@@ -27,7 +27,7 @@ require_once P_TMP.'_head.php';
     <?php echo funPos('module', 'after-nav');?>
 
     <?php
-        require_once P_TMP.'html/'.$res->qMenuCurr->extension->fileName.'.php';
+        require_once P_HTML.$res->qMenuCurr->extension->fileName.'.php';
     ?>
 
     <?php echo funPos('module', 'after-container');?>
@@ -60,5 +60,5 @@ require_once P_TMP.'_head.php';
     <?php echo funPos('module', 'after-footer');?>
 
 <?php
-require_once P_TMP.'_ender.php';
+require_once P_TEMP.'_ender.php';
 ?>

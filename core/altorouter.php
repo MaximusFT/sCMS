@@ -85,9 +85,9 @@ class AltoRouter {
 	 * @param mixed $target The target where this route should point to. Can be anything.
 	 * @param string $name Optional name of this route. Supply if you want to reverse route this url in your application.
 	 */
-	public function map($method, $route, $target, $name = null) {
+	public function map($method, $route, $target, $name = null, $id = null, $type = 'view') {
 
-		$this->routes[] = array($method, $route, $target, $name);
+		$this->routes[] = array($method, $route, $target, $name, $id, $type);
 
 		if($name) {
 			if(isset($this->namedRoutes[$name])) {
@@ -185,7 +185,7 @@ class AltoRouter {
 		$_REQUEST = array_merge($_GET, $_POST);
 
 		foreach($this->routes as $handler) {
-			list($method, $_route, $target, $name, $id) = $handler;
+			list($method, $_route, $target, $name, $id, $fileType) = $handler;
 
 			$methods = explode('|', $method);
 			$method_match = false;
@@ -290,6 +290,7 @@ class AltoRouter {
 					'target' => $target,
 					'params' => $params,
 					'name' => $name,
+					'fileType' => $fileType,
 					'qMenuCurr' => $resMenu,
 					'qCont' => $resContent,
 					'qContId' => $resMenu['link_id'],
@@ -359,7 +360,7 @@ class AltoRouter {
 			]
 		);
 	    foreach ($res as $value) {
-			$this->routes[] = [$value['method'], $value['path'], $value['function'], '', $value['id']];
+			$this->routes[] = [$value['method'], $value['path'], $value['function'], '', $value['id'], 'view'];
 	    }
 
 		return;

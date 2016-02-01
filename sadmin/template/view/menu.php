@@ -1,96 +1,229 @@
 <div class="row">
+    <div class="col-md-4">
+        <h2>Меню сайта</h2>
+    </div>
+    <div class="col-md-4">
+        <button type="button" class="btn btn-success" data-toggle="modal" data-keyboard="false" data-target="#modalMenuAdd">Add</button>
+    </div>
+    <div class="col-md-4"></div>
+</div>
+<div class="row">
     <div class="col-md-12">
-        <h2>Меню сайта
-            <a class="btn btn-success pull-right"
-                id="RowAdd"
-                data-params="menu"
-                href="/sadmin/ajax/_row-add.php">Добавить пункт меню</a>
-        </h2>
-        <table class="table table-condensed table-hover table-bordered">
-            <tr class="active">
-                <th></th>
-                <th><span data-toggle="tooltip" title="Тип меню">MT</span></th>
-                <th width="1%"><span data-toggle="tooltip" title="Опубликовать">P</span></th>
-                <th width="1%"><span data-toggle="tooltip" title="Язык">LN</span></th>
-                <th width="1%"><span data-toggle="tooltip" title="Порядок">O</span></th>
-                <th><span data-toggle="tooltip" title="Название пункта меню">Title</span></th>
-                <th><span data-toggle="tooltip" title="Alias">Alias</span></th>
-                <th><span data-toggle="tooltip" title="Page URL path">Path</span></th>
-                <th>method</th>
-                <th>Func</th>
-                <th>type</th>
-                <th width="1%"><span class="glyphicon glyphicon-link" data-toggle="tooltip" title="Привязать статью"></span></th>
-                <?/*
-                <th>params</th>
-                */?>
-                <th width="1%"><span class="glyphicon glyphicon-trash"></span></th>
-            </tr>
-    <?
-    foreach(json_decode(json_encode($res->qMenu), true) as $r) {
-        if ($r['id'] == 1) continue;
-    ?>
-        <tr>
-            <td><?=$r['id'];?></td>
-            <td class="edit_sel"
-                data-select="menutype|name|<?=$r['menutype_id'];?>"
-                data-params="menu|menutype_id|<?=$r['id'];?>|menutype|name"><?=$r['menutype_name'];?></td>
-            <td><input class="jedCheck" type="checkbox" data-params="menu|published|<?=$r['id'];?>"<?=(($r['published'] == true)?' checked="checked"':'');?>></td>
-            <td class="edit_row" data-params="menu|lang|<?=$r['id'];?>"><?=$r['lang'];?></td>
-            <td class="edit_row" data-params="menu|pos|<?=$r['id'];?>"><?=$r['pos'];?></td>
-            <td class="edit_row" data-params="menu|title|<?=$r['id'];?>"><?=$r['title'];?></td>
-            <td>
-                <span class="edit_row" data-params="menu|alias|<?=$r['id'];?>"><?=$r['alias'];?></span>
-                <a class="btn btn-sm btn-primary pull-right ToTranslit"
-                    data-id="<?=$r['id'];?>"
-                    data-toggle="tooltip" title="Перевести в транслит из title"
-                    data-params="menu|title|alias|<?=$r['alias'];?>">
-                        <span class="fa fa-undo"></span></a>
-            </td>
-            <td class="edit_row" data-params="menu|path|<?=$r['id'];?>"><?=$r['path'];?></td>
-            <td class="edit_sel_custom" data-case="menu-method" data-params="menu|method|<?=$r['id'];?>"><?=$r['method'];?></td>
-            <td class="edit_row" data-params="menu|function|<?=$r['id'];?>"><?=$r['function'];?></td>
-            <td class="edit_sel"
-                data-select="extension|title|<?=$r['extension_id'];?>|type|component"
-                data-params="menu|extension_id|<?=$r['id'];?>|extension|title"><?=$r['extension_title'];?></td>
-            <td><a class="btn btn-primary btn-sm linkArticle"
-                data-params="<?=$r['id'];?>"
-                data-toggle="modal"
-                data-target="#modalLinkArticle">
-                    <?=$r['link_id'];?> <span class="glyphicon glyphicon-link"></span></a></td>
-            <?/*
-            <td><?=$r['params'];?></td>
-            */?>
-            <td>
-                <div class="input-group input-group-sm">
-                    <span class="input-group-addon">
-                        <input type="checkbox" value="Del">
-                    </span>
-                    <span class="input-group-btn">
-                        <a href="/sadmin/ajax/_row-del.php" class="btn btn-danger RowDel" data-params="menu|<?=$r['id'];?>"><span class="glyphicon glyphicon-trash"></span></a>
-                    </span>
-                </div>
-            </td>
-        </tr>
-    <?
-    }
-    ?>
+        <table id="myTable" class="table table-condensed table-striped table-bordered" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>lang</th>
+                    <th>menutype_id</th>
+                    <th>extension_id</th>
+                    <th>method</th>
+                    <th>function</th>
+                    <th>home</th>
+                    <th>title</th>
+                    <th>alias</th>
+                    <th>path</th>
+                    <th>pos</th>
+                    <th>published</th>
+                </tr>
+            </thead>
         </table>
     </div>
 </div>
 
-<!-- Modal for link Article to Menu-->
-<div class="modal fade" id="modalLinkArticle" tabindex="-1" role="dialog" aria-labelledby="linkArticle" aria-hidden="true">
-    <div class="modal-dialog">
+<!-- Modal for Edit Page -->
+<div class="modal fade" id="modalMenuAdd" tabindex="-1" role="dialog" aria-labelledby="contentEdit" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="linkArticle">Привязать статью к пункту меню</h4>
-            </div>
-            <div class="modal-body" id="AjaxContent" data-contentid=""></div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save</button>
-            </div>
+            <form>
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="contentEdit">Add menu item</h4>
+                </div>
+                <div class="modal-body" id="menuAdd">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-condensed table-striped table-bordered" cellspacing="0" width="100%">
+                                <tbody>
+                                   <tr><td>lang</td>
+                                        <td><a href="#" class="myeditable"
+                                            data-name="lang"
+                                            data-type="select"
+                                            data-source="/sadmin/get/group/static/lang/"
+                                            data-title="Пол"
+                                            data-original-title="lang"></a></td></tr>
+                                   <tr><td>menutype_id</td>
+                                        <td><a href="#" class="myeditable"
+                                            data-type="select"
+                                            data-name="menutype_id"
+                                            data-source="/sadmin/get/group/menutype/name/"
+                                            data-original-title="menutype_id"></a></td></tr>
+                                   <tr><td>extension_id</td>
+                                        <td><a href="#" class="myeditable"
+                                            data-type="select"
+                                            data-name="extension_id"
+                                            data-source="/sadmin/get/group/extension/title/"
+                                            data-original-title="extension_id"></a></td></tr>
+                                   <tr><td>metdod</td>
+                                        <td><a href="#" class="myeditable"
+                                            data-type="select"
+                                            data-name="metdod"
+                                            data-source="/sadmin/get/group/static/menu-method/"
+                                            data-original-title="metdod"></a></td></tr>
+                                   <tr><td>function</td>
+                                        <td><a href="#" class="myeditable"
+                                            data-type="select"
+                                            data-name="function"
+                                            data-source="/sadmin/get/group/static/menu-function/"
+                                            data-original-title="function"></a></td></tr>
+                                   <tr><td>title</td>
+                                        <td><a href="#" class="myeditable"
+                                            data-type="text"
+                                            data-name="title"
+                                            data-original-title="title"></a></td></tr>
+                                   <tr><td>alias</td>
+                                        <td><a href="#" class="myeditable"
+                                            data-type="text"
+                                            data-name="alias"
+                                            data-original-title="alias"></a></td></tr>
+                                   <tr><td>patd</td>
+                                        <td><a href="#" class="myeditable"
+                                            data-type="text"
+                                            data-name="patd"
+                                            data-original-title="patd"></a></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Закрыть окно</button>
+                    <button id="reset-btn" type="button" class="btn btn-danger">Очистить форму</button>
+                    <button id="save-btn" type="button" class="btn btn-primary">Добавить</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
+
+<script>
+'use strict';
+
+function addInfoDT(d){return d.addInfoRowDT;}
+function addElemA (argument) {
+    var par = $(argument).data('params');
+    $(argument).before('<a href="#" class="myeditable hidden killreset" data-type="text" data-name="'+par.name+'-id">'+par.tokens+'</a>');
+}
+
+$(function() {
+    var detailRows = [];
+    var myTab = $('#myTable');
+    var dt = myTab.DataTable({
+        "processing": true,
+        "serverSide": true,
+        "deferRender": true,
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        dom: 'RC<"clear">lfrtip',
+        colVis: {
+            exclude: [ 0 ]
+        },
+        columnDefs: [
+            // { visible: false, targets: [4, 5, 6, 7] }
+        ],
+        stateSave: true,
+        "ajax": {
+            "url": "/sadmin/get/data/menu/menu-list/",
+            "type": "POST"
+        },
+        "columns": [
+            {
+                "class":          "details-control",
+                "orderable":      false,
+                "data":           null,
+                "defaultContent": ""
+            },
+            { "data": "lang" },
+            { "data": "menutype_id" },
+            { "data": "extension_id" },
+            { "data": "method" },
+            { "data": "function" },
+            { "data": "home" },
+            { "data": "title" },
+            { "data": "alias" },
+            { "data": "path" },
+            { "data": "pos" },
+            { "data": "published" }
+        ],
+        "order": [[1, 'asc'], [2, 'asc']],
+        "drawCallback": function(settings){
+            xEdit();
+        }
+    });
+
+    myTab.on('click', 'tr td.details-control', function() {
+        var tr = $(this).closest('tr'),
+            row = dt.row(tr),
+            idx = $.inArray(tr.attr('id'), detailRows);
+        if (row.child.isShown()) {
+            tr.removeClass('details');
+            row.child.hide();
+            detailRows.splice(idx, 1);
+        } else {
+            tr.addClass('details');
+            row.child(addInfoDT(row.data())).show();
+
+            xEdit();
+
+            if (idx === -1) {
+                detailRows.push(tr.attr('id'));
+            }
+        }
+    });
+    dt.on('draw', function() {
+        $.each(detailRows, function(i, id) {
+            $('#' + id + ' td:first-child').trigger('click');
+        });
+    });
+
+    //init editables 
+    $('.myeditable').editable();
+
+    //automatically show next editable
+    $('.myeditable').on('save.newuser', function(){
+        var that = this;
+        setTimeout(function() {
+            $(that).closest('tr').next().find('.myeditable').editable('show');
+        }, 200);
+    });
+
+    $('#save-btn').click(function() {
+        $('.myeditable').editable();
+        $('#menuAdd a').editable('submit', {
+            url: '/sadmin/save/people/add/',
+            ajaxOptions: {
+                dataType: 'json' //assuming json response
+            },
+            success: function(data, config) {
+                $('#menuAdd a')
+                    .editable('setValue', null)  //clear values
+                    .editable('option', 'pk', null)          //clear pk
+                    .removeClass('editable-unsaved');        //remove bold css
+                $('.killreset').remove();
+                $('.myeditable').editable();
+            },
+            error: function(errors) {
+                console.log('Ошибка');
+            }
+        });
+    });
+    $('#reset-btn').click(function() {
+        $('.myeditable').editable('setValue', null)  //clear values
+            .editable('option', 'pk', null)          //clear pk
+            .removeClass('editable-unsaved');        //remove bold css
+        $('.killreset').remove();
+        $('.myeditable').editable();
+    });
+    $('.aExMother').editable({
+        typeahead: {remote: {url: '/sadmin/get/typeaheadmf/mother/?q=%QUERY'}},
+        success: function(response, newValue) {addElemA(this)}});
+});
+</script>
