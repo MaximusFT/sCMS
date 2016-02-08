@@ -1,4 +1,25 @@
 'use strict';
+function xEdit(){
+    $('.xeditAddDate').datepicker({
+        format: "yyyy-mm-dd",
+        language: "ru",
+        autoclose: true
+    });
+    $('.xedit').editable({
+        url: '/sadmin/save/',
+        success: function(response, newValue) { xjGrowl(response, newValue) }
+    })
+    $('.aCountry').editable({
+        url: '/sadmin/save/',
+        typeahead: {
+            name: 'name',
+            remote: {
+                url: '/sadmin/get/typeahead/country/name/name/?q=%QUERY'
+            }
+        },
+        success: function(response, newValue) { xjGrowl(response, newValue) }
+    })
+}
 
 $(function() {
     $('.form_datetime').datetimepicker({
@@ -54,113 +75,6 @@ $(function() {
 
 
     /**
-     * Extension Scripts
-     * @return {[type]} [description]
-     */
-    $("body").on('click', '.extensionEdit', function() {
-        //event.preventDefault();
-        var $this = $(this),
-            id = $this.data('id'),
-            _params = $this.data('params') ? $this.data('params') : [],
-            $ACont = $("#ajaxContent");
-        $ACont.empty();
-        $ACont.data('contentid', id);
-        if(_params.file)
-            $.ajax({
-                type: "POST",
-                url: _params.file,
-                data: {
-                    id: id,
-                    params: _params
-                }
-            }).done(function(result) {
-                $ACont.html(result);
-            });
-        else
-            $.ajax({
-                type: "POST",
-                url: "/sadmin/ajax/extension-snippet-edit.php",
-                data: {
-                    id: id,
-                    params: _params
-                }
-            }).done(function(result) {
-                $ACont.html(result);
-            });
-    });
-
-
-    /**
-     * Modules Scripts
-     * @return {[type]} [description]
-     */
-    $("body").on('click', '.moduleVisibleEdit', function() {
-        //event.preventDefault();
-        var $this = $(this),
-            id = $this.data('id'),
-            _params = $this.data('params') ? $this.data('params') : [],
-            $ACont = $("#ajaxContent");
-        $ACont.empty();
-        $ACont.data('contentid', id);
-        $.ajax({
-            type: "POST",
-            url: '/sadmin/ajax/module-visible.php',
-            data: {
-                id: id,
-                params: _params
-            }
-        }).done(function(result) {
-            $ACont.html(result);
-        });
-    });
-    $("body").on('click', '.moduleEdit', function() {
-        //event.preventDefault();
-        var $this = $(this),
-            id = $this.data('id'),
-            _params = $this.data('params') ? $this.data('params') : [],
-            $ACont = $("#ajaxContent");
-        $ACont.empty();
-        $ACont.data('contentid', id);
-        $.ajax({
-            type: "POST",
-            url: _params.file,
-            data: {
-                id: id,
-                params: _params
-            }
-        }).done(function(result) {
-            $ACont.html(result);
-        });
-    });
-    $("body").on('click', '.jedCheckVisible', function() {
-        $.post('/sadmin/ajax/module-visible-add.php', {
-            params: $(this).data('params'),
-            check: $(this).prop('checked')
-        }, function(sValue) {
-            $(this).prop('checked', function(i,val){return !val;});
-            $.jGrowl('Новое значение поля = ' + sValue, {
-                theme: 'lightness',
-                header: "Состояние запроса:",
-                life: 1500
-            });
-        });
-    })
-    $("body").on('click', '.jedCheckLink', function() {
-        $.post('/sadmin/ajax/module-link-useful-add.php', {
-            params: $(this).data('params'),
-            check: $(this).prop('checked')
-        }, function(sValue) {
-            $(this).prop('checked', function(i,val){return !val;});
-            $.jGrowl('Новое значение поля = ' + sValue, {
-                theme: 'lightness',
-                header: "Состояние запроса:",
-                life: 1500
-            });
-        });
-    })
-
-
-    /**
      * Content Scripts
      * @return {[type]} [description]
      */
@@ -181,26 +95,6 @@ $(function() {
             $ACont.html(result);
         });
     });
-    /*$("body").on('click', '.articleEdit', function(event) {
-        event.preventDefault();
-        var $this = $(this),
-            id = $this.data('id'),
-            $ACont = $("#editor");
-        $('#editor').data('cid', id).attr('data-cid', id);
-        console.log(id);
-        $ACont.empty();
-        $ACont.data('contentid', id);
-        $.ajax({
-            type: "POST",
-            url: "/sadmin/ajax/content-body-article-edit.php",
-            data: {
-                id: id
-            }
-        }).done(function(result) {
-            $ACont.html(result);
-            $('input[id=file]').data('id', id);
-        });
-    });*/
     $("body").on('click', '.ToTranslit', function(event) {
         event.preventDefault();
         var $this = $(this),
@@ -226,134 +120,6 @@ $(function() {
 
 
 
-    /**
-     * All page Scripts
-     * @return {[type]} [description]
-     */
-    $("[data-toggle='popover']").popover();
-    $("[data-toggle='tooltip']").tooltip();
-    $("body").on('click', '#RowAdd', function(event) {
-        var $this = $(this),
-            promises;
-        event.preventDefault();
-        promises = $.map([$this.attr('href')], function(urls) {
-            return $.ajax({
-                url : urls,
-                data : {'params': $this.data('params')},
-                type : "post"
-            }).then(function(result) {
-                $.jGrowl('Новая страница добавлена, обновите страницу!', {
-                    theme: 'lightness',
-                    header: "Состояние запроса:",
-                    life: 1500
-                })
-            })
-        });
-    });
-    $("body").on('click', '.RowDel', function(event) {
-        var $this = $(this),
-            promises;
-
-        event.preventDefault();
-        if ($this.parent().prev().find('input').prop('checked') === false) {return false;};
-        promises = $.map([$this.attr('href')], function(urls) {
-            return $.ajax({
-                url : urls,
-                data : {'params': $this.data('params')},
-                type : "post"
-            }).then(function(result) {
-                $.jGrowl('Страница удалена, обновите страницу!', {
-                    theme: 'lightness',
-                    header: "Состояние запроса:",
-                    life: 1500
-                })
-            })
-        });
-    });
-    $("body").on('click', '.jedCheck', function() {
-        $.post('/sadmin/ajax/save-to-db-check.php', {
-            params: $(this).data('params'),
-            check: $(this).prop('checked')
-        }, function(sValue) {
-            $(this).prop('checked', function(i,val){return !val;});
-            $.jGrowl('Новое значение поля = ' + sValue, {
-                theme: 'lightness',
-                header: "Состояние запроса:",
-                life: 1500
-            });
-        });
-    })
-    $('.edit_sel').editable('/sadmin/ajax/save-to-db-select.php', {
-        type        : 'select',
-        loadurl     : '/sadmin/ajax/load-select-from-db.php',
-        loaddata    : function(value) {
-            return {params: $(this).data('select')};
-        },
-        submitdata: function() {
-            return {
-                params: $(this).data('params'),
-                sel: $(this).data('select')
-            }
-        },
-        callback    : function(value) {
-            $.jGrowl('Новое значение поля = ' + value, {
-                theme: 'lightness',
-                header: "Состояние запроса:",
-                life: 1500
-            });
-        },
-        event       : 'click',
-        submit      : 'OK'
-    });
-    $('.edit_sel_custom').editable('/sadmin/ajax/save-to-db.php', {
-        type        : 'select',
-        loadurl     :  '/sadmin/ajax/select-custom.php',
-        loaddata    : function(value) {
-            return {params: $(this).data('case')};
-        },
-        callback    : function(value) {
-            $.jGrowl('Новое значение поля = ' + value, {
-                theme: 'lightness',
-                header: "Состояние запроса:",
-                life: 1500
-            });
-        },
-        event       : 'click',
-        submit      : 'OK'
-    });
-    $('.edit_area').editable('/sadmin/ajax/save-to-db.php', {
-        type        : 'textarea',
-        callback    : function(value) {
-            $.jGrowl('Новое значение поля = ' + value, {
-                theme: 'lightness',
-                header: "Состояние запроса:",
-                life: 1500
-            });
-        },
-        submitdata: {
-            params: $(this).data('params')
-        },
-        height      : '200',
-        width       : '100%',
-        submit      : 'OK',
-        event       : 'click'
-    });
-
-    $(".edit_row").editable("/sadmin/ajax/save-to-db.php", {
-        callback: function(value) {
-            $.jGrowl('Новое значение поля = ' + value, {
-                theme: 'lightness',
-                header: "Состояние запроса:",
-                life: 1500
-            });
-        },
-        submitdata: {
-            params: $(this).data('params')
-        },
-        height      : '24',
-        width       : '250',
-        event: "click"
-    });
     $('.btnWSave').on('click', function(event){
         event.preventDefault();
         var $this = $(this),

@@ -59,12 +59,12 @@ $router->map('POST|PUT','/save/family/people/add/', 'saveFamilyPeopleAdd', 'save
 /**
  * AJAX Route
  */
-$router->map('POST',    '/get/data/[*:table]/[*:tmpl]/', 'getFromDB', 'get-from-db', null, 'ajax');
-$router->map('POST',    '/get/list/[*:table]/[*:tmpl]/', 'getListDB', 'get-list-db', null, 'ajax');
-$router->map('GET|POST','/get/group/static/[*:title]/', 'getFromDBSelectStatic', 'get-from-db-select-static', null, 'ajax');
-$router->map('POST',    '/get/group/[*:table]/[*:table_name]/[*:table_cond]/[*:table_param]/', 'getFromDBSelect', 'get-from-db-select', null, 'ajax');
-$router->map('GET|POST','/get/typeahead/[*:table]/[*:table_col]/[*:table_cond]/', 'getTypeAHead', 'get-typea-head', null, 'ajax');
-$router->map('GET|POST','/get/typeaheadmf/[*:cond]/', 'getTypeAHeadMF', 'get-typea-head-mf', null, 'ajax');
+$router->map('GET|POST',    '/get/data/[*:table]/[*:tmpl]/', 'getFromDB', 'get-from-db', null, 'ajax');
+$router->map('GET|POST',    '/get/list/[*:table]/[*:tmpl]/', 'getListDB', 'get-list-db', null, 'ajax');
+$router->map('GET|POST',    '/get/group/static/[*:title]/', 'getFromDBSelectStatic', 'get-from-db-select-static', null, 'ajax');
+$router->map('GET|POST',    '/get/group/[*:table]/[*:table_name]/[*:table_cond]/[*:table_param]/', 'getFromDBSelect', 'get-from-db-select', null, 'ajax');
+$router->map('GET|POST',    '/get/typeahead/[*:table]/[*:table_col]/[*:table_cond]/', 'getTypeAHead', 'get-typea-head', null, 'ajax');
+$router->map('GET|POST',    '/get/typeaheadmf/[*:cond]/', 'getTypeAHeadMF', 'get-typea-head-mf', null, 'ajax');
 
 $router->map('GET|POST',    '/get/prints/[*:id]', 'getPrintsCrtl', 'get-prints');
 

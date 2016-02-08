@@ -275,7 +275,7 @@ class AltoRouter {
 
 				$resMenu['extension']['params'] = json_decode($resMenu['extension']['params']);
 				$resContent = $this->db->get("content", '*', [
-					"id"=>$resMenu['link_id']
+					"id" => $resMenu['link_id']
 				]);
 
 				$resSnippet = $this->db->select("extension", '*', ["AND"=>["type" => "snippet","enabled"=>"1"]]);

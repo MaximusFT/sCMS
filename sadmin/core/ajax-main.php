@@ -167,34 +167,34 @@ function getTypeAHead($table, $table_col, $table_cond) {
 }
 function getListDB($table, $tmpl = '') {
     global $match;
-    global $db;
+    global $SQL_array;
 
     if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
     header('Content-Type: application/json; charset=utf-8');
 
     $primaryKey = 'id';
 
-    require_once A_AJAX.'template-list-'.$tmpl.'.php';
+    require_once A_CORE.'template-list-'.$tmpl.'.php';
 
     echo json_encode(
-        SSP::simple( $_POST, SQL_array, $table, $primaryKey, $columns, $tmpl )
+        SSP::simple( $_POST, $SQL_array, $table, $primaryKey, $columns, $tmpl )
     );
 
     exit();
 }
 function getFromDB($table, $tmpl = '') {
     global $match;
-    global $db;
+    global $SQL_array;
 
-    if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
+    // if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
     header('Content-Type: application/json; charset=utf-8');
 
     $primaryKey = 'id';
 
-    require_once A_AJAX.'template-'.$tmpl.'.php';
+    require_once A_CORE.'template-'.$tmpl.'.php';
 
     echo json_encode(
-        SSP::simple( $_POST, SQL_array, $table, $primaryKey, $columns, $tmpl )
+        SSP::simple( $_POST, $SQL_array, $table, $primaryKey, $columns, $tmpl )
     );
     exit();
 }

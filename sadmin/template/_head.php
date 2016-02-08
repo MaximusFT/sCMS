@@ -48,20 +48,19 @@
 
     <script src="<?php echo S_A_JS;?>vendor/jquery.tabletojson.min.js"></script>
 
-    <link href="<?php echo A_ROOT;?>css/jquery.jgrowl.min.css" rel="stylesheet">
+    <link href="<?php echo A_URLh;?>css/jquery.jgrowl.min.css" rel="stylesheet">
     <script src="<?php echo S_A_JS;?>vendor/jquery.jgrowl.min.js"></script>
 
     <script src="<?php echo S_A_JS;?>vendor/bootstrap-datetimepicker.min.js"></script>
     <script src="<?php echo S_A_JS;?>vendor/bootstrap-datetimepicker.ru.js"></script>
-    <script src="<?php echo S_A_JS;?>vendor/jquery.jeditable.js"></script>
 
     <script src="<?php echo S_A_JS;?>tinymce/tinymce.min.js"></script>
 
     <script src="<?php echo S_A_JS;?>plugins.js"></script>
     <script src="<?php echo S_A_JS;?>main.js"></script>
 
-    <link href="<?php echo A_ROOT;?>css/style.css" rel="stylesheet">
-    <link href="<?php echo A_ROOT;?>css/editor.css" rel="stylesheet">
+    <link href="<?php echo A_URLh;?>css/style.css" rel="stylesheet">
+    <link href="<?php echo A_URLh;?>css/editor.css" rel="stylesheet">
 </head>
 <body class="admin">
     <nav class="navbar navbar-default" role="navigation">
