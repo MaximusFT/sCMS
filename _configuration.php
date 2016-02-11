@@ -32,7 +32,7 @@ define('P_BASE', 			__DIR__);
 define('P_ROOT',			implode(DIRECTORY_SEPARATOR, explode(DIRECTORY_SEPARATOR, P_BASE)));
 define('P_SITE',			P_ROOT . '/');
 define('P_CORE',			P_ROOT . '/core/');
-define('P_MODU',			P_CORE . 'modules/');
+define('P_MODL',			P_CORE . 'modules/');
 define('P_LANG',			P_ROOT . '/language/'.$langUser.'/');
 define('P_TEMP',			P_ROOT . '/templates/'.DEF_TEMP.'/');
 define('P_VIEW',			P_ROOT . '/templates/'.DEF_TEMP.'/view/');

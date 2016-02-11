@@ -22,12 +22,12 @@ function funPos($type='', $pos=''){
 
         if ($qRes[$key]['visible']) {
             if (in_array($res->qMenuCurr->id, $qRes[$key]['visible'])) {
-                include P_MOD.'mod-'.$qRes[$key]['extension']['fileName'].'/'.$qRes[$key]['extension']['fileName'].$view.'.php';
+                include P_MODL.'mod-'.$qRes[$key]['extension']['fileName'].'/'.$qRes[$key]['extension']['fileName'].$view.'.php';
             } else {
                 continue;
             }
         } else {
-            include P_MOD.'mod-'.$qRes[$key]['extension']['fileName'].'/'.$qRes[$key]['extension']['fileName'].$view.'.php';
+            include P_MODL.'mod-'.$qRes[$key]['extension']['fileName'].'/'.$qRes[$key]['extension']['fileName'].$view.'.php';
         }
     }
 }

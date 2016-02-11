@@ -53,7 +53,7 @@ function getFromDBSelect($table, $table_name = null, $table_cond = null, $table_
     global $match;
     global $db;
 
-    if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
+    // if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
     header('Content-Type: application/json;');
 
     if ($table_cond === null || $table_param === null) {

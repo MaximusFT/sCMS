@@ -31,7 +31,16 @@ $columns = array(
                     data-title="Menu Extension">'.$d.'</a>';
         }
     ),
-    array('db' => 'title', 'dt' => 'title'),
+    array('db' => 'title', 'dt' => 'title',
+        'formatter' => function( $d, $row, $table ) {
+            return '
+            <a href="#" class="xedit"
+                    data-pk="'.$row['id'].'"
+                    data-value="'.$d.'"
+                    data-params=\'{"name":"title","table":"'.$table.'"}\'
+                    data-title="Заголовок">'.$d.'</a>';
+        }
+    ),
     array('db' => 'alias', 'dt' => 'alias'),
     array('db' => 'path', 'dt' => 'path'),
     array('db' => 'method', 'dt' => 'method',

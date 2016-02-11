@@ -13,17 +13,17 @@
             <thead>
                 <tr>
                     <th></th>
-                    <th>lang</th>
-                    <th>menutype_id</th>
-                    <th>extension_id</th>
-                    <th>method</th>
-                    <th>function</th>
+                    <th>LN</th>
+                    <th>Type</th>
+                    <th>Ext</th>
+                    <th>Method</th>
+                    <th>Func</th>
                     <th>home</th>
-                    <th>title</th>
-                    <th>alias</th>
-                    <th>path</th>
-                    <th>pos</th>
-                    <th>published</th>
+                    <th>Title</th>
+                    <th>Alias</th>
+                    <th>Path</th>
+                    <th>Pos</th>
+                    <th>Pub</th>
                 </tr>
             </thead>
         </table>
