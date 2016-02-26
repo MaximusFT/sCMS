@@ -1,0 +1,152 @@
+/**
+   Component: calendar.scss
+*/
+
+.calendar-app {
+
+  .calendar {
+    min-height: 450px;
+  }
+
+  .fc-button {
+    @inlcude button-variant($btn-default-color, $btn-default-bg, $btn-default-border);
+    @inlcude button-size($padding-small-vertical, $padding-small-horizontal, $font-size-small, $line-height-small, $border-radius-small);
+    height: auto;
+    background-image: none;
+    &:active,
+    &.active,
+    &.fc-state-active {
+      outline: 0;
+      background-image: none;
+      @include shadow-z1;
+    }
+
+  }
+
+  .fc-event {
+    border: 1px solid $brand-info;
+    background-color: $brand-info;
+    color: #fff;
+
+    // Different color for external events
+    &.is-external {
+      border: 1px solid $brand-purple;
+      background-color: $brand-purple;
+    }
+  }
+
+  .fc-button .fc-icon {
+    margin: 0 .1em;
+    font-size: inherit;
+    font-family: FontAwesome !important;
+    vertical-align: baseline;
+    color: #555;
+    // Remove any icon predefined by FullCalendar
+    &:after {
+      display: none;
+    }
+    $fa-var-angle-left: "\f104";
+    $fa-var-angle-right: "\f105";
+    &.fc-icon-right-single-arrow {
+      &:before {
+        content: $fa-var-angle-right;
+      }
+    }
+    &.fc-icon-left-single-arrow {
+      &:before {
+        content: $fa-var-angle-left;
+      }
+    }
+  }
+
+  .fc-toolbar h2 {
+    font-size: 18px;
+  }
+
+  // style cells
+  .fc .fc-month-view {
+    th, td{
+      border-left: 0;
+      border-right: 0;
+    }
+  }
+
+  // Hover and today hilight
+  .fc-state-highlight,
+  .fc-day:hover,
+  .fc-unthemed .fc-today {
+    background-color: $gray-lighter;
+  }
+
+  // Range selection
+  .fc-cell-overlay {
+    background-color: fadeout($brand-primary, 30%);
+  }
+
+  .fc-day-number {
+    font-size: 18px;
+    font-weight: bold;
+    color: #a1a2a3;
+  }
+
+
+  // Allow to drag event outside the calendar
+  .fc-view {
+    overflow: visible;
+  }
+
+
+  // Calendar app styles
+  // -----------------------
+
+  .external-events {
+    margin: 0;
+    > div {
+      display: inline-block;
+      margin-right: 5px;
+      margin-bottom: 5px;
+      padding: 6px 10px;
+      color: #fff;
+      font-size: 11px;
+      cursor: pointer;
+    }
+    &:empty {
+      content: "EMRTPUY";
+    }
+  }
+
+  // Remove events drop area
+  .external-events-trash {
+    position: relative;
+    min-height: 120px;
+    &:after {
+      content: "\f00d"; // .fa-times
+      position: absolute;
+      top: 0; left: 0;
+      right: 0; bottom: 0;
+      background-color: $brand-inverse;
+      opacity: 0;
+      font-family: FontAwesome;
+      color: #fff;
+      text-align: center;
+      font-size: 50px;
+      padding: 8%;
+      max-height: 100%;
+      @include transition(all .3s ease);
+      z-index: -1;
+    }
+    &.active:after {
+      opacity: 1;
+      z-index: 1;
+    }
+    &.hovered:after {
+      background-color: #fb797e;
+    }
+  }
+
+  .external-event-color-selector {
+    .circle.selected {
+      border: 3px solid rgba(255,255,255,.5);
+    }
+  }
+}

@@ -1,0 +1,68 @@
+/**
+   Component: form-upload.less
+*/
+ 
+.form-upload {
+
+  .dropzone {
+    min-height: 260px;
+    background: $gray-light;
+    outline: 0;
+    padding: 15px;
+    border: 1px dotted $gray;
+  }
+
+  .dropzone a.dz-remove,
+  .dropzone-previews a.dz-remove {
+    cursor: pointer;
+  }
+  .dropzone .dz-preview,
+  .dropzone-previews .dz-preview {
+    box-shadow: none;
+    border-color: #DDD;
+  }
+  .dropzone .dz-preview .dz-details .dz-size,
+  .dropzone-previews .dz-preview .dz-details .dz-size {
+    font-size: 13px;
+  }
+  .dropzone .dz-preview .dz-details,
+  .dropzone-previews .dz-preview .dz-details,
+  .dropzone .dz-preview .dz-details img,
+  .dropzone-previews .dz-preview .dz-details img {
+    width: 115px;
+  }
+  .dropzone a.dz-remove,
+  .dropzone-previews a.dz-remove {
+    margin-top: 30px;
+    border-radius: 0;
+  }
+  .dropzone .dz-preview.dz-error .dz-error-mark,
+  .dropzone-previews .dz-preview.dz-error .dz-error-mark,
+  .dropzone .dz-preview.dz-error .dz-success-mark,
+  .dropzone-previews .dz-preview.dz-error .dz-success-mark {
+    -webkit-transform: scale(0.7);
+    transform: scale(0.7);
+  }
+
+  .dropzone .dz-preview.dz-image-preview {
+    background-color: transparent;
+  }
+  .dropzone .dz-preview .dz-image {
+    border-radius: 2px;
+    border: 1px solid $gray;
+  }
+
+  .dropzone .dz-preview .dz-error-message {
+    top: 0;
+    background-color: $brand-danger;
+    border-radius: 2px;
+    &:after {
+      display: none;
+    }
+  }
+
+  .dz-remove {
+
+  }
+  
+}

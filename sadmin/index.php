@@ -25,14 +25,18 @@ $router->map( 'GET', '/comments/', 'CommentsCrtl', 'comments');
 $router->map( 'GET', '/subscribers/', 'SubscribersCrtl', 'subscribers');
 $router->map( 'GET', '/askings/', 'AskingsCrtl', 'askings');
 
-$router->map( 'GET', '/menu/', 'MenuCrtl', 'menu');
+$router->map('POST|GET', '/menu/', 'MenuCrtl', 'menu');
+$router->map('POST|GET', '/menu/[*:type]/', 'MenuOneCrtl', 'menuone');
+$router->map('POST|PUT', '/save/menu/add/', 'saveMenuAdd', 'save-menu-add', null, 'ajax');
+$router->map('POST|PUT', '/save/menu/del/', 'saveMenuDel', 'save-menu-del', null, 'ajax');
+$router->map('POST|PUT', '/save/menu/refresh/', 'saveMenuRefresh', 'save-menu-refresh', null, 'ajax');
 
 $router->map('POST', '/content/csv-to-mysql/', 'appCSVtoMysql', 'content-csv-to-mysql');
 $router->map( 'GET', '/content/mysql-to-csv/', 'appMysqlToCSV', 'content-mysql-to-csv');
 
 $router->map(' GET', '/people/', 'PeoplesCrtl', 'peoples');
 $router->map(' GET', '/people/[i:id]/', 'PeopleCrtl', 'people');
-$router->map('POST', '/people/add/', 'PeopleAddCrtl', 'people-add');
+$router->map('POST|PUT', '/people/add/', 'PeopleAddCrtl', 'people-add');
 $router->map(' GET', '/people/edit/[i:id]/', 'PeopleEditCrtl', 'people-edit');
 
 $router->map(' GET', '/family/', 'FamiliesCrtl', 'families');
@@ -68,6 +72,10 @@ $router->map('GET|POST',    '/get/typeaheadmf/[*:cond]/', 'getTypeAHeadMF', 'get
 
 $router->map('GET|POST',    '/get/prints/[*:id]', 'getPrintsCrtl', 'get-prints');
 
+// get Translit from POST params
+$router->map('GET|POST',    '/get/translit/', 'getTranslit', 'get-translit');
+$router->map('GET|POST',    '/get/translit/alias/', 'getTranslitAlias', 'get-translit-alias');
+
 $match = $router->match();
 
 if ($match['type'] === 'view' || $match['type'] === null){
@@ -80,6 +88,12 @@ if ($match['type'] === 'view' || $match['type'] === null){
 if($match && is_callable($match['target'])) {
     $res = call_user_func_array($match['target'], $match['params']);
     $res = json_decode(json_encode($res), FALSE);
+
+    if ($match['method'] === 'POST' && $res->appGoPost === true) {
+        include A_VIEW.$res->pageContent;
+        exit();
+    }
+
     require_once A_TEMP."_template.php";
 } else {
     header( $_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
@@ -90,6 +104,7 @@ if($match && is_callable($match['target'])) {
 /* Debuging */
 if (isset($_GET['d'])) {
     echo '<div class="debug"><pre>';
+    print_r($match);
     print_r($res);
     echo '</pre></div>';
 }

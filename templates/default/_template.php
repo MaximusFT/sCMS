@@ -1,6 +1,7 @@
 <?php
 require_once P_TEMP.'_head.php';
 ?>
+
     <nav class="navbar navbar-default" role="navigation">
         <div class="container">
             <div class="navbar-header">
@@ -15,9 +16,7 @@ require_once P_TEMP.'_head.php';
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav">
                     <?php
-                    foreach (json_decode(json_encode($res->qMenus->mainmenu), true) as $menus) {
-                        echo '<li'.(($res->qMenuCurr->alias == $menus['alias'])?' class="active"':'').'><a href="'.$menus['path'].'">'.$menus['title'].'</a></li>';
-                    }
+                        echo frontMenuBuild(json_decode($res->qMenus->mainmenu->params, true), json_decode(json_encode($res->qMenus->mainmenu->items), true), $res->qMenuCurr->alias);
                     ?>
                 </ul>
             </div>
@@ -37,13 +36,6 @@ require_once P_TEMP.'_head.php';
             <div id="copyright" class="row">
                 <div class="col-md-4">
                     <?php echo funPos('module', 'footer-pos-left');?>
-                    <ul class="list-unstyled">
-                        <?php
-                        foreach (json_decode(json_encode($res->qMenus->footermenu), true) as $menus) {
-                            echo '<li'.(($res->qMenuCurr->alias == $menus['alias'])?' class="active"':'').'><a href="'.$menus['path'].'">'.$menus['title'].'</a></li>';
-                        }
-                        ?>
-                    </ul>
                 </div>
                 <div class="col-md-4">
                     <?php echo funPos('module', 'footer-pos-center');?>

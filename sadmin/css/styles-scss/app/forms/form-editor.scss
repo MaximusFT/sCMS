@@ -1,0 +1,40 @@
+/**
+   Component: form-editor.less
+*/
+ 
+.summernote {
+  + .note-editor {
+    border: 1px solid $gray-light ;
+    .note-toolbar {
+      background: $gray-lighter;
+      border: 0;
+      border-bottom: 1px solid $gray-light;
+      padding: 0 10px 10px;
+      margin: 0;
+    }
+    .note-toolbar > .btn-group {
+      margin-top: 10px;
+    }
+    .btn-sm,
+    .btn-group-sm > .btn {
+      padding: 5px 10px;
+    }
+    .btn-default {
+      background-color: #fff;
+      border-color: $gray-light;
+      border-radius: 2px;
+    }
+    .note-editable {
+      overflow: auto;
+    }
+    .note-statusbar {
+      background: none;
+    }
+    .note-statusbar .note-resizebar {
+      border: none;
+    }
+    .note-dialog .modal-dialog {
+      padding-top: 50px;
+    }
+  }
+}

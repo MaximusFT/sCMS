@@ -19,7 +19,52 @@ function MenuCrtl() {
     global $db;
 
     return [
+        'appGoPost'       => true,
         'params'          => qToDB($match),
+        'pageContent'     => $pathTo.$match['name'].'.php'
+    ];
+}
+
+function MenuOneCrtl($type) {
+    global $match;
+    global $db;
+
+    $menuArray = $db->get("menutype", ["title", "params", "lang"], [
+        "id" => $type
+    ]);
+
+    $menuItems_alt = $db->select("menu", [
+        "[>]extension" => ["extension_id" => "id"]
+    ], [
+        "menu.id",
+        "menu.extension_id",
+        "menu.menutype_id",
+        "extension.title(extension_title)",
+        "menu.link_id",
+        "menu.title",
+        "menu.alias",
+        "menu.path",
+        "menu.method",
+        "menu.function",
+        "menu.published",
+        "menu.img",
+        "menu.home",
+        "menu.params"
+    ], [
+        "menutype_id" => $type
+    ]);
+
+    foreach ($menuItems_alt as $key => $value) {
+        $menuItems[$value['id']] = $value;
+    }
+
+    return [
+        'appGoPost'       => true,
+        'menuLang'        => $menuLang,
+        'menuArray'       => $menuArray,
+        'menuItems'       => $menuItems,
+        'params'          => qToDB($match),
+        'menuTypeId'      => $type,
         'pageContent'     => $pathTo.$match['name'].'.php'
     ];
 }

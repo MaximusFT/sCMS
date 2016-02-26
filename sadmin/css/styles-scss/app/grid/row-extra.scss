@@ -1,0 +1,64 @@
+/**
+   Component: row-extra.scss
+*/
+
+.container-lg {
+  max-width: 1200px;
+  width: auto;
+}
+
+.container-md {
+  max-width: 768px;
+  width: auto;
+}
+
+.container-sm {
+  max-width: 640px;
+  width: auto;
+}
+
+//
+// Utilities to manage bootstrap rows and cols
+// with more flexibility
+// Use in conjunction with .row
+// ---------------------------------------------
+
+// Display a row using table layout
+// allows to have vertically aligned elements
+
+@media #{$mobile} {
+  .row-table {
+    display: table;
+    table-layout: fixed;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+
+    > [class*="col-"] {
+      display: table-cell;
+      float: none;
+      table-layout: fixed;
+      vertical-align: middle;
+    }
+  }
+}
+// Remove padding and collapse columns
+.row-flush {
+  > [class*="col-"] {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+// Reduce padding in row>cols
+$container-flush-sz: 5px;
+.container-flush {
+  .row {
+    margin-left: -$container-flush-sz;
+    margin-right: -$container-flush-sz;
+    > [class*="col-"] {
+      padding-left: $container-flush-sz;
+      padding-right: $container-flush-sz;
+    }
+  }
+}

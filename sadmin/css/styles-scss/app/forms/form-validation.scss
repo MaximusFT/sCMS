@@ -1,0 +1,27 @@
+/**
+   Component: form-validation.less
+*/
+
+//
+// Styles for validation results
+//
+
+
+.form-validate {
+  .form-control {
+
+    // Invalid input
+    &.error {
+        border-color: $brand-danger;
+    }
+    // Valid input
+    &.valid,
+    &.valid:focus {
+        border-color: $brand-success;
+    }
+
+  }
+  // label.error {
+  //   color: $brand-danger;
+  // }
+}

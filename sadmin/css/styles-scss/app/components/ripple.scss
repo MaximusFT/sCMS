@@ -1,0 +1,54 @@
+/**
+   Component: ripple.less
+*/
+
+[data-ripple] {
+  position: relative;
+  > .ripple {
+    position: absolute;
+    top: 0; right: 0;
+    bottom: 0; left: 0;
+    overflow: hidden;
+    > .angular-ripple {
+      display: block;
+      position: absolute;
+      background-color: #d1d2d3;
+      border-radius: 50%;
+      @include scale(0);
+      &.animate {
+        @include animation(ripple 0.35s linear);
+      }
+    }
+  }
+}
+
+@keyframes ripple {
+  from {
+    @include scale(0);
+    opacity: 0.4;
+  }
+  to {
+    @include scale(3);
+    opacity: 0;
+  }
+}
+@-moz-keyframes ripple {
+  from {
+    @include scale(0);
+    opacity: 0.4;
+  }
+  to {
+    @include scale(3);
+    opacity: 0;
+  }
+}
+@-webkit-keyframes ripple {
+  from {
+    @include scale(0);
+    opacity: 0.4;
+  }
+  to {
+    @include scale(3);
+    opacity: 0;
+  }
+}

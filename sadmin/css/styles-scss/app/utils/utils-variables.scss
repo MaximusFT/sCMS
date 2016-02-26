@@ -1,0 +1,70 @@
+/**
+   Component: utils-variables.scss
+*/
+
+//
+// Utilities classes to simplify
+// components constructions
+// ------------------------------
+
+// Variables
+// -----------------------------------
+
+$margin-base: 10px;
+$margin-sm:   5px;
+$margin-lg:   15px;
+$margin-xl:   30px;
+
+$padding-xxl:  25px;
+$padding-xl:   20px;
+$padding-lg:   15px;
+$padding-base: 10px;
+$padding-sm:   5px;
+
+$text-alpha:            rgba(255,255,255,.5);
+$text-alpha-inverse:    rgba(0,0,0,.5);
+
+$text-xs:               $font-size-base * .6;
+$text-sm:               $font-size-base * .85;
+$text-md:               $font-size-base * 1.7;
+$text-lg:               $font-size-base * 3;
+$text-hg:               $font-size-base * 4;
+
+$border-color:          darken($gray-lighter, 3%);
+
+$wd-tiny:               50px;
+$wd-xxs:                60px;
+$wd-xs:                 90px;
+$wd-sm:                 150px;
+$wd-sd:                 200px; // sd == standard
+$wd-md:                 240px;
+$wd-lg:                 280px;
+$wd-xl:                 320px;
+$wd-xxl:                360px;
+$wd-wide:               100%;
+$wd-auto:               auto;
+
+// Shadows
+// -----------------------------------
+@mixin shadow-z1() {
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 6px rgba(0, 0, 0, 0.12) !important;
+}
+
+@mixin shadow-z2() {
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.23), 0 3px 10px rgba(0, 0, 0, 0.16) !important;
+}
+@mixin shadow-z2-hover() {
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.23), 0 10px 30px rgba(0, 0, 0, 0.19) !important;
+}
+
+@mixin shadow-z3() {
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.23), 0 10px 30px rgba(0, 0, 0, 0.19) !important;
+}
+
+@mixin shadow-z4() {
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.22), 0 14px 45px rgba(0, 0, 0, 0.25) !important;
+}
+
+@mixin shadow-z5() {
+  box-shadow: 0 15px 20px rgba(0, 0, 0, 0.22), 0 19px 60px rgba(0, 0, 0, 0.3) !important;
+}

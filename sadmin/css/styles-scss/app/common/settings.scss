@@ -1,0 +1,146 @@
+/**
+   Component: settings.scss
+*/
+
+
+.settings-wrapper {
+  position: fixed;
+  width: 250px;
+  top: $header-hg + 50;
+  right: -254px;
+  z-index: 3001;
+  @include transition(right .3s $easeInOutQuint);
+  > .settings-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    border: 1px solid $gray;
+    padding-right: 20px;
+    @include shadow-z2;
+
+    .settings-button {
+      position: absolute;
+      top: 50px;
+      right: 100%;
+      width: 50px;
+      height: 50px;
+      line-height: 50px;
+      background-color: inherit;
+      border: inherit;
+      border-right: #fff;
+      cursor: pointer;
+      text-align: center;
+
+      @include transition(top .3s ease .1s, right .3s ease .1s, box-shadow 0s linear .3s, border .3s linear .3s, background 0s linear .3s);
+      @include shadow-z2;
+      > em {
+        font-size: 20px;
+        color: $text-muted;
+        &:before {
+          @include transition(content 0s linear .4s);
+          content: "\e023";
+        }
+      }
+    }
+    &:after {
+      content: "";
+      position: absolute;
+      background-color: #fff;
+      top: 0;
+      left: -5;
+      width: 5px;
+      height: 50px;
+    }
+  }
+  &.visible {
+    right: -20px;
+    .settings-button {
+      top: -5px;
+      right: 15px;
+      border: 0;
+      -webkit-box-shadow: 0 0 0 #000 !important;
+      box-shadow: 0 0 0 #000 !important;
+      background-color: transparent;
+      @include transition(top .3s ease .1s, right .3s ease .1s);
+      > em {
+        &:before {
+          content: "\e117";
+        }
+      }
+    }
+  }
+}
+
+.setting-color {
+  padding: 0 5px;
+
+  > label {
+    display: block;
+    position: relative;
+    height: 40px;
+    margin: 0 10px;
+    border-radius: 3px;
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,.1);
+    cursor: pointer;
+    border: 1px solid $gray;
+
+    &:first-child { margin-left: 0}
+    &:last-child { margin-right: 0}
+
+    .list-table {
+      height: 100%;
+      margin: 0;
+    }
+
+    $baseHg: 15px;
+    > .color {
+      display: block;
+      height: $baseHg * 1.2;
+    }
+
+    > .split {
+      @include clearfix;
+      display: block;
+      > .color {
+        display: block;
+        height: $baseHg * 2.5;
+        &:first-child {
+          float: left;
+          width: 70%;
+        }
+        &:last-child {
+          float: right;
+          width: 30%;
+        }
+      }
+    }
+
+    // icon checked
+    > .icon-check {
+      position: absolute;
+      display: block;
+      left: 50%;
+      top: 50%;
+      width: 20px;
+      height: 20px;
+      margin-top: -10px;
+      margin-left: -10px;
+      text-align: center;
+      font-size: 1.33333333em;
+      vertical-align: -15%;
+      color: #fff;
+      opacity: 0;
+    }
+
+    > input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      visibility: hidden;
+      &:checked + .icon-check {
+        opacity: 1 !important;
+      }
+    }
+  }
+}

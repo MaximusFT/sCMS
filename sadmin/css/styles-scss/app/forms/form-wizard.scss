@@ -1,0 +1,105 @@
+/**
+   Component: form-wizard.less
+*/
+
+$wizard-primary-color:        $brand-primary;
+$wizard-steps-bg:             $jumbotron-bg;
+$wizard-steps-bg-active:      $wizard-primary-color;
+
+$wizard-heading-color:        $text-color;
+$wizard-subheading-color:     $text-muted;
+
+.form-wizard {
+  .wizard > .content,
+  .wizard > .steps .disabled a, .wizard > .steps .disabled a:hover, .wizard > .steps .disabled a:active {
+    background-color: $wizard-steps-bg;
+  }
+
+  .wizard > .steps .current a, .wizard > .steps .current a:hover, .wizard > .steps .current a:active,
+  .wizard > .actions a, .wizard > .actions a:hover, .wizard > .actions a:active {
+    background-color: $wizard-steps-bg-active;
+  }
+
+  .wizard > .steps .done a, .wizard > .steps .done a:hover, .wizard > .steps .done a:active {
+    background-color: rgba($wizard-steps-bg-active, 0.25);
+  }
+
+  .wizard > .content > .body input.error {
+    background-color: #fff;
+    border-color: $brand-danger;
+  }
+  .wizard > .content > .body label.error {
+    color: $brand-danger;
+  }
+
+  label > label {
+    display: block !important;
+    margin-left: -20px !important;
+    padding-left: 0 !important;
+  }
+}
+
+.steps-bar {
+  margin-bottom: 30px;
+  overflow: hidden;
+  counter-reset: step; // CSS counters to number the steps
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+
+  > li {
+    display: table-cell;
+    list-style-type: none;
+    text-transform: uppercase;
+    font-size: 10px;
+    position: relative;
+    text-align: center;
+
+    > span {
+      cursor: pointer;
+    }
+
+    &:before {
+      content: counter(step);
+      position: relative;
+      counter-increment: step;
+      width: 30px;
+      line-height: 30px;
+      display: block;
+      font-size: 14px;
+      color: #333;
+      background: white;
+      border-radius: 3px;
+      margin: 0 auto 5px auto;
+      z-index: 2;
+    }
+
+    // progressbar connectors
+    &:after {
+      content: '';
+      width: 0;
+      height: 2px;
+      background: white;
+      position: absolute;
+      left: -50%;
+      top: 14px;
+      z-index: 1; /*put it behind the numbers*/
+      @include transition(width .3s ease-out);
+    }
+
+    // connector not needed before the first step
+    &:first-child:after {
+      content: none;
+    }
+
+    /* paint the steps progress */
+    &.active:before,
+    &.active:after {
+      background: $brand-primary;
+      color: white;
+    }
+    &.active:after {
+      width: 100%;
+    }
+  }
+}

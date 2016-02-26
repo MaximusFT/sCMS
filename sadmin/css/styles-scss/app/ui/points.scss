@@ -1,0 +1,102 @@
+/**
+   Component: points.scss
+*/
+ 
+//
+// Colored point for indication purposes
+// 
+
+$point-sz-sm:       5px;
+$point-sz:          7px;
+$point-sz-lg:       11px;
+$point-sz-xl:       18px;
+
+.point {
+  display: inline-block;
+  width: $point-sz;
+  height: $point-sz;
+  border-radius: 500px;
+  margin: 0 .5em;
+  background-color: $gray;
+  vertical-align: baseline;
+  border: 1px solid rgba(255,255,255,.5);
+  &.text-left {
+    margin-left: 0;
+  }
+  &.text-right {
+    margin-right: 0;
+  }
+}
+
+.point-primary {
+  background-color: $brand-primary;
+}
+.point-success {
+  background-color: $brand-success;
+}
+.point-info {
+  background-color: $brand-info;
+}
+.point-warning {
+  background-color: $brand-warning;
+}
+.point-danger {
+  background-color: $brand-danger;
+}
+.point-amber {
+  background-color: $brand-amber;
+}
+.point-pink {
+  background-color: $brand-pink;
+}
+.point-inverse {
+  background-color: $brand-inverse;
+}
+.point-purple {
+  background-color: $brand-purple;
+}
+
+
+.point-sm {
+  width: $point-sz-sm;
+  height: $point-sz-sm;
+}
+
+.point-lg {
+  width: $point-sz-lg;
+  height: $point-sz-lg;
+}
+
+.point-xl {
+  width: $point-sz-xl;
+  height: $point-sz-xl;
+}
+
+.point-outline {
+  background-color: transparent;
+  &.point-primary {
+    border: 1px solid $brand-primary;
+  }
+  &.point-success {
+    border: 1px solid $brand-success;
+  }
+  &.point-info {
+    border: 1px solid $brand-info;
+  }
+  &.point-warning {
+    border: 1px solid $brand-warning;
+  }
+  &.point-danger {
+    border: 1px solid $brand-danger;
+  }
+}
+
+.point-pin {
+  position: relative;
+  > .point {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    margin: 0;
+  }
+}

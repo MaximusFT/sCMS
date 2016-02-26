@@ -1,0 +1,51 @@
+/**
+   Component: slim-scroll.scss
+*/
+
+$slim-scroll-bar-bg:      rgba(#000, .35);
+$slim-scroll-rail-bg:     rgba(#000, .15);
+
+
+// Important to override js inline styles
+.slimScrollBar {
+  opacity: 0 !important;
+  background-color: $slim-scroll-bar-bg !important;
+  border: 0 !important;
+  border-radius: 1px !important;
+  @include transition(opacity .3s ease);
+}
+
+.slimScrollDiv:hover {
+  .slimScrollBar {
+    opacity: 0.4 !important;
+  }
+}
+
+.slimScrollRail {
+  opacity: 1 !important;
+  background-color: $slim-scroll-rail-bg !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  bottom: 0;
+}
+
+// Simulate smooth gradient at the bottom of on element
+// to hide content. Ideal for scrollable elements
+
+.smoothy {
+  position: relative;
+  z-index: 1;
+  &:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 30px;
+    width: 100%;
+    background: 100px;
+    box-shadow: 0 -15px 15px #ffffff inset;
+    z-index: 9999;
+    overflow: visible;
+  }
+}

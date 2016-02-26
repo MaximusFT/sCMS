@@ -1,0 +1,66 @@
+//
+// Custom datatables
+// --------------------------------------------------
+
+table.dataTable {
+  border-bottom: 1px solid $gray-light !important;
+}
+
+table.dataTable thead th,
+table.dataTable thead td {
+  border-bottom: 1px solid $gray-light !important;
+}
+
+// Input styles
+.dataTables_wrapper .dataTables_filter input,
+.dataTables_wrapper select {
+  box-shadow: none;
+  // -webkit-appearance: none;
+  height: $input-height-small; // Make inputs at least the height of their button counterpart (base line-height + padding + border)
+  padding: $padding-small-vertical $padding-small-horizontal;
+  font-size: $font-size-small;
+  line-height: $line-height-small;
+  color: $input-color;
+  background-color: $input-bg;
+  background-image: none; // Reset unusual Firefox-on-Android default style; see https://github.com/necolas/normalize.css/issues/214
+  border: 1px solid $input-border;
+  border-radius: $input-border-radius; // Note: This has no effect on <select>s in some browsers, due to the limited stylability of <select>s in CSS.
+}
+
+// Pagination buttons
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  background-image: none !important;
+  background-color: $gray-lighter !important;
+  border: 0 !important;
+  &:hover {
+    background-color: #fff !important;
+  }
+}
+
+table.dataTable tfoot th, table.dataTable tfoot td {
+  border-top: 1px solid $gray-light !important;
+}
+
+// place controls correctly
+@media #{$upto-tablet} {
+  div.dataTables_filter label,
+  div.dataTables_length label,
+  div.dataTables_paginate {
+    float: none;
+    select {
+      display: block;
+      margin: 0 auto;
+    }
+  }
+  .dataTables_wrapper {
+    > .row > div {
+      float: none;
+      text-align: center;
+      width: 100%;
+    }
+  }
+  .dataTables_wrapper .dataTables_filter input {
+    margin-left: 0.5em;
+    display: block;
+  }
+}

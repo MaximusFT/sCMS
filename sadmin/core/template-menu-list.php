@@ -87,7 +87,6 @@ $columns = array(
                     data-title="Language">'.$d.'</a>';
         }
     ),
-    array('db' => 'pos', 'dt' => 'pos'),
     array(
         'db' => 'id',
         'dt' => 'addInfoRowDT',
@@ -112,20 +111,6 @@ $columns = array(
                     data-type="text"
                     data-params=\'{"name":"params","table":"'.$table.'"}\'
                     data-title="Телефон Домашний">'.$row['params'].'</a></dd>
-
-                <dt for="parent_id">parent_id</dt>
-                <dd><a href="#" class="xedit"
-                    data-pk="'.$row['id'].'"
-                    data-type="text"
-                    data-params=\'{"name":"parent_id","table":"'.$table.'"}\'
-                    data-title="Телефон Основной">'.$row['parent_id'].'</a></dd>
-
-                <dt for="level">level</dt>
-                <dd><a href="#" class="xedit"
-                    data-pk="'.$row['id'].'"
-                    data-type="text"
-                    data-params=\'{"name":"level","table":"'.$table.'"}\'
-                    data-title="Телефон Домашний">'.$row['level'].'</a></dd>
             </dl>
     </div>
     <div class="col-sm-4">
@@ -135,7 +120,5 @@ $columns = array(
         }
     ),
     array('db' => 'link_id', 'dt' => 'link_id'),
-    array('db' => 'params', 'dt' => 'params'),
-    array('db' => 'parent_id', 'dt' => 'parent_id'),
-    array('db' => 'level', 'dt' => 'level')
+    array('db' => 'params', 'dt' => 'params')
 );

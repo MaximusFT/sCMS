@@ -1,0 +1,259 @@
+/**
+   Component: utils-background.scss
+*/
+
+// Background helpers
+//  Generates bg classes for
+//    .bg-{brand-name}
+//    .bg-{brand-name}-light
+//    .bg-{brand-name}-dark
+
+$colors: (
+  'primary-light': $brand-primary-light,
+  'primary':       $brand-primary,
+  'primary-dark':  $brand-primary-dark,
+  'success-light': $brand-success-light,
+  'success':       $brand-success,
+  'success-dark':  $brand-success-dark,
+  'info-light':    $brand-info-light,
+  'info':          $brand-info,
+  'info-dark':     $brand-info-dark,
+  'warning-light': $brand-warning-light,
+  'warning':       $brand-warning,
+  'warning-dark':  $brand-warning-dark,
+  'danger-light':  $brand-danger-light,
+  'danger':        $brand-danger,
+  'danger-dark':   $brand-danger-dark,
+  'amber-light':   $brand-amber-light,
+  'amber':         $brand-amber,
+  'amber-dark':    $brand-amber-dark,
+  'orange-light':  $brand-orange-light,
+  'orange':        $brand-orange,
+  'orange-dark':   $brand-orange-dark,
+  'pink-light':    $brand-pink-light,
+  'pink':          $brand-pink,
+  'pink-dark':     $brand-pink-dark,
+  'purple-light':  $brand-purple-light,
+  'purple':        $brand-purple,
+  'purple-dark':   $brand-purple-dark,
+  'inverse-light': $brand-inverse-light,
+  'inverse':       $brand-inverse,
+  'inverse-dark':  $brand-inverse-dark,
+  'noir':          $brand-noir,
+  'white':         $brand-white,
+  'gray-darker':   $gray-darker,
+  'gray-dark':     $gray-dark,
+  'gray':          $gray,
+  'gray-light':    $gray-light,
+  'gray-lighter':  $gray-lighter
+);
+
+@function colorkey($key) {
+  @return map-get($colors, $key);
+}
+
+@mixin bgcolor-variant($bg)
+{
+
+  &.bg-light {
+    $colLight: #{$bg}-light;
+    background-color: colorkey($colLight) !important;
+  }
+  &.bg-dark {
+    $colDark: #{$bg}-dark;
+    background-color: colorkey($colDark) !important;
+  }
+
+}
+
+@mixin make-bg($bg, $color: 0, $link: 0, $muted: 0, $navlinkbg: 0)
+{
+  $bgColor: colorkey($bg);
+  @if($color == 0) {
+    $color: lighten($bgColor, 43%);
+  }
+  @if($link == 0) {
+    $link: lighten($bgColor, 52%);
+  }
+  @if($muted == 0) {
+    $muted: lighten($bgColor, 26%);
+  }
+  @if($navlinkbg == 0) {
+    $navlinkbg: darken($bgColor, 8%);
+  }
+
+  background-color: $bgColor !important;
+  // @include transition(background-color .2s ease);
+
+  & {
+    color: $color;
+    a {
+      color: mix($link, $bgColor, 70%);
+      &:focus, &:hover {
+        color: $link;
+      }
+      // &.btn-default { color: $btn-default-color; }
+      // &.btn-primary { color: $btn-primary-color; }
+      // &.btn-success { color: $btn-success-color; }
+      // &.btn-info    { color: $btn-info-color;    }
+      // &.btn-warning { color: $btn-warning-color; }
+      // &.btn-danger  { color: $btn-danger-color;  }
+    }
+
+    .nav > li {
+      > a {
+        color: $link;
+      }
+      &.active {
+        background-color: mix($bgColor, $navlinkbg, 50%) !important;
+      }
+      &:hover,
+      &.active {
+        > a { color: lighten($link, 5%); }
+      }
+      &:hover,
+      &.active {
+        > a { background-color: $navlinkbg; }
+      }
+    }
+
+    .sidebar-subnav {
+      background-color: $bgColor;
+      > li.active {
+        > a {
+          font-weight: bold;
+          background-color: transparent;
+        }
+      }
+    }
+
+    .navbar-form {
+      .form-control {
+        background-color: $bgColor;
+        color: $color;
+        @include placeholder($muted);
+        .ie9 & {
+          border-bottom: 1px solid rgba($muted, .15);
+        }
+      }
+      .form-control-feedback,
+      .input-group-addon {
+        color: $muted;
+      }
+    }
+
+    .text-muted {
+      color: $muted
+    }
+    .text-loud {
+      color: lighten($muted, 26%);
+    }
+
+    small {
+      color: inherit;
+    }
+    @media print {
+      color: #000 !important;
+
+    }
+    .help-block {
+      color: $muted
+    }
+
+    .flot-tick-label {
+      color: $color;
+    }
+    hr {
+      border-top-color: rgba($muted, .26);
+    }
+  }
+}
+
+.bg-gray         { @include make-bg('gray'); }
+.bg-gray-darker  { @include make-bg('gray-darker'); }
+.bg-gray-dark    { @include make-bg('gray-dark'); }
+.bg-gray-light   {
+  @include make-bg('gray-light', $text-color, #919293, $gray, #fff);
+}
+.bg-gray-lighter {
+  @include make-bg('gray-lighter', $text-color, #919293, $gray, #fff);
+}
+#bg-white,
+.bg-white {
+  @include make-bg('white', $text-color, $gray-dark, $text-muted, #f1f2f3 );
+}
+
+.bg-inverse {
+  @include make-bg('inverse');
+  @include bgcolor-variant('inverse');
+}
+.bg-primary {
+  @include make-bg('primary');
+  @include bgcolor-variant('primary');
+}
+.bg-success {
+  @include make-bg('success');
+  @include bgcolor-variant('success');
+}
+.bg-info {
+  @include make-bg('info');
+  @include bgcolor-variant('info');
+}
+.bg-warning {
+  @include make-bg('warning');
+  @include bgcolor-variant('warning');
+}
+.bg-danger {
+  @include make-bg('danger');
+  @include bgcolor-variant('danger');
+}
+.bg-amber {
+  @include make-bg('amber');
+  @include bgcolor-variant('amber');
+}
+.bg-pink {
+  @include make-bg('pink');
+  @include bgcolor-variant('pink');
+}
+.bg-purple {
+  @include make-bg('purple');
+  @include bgcolor-variant('purple');
+}
+.bg-orange {
+  @include make-bg('orange');
+  @include bgcolor-variant('orange');
+}
+
+.bg-transparent {
+  background-color: transparent !important;
+}
+
+// Background hover
+
+// .bg-hover-primary      { &:hover { &:extend(.bg-primary);} }
+// .bg-hover-success      { &:hover { &:extend(.bg-success);} }
+// .bg-hover-info         { &:hover { &:extend(.bg-info);} }
+// .bg-hover-warning      { &:hover { &:extend(.bg-warning);} }
+// .bg-hover-danger       { &:hover { &:extend(.bg-danger);} }
+// .bg-hover-amber    { &:hover { &:extend(.bg-amber);} }
+// .bg-hover-pink         { &:hover { &:extend(.bg-pink);} }
+// .bg-hover-purple       { &:hover { &:extend(.bg-purple);} }
+// .bg-hover-inverse      { &:hover { &:extend(.bg-inverse);} }
+// .bg-hover-orange       { &:hover { &:extend(.bg-orange);} }
+
+// .bg-hover-white        { &:hover { &:extend(.bg-white);} }
+// .bg-hover-gray-darker  { &:hover { &:extend(.bg-gray-darker);} }
+// .bg-hover-gray-dark    { &:hover { &:extend(.bg-gray-dark);} }
+// .bg-hover-gray         { &:hover { &:extend(.bg-gray);} }
+// .bg-hover-gray-light   { &:hover { &:extend(.bg-gray-light);} }
+// .bg-hover-gray-lighter { &:hover { &:extend(.bg-gray-lighter);} }
+
+
+
+// Background pics shortcut
+.bg-pic1 { background-image: url('../images/bg1.jpg'); }
+.bg-pic2 { background-image: url('../images/bg2.jpg'); }
+.bg-pic3 { background-image: url('../images/bg3.jpg'); }
+.bg-pic4 { background-image: url('../images/bg4.jpg'); }
+.bg-pic5 { background-image: url('../images/bg5.jpg'); }
+.bg-pic6 { background-image: url('../images/bg6.jpg'); }

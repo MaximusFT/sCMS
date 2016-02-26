@@ -1,0 +1,140 @@
+/**
+   Component: layermorph.scss
+*/
+
+$layer-overlay-zindex:        9001;
+$layer-close-zindex:          $layer-overlay-zindex + 2;
+$layer-container-zindex:      $layer-overlay-zindex + 1;
+
+// Main overlay
+.layer-morph-overlay {
+  visibility: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: $layer-overlay-zindex;
+  @include transition(visibility 0s linear .5s);
+  > .layer-morph-inner {
+    position: absolute;
+    border-radius: 100%;
+    z-index: 1;
+    @include scale(0);
+    @include transform-origin(50% 50%);
+    @include backface-visibility(hidden);
+    @include transition-transform(.5s cubic-bezier(.42, 0, .58, 1));
+  }
+}
+
+// Close button
+.layer-morph-close {
+  position: fixed;
+  z-index: 2;
+  top: 20px;
+  right: 30px;
+  opacity: 0;
+  color: #fff;
+  z-index: $layer-close-zindex;
+  cursor: pointer;
+  visibility: hidden;
+  @include transition(opacity 0.2s ease 0s);
+  > em {
+    font-size: 40px;
+    color: rgba(255,255,255,.5);
+  }
+  &:hover {
+    > em {
+      color: #fff;
+    }
+  }
+}
+
+// Overlay active state
+.layer-morph-active {
+  > .app-container {
+    > footer {
+      display: none;
+    }
+  }
+  .layer-morph-overlay {
+    visibility: visible;
+    @include transition(visibility 0s linear 0s);
+    > .layer-morph-inner {
+      @include scale(1);
+      @include transition-transform(.5s cubic-bezier(.42, 0, .58, 1));
+    }
+  }
+  .layer-morph-close {
+    visibility: visible;
+    opacity: 1;
+    @include transition(opacity 0.2s ease .4s);
+  }
+}
+
+.layer-morph-ready {
+  overflow: hidden !important;
+  > .app-container {
+    > section {
+      overflow: hidden !important;
+    }
+  }
+}
+
+
+// Content container
+.layer-morph-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  visibility: hidden;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  z-index: $layer-container-zindex;
+
+  .layer-morph-wrapper {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    padding: 30px;
+    padding-bottom: 50px;
+    @media #{$tablet} {
+      padding-left: 70px;
+    }
+  }
+
+  .layer-morph {
+    position: relative;
+    width: 100%;
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+    @include transition(opacity 0.5s ease 0s);
+    &.active {
+      min-height: 100%;
+      height: auto;
+      opacity: 1;
+    }
+  }
+  &.active {
+    visibility: visible;
+    .layer-morph {
+      opacity: 1;
+    }
+  }
+
+  .layer-morph-footer {
+    position: relative;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    text-align: right;
+    font-weight: bold;
+    color: #fff;
+    font-size: 13px;
+    padding: 15px 0;
+  }
+}

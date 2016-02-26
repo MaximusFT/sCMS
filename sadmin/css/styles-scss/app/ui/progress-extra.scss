@@ -1,0 +1,36 @@
+/**
+   Component: progress-extra.scss
+*/
+
+// Different size of Progress bars
+
+$progress-height-sm:  14px;
+$progress-height-xs:  8px;
+$progress-height-xxs: 2px;
+
+.progress-sm {
+  height: $progress-height-sm;
+}
+
+.progress-xs {
+  height: $progress-height-xs;
+}
+
+.progress-xxs {
+  height: $progress-height-xxs;
+}
+
+// Progress color variants
+
+.progress-bar-purple {
+  @include progress-bar-variant($brand-purple);
+}
+.progress-bar-inverse {
+  @include progress-bar-variant($brand-inverse);
+}
+.progress-bar-amber {
+  @include progress-bar-variant($brand-amber);
+}
+.progress-bar-pink {
+  @include progress-bar-variant($brand-pink);
+}

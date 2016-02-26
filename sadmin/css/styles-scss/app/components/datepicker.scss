@@ -1,0 +1,12 @@
+/**
+   Component: datepicker.less
+*/
+
+.bootstrap-datetimepicker-widget table td,
+.bootstrap-datetimepicker-widget table td span {
+  background-image: none !important;
+  &.active,
+  &.active:hover {
+    background-color: $brand-primary !important;
+  }
+}

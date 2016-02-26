@@ -250,22 +250,24 @@ class AltoRouter {
 					}
 				}
 
-				$resMenus = $this->db->select("menutype", '*');
+				$resMenus = $this->db->select("menutype", '*', [
+						"lang"=>$this->lang,
+					]);
 				foreach ($resMenus as $key => $value) {
 					$qTmp = $this->db->select("menu", '*', [
 						"AND" => [
-							"menutype_id"=>$value['id'],
-							"lang"=>$this->lang,
-							"level"=>1,
+							"menutype_id" => $value['id'],
 							"published" => 1
-							],
-						"ORDER" => ['pos ASC']
+							]
 					]);
-					$Menus[$value['name']] = $qTmp;
+					$Menus[$value['name']]['params'] = $value['params'];
+					foreach ($qTmp as $key => $val) {
+						$Menus[$value['name']]['items'][$val['id']] = $val;
+					}
 				}
 				$resMenu = $this->db->get("menu", '*', [
 					"AND" => [
-						"id"=>$id,
+						"id" => $id,
 						"published" => 1
 						]
 					]
@@ -288,6 +290,7 @@ class AltoRouter {
 
 				return [
 					'target' => $target,
+					'method' => $method,
 					'params' => $params,
 					'name' => $name,
 					'fileType' => $fileType,

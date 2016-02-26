@@ -1,32 +1,36 @@
 <div class="row">
     <div class="col-md-4">
-        <h2>Меню сайта</h2>
-    </div>
-    <div class="col-md-4">
-        <button type="button" class="btn btn-success" data-toggle="modal" data-keyboard="false" data-target="#modalMenuAdd">Add</button>
+        <h2>Menu Types</h2>
     </div>
     <div class="col-md-4"></div>
+    <div class="col-md-4">
+    </div>
 </div>
 <div class="row">
     <div class="col-md-12">
-        <table id="myTable" class="table table-condensed table-striped table-bordered" cellspacing="0" width="100%">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>LN</th>
-                    <th>Type</th>
-                    <th>Ext</th>
-                    <th>Method</th>
-                    <th>Func</th>
-                    <th>home</th>
-                    <th>Title</th>
-                    <th>Alias</th>
-                    <th>Path</th>
-                    <th>Pos</th>
-                    <th>Pub</th>
-                </tr>
-            </thead>
-        </table>
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <div class="clearfix">
+                    <div id="nestable-menu" class="pull-left">
+                        <button type="button" data-toggle="modal" data-target="#modalMenuAdd" class="btn btn-success btn-xs"><i class="fa fa-plus"></i> Add MenuType</button>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table id="myTable" class="table table-condensed table-striped table-bordered" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Edit items</th>
+                                <th>Language</th>
+                                <th>Name</th>
+                                <th>Title</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -122,69 +126,29 @@ $(function() {
         "serverSide": true,
         "deferRender": true,
         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-        dom: 'RC<"clear">lfrtip',
-        colVis: {
-            exclude: [ 0 ]
-        },
-        columnDefs: [
-            // { visible: false, targets: [4, 5, 6, 7] }
-        ],
         stateSave: true,
         "ajax": {
-            "url": "/sadmin/get/data/menu/menu-list/",
+            "url": "/sadmin/get/data/menutype/menutype-list/",
             "type": "POST"
         },
         "columns": [
-            {
-                "class":          "details-control",
-                "orderable":      false,
-                "data":           null,
-                "defaultContent": ""
-            },
+            { "data": "link" },
             { "data": "lang" },
-            { "data": "menutype_id" },
-            { "data": "extension_id" },
-            { "data": "method" },
-            { "data": "function" },
-            { "data": "home" },
-            { "data": "title" },
-            { "data": "alias" },
-            { "data": "path" },
-            { "data": "pos" },
-            { "data": "published" }
+            { "data": "name" },
+            { "data": "title" }
         ],
-        "order": [[1, 'asc'], [2, 'asc']],
         "drawCallback": function(settings){
             xEdit();
         }
     });
 
-    myTab.on('click', 'tr td.details-control', function() {
-        var tr = $(this).closest('tr'),
-            row = dt.row(tr),
-            idx = $.inArray(tr.attr('id'), detailRows);
-        if (row.child.isShown()) {
-            tr.removeClass('details');
-            row.child.hide();
-            detailRows.splice(idx, 1);
-        } else {
-            tr.addClass('details');
-            row.child(addInfoDT(row.data())).show();
-
-            xEdit();
-
-            if (idx === -1) {
-                detailRows.push(tr.attr('id'));
-            }
-        }
-    });
     dt.on('draw', function() {
         $.each(detailRows, function(i, id) {
             $('#' + id + ' td:first-child').trigger('click');
         });
     });
 
-    //init editables 
+    //init editables
     $('.myeditable').editable();
 
     //automatically show next editable

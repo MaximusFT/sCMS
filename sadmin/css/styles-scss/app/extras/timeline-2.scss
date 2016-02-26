@@ -1,0 +1,212 @@
+/**
+   Component: timeline.scss
+*/
+
+$link: #acb7c0; // anchor tags
+
+$vertical-line-bg: darken(#e9f0f5, 5%);; // body background color
+
+$color-1: $brand-primary; // blue dark
+$color-2: $brand-danger; // red
+$color-3: #fff; // white
+$color-4: $brand-success; // green
+$color-5: $brand-amber; // yellow
+
+.tl-timeline-container {
+  position: relative;
+  padding: 2em 0;
+  margin-top: 2em;
+  margin-bottom: 2em;
+
+  /* this is the vertical line */
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 18px;
+    height: 100%;
+    width: 4px;
+    background: $vertical-line-bg;
+  }
+
+  @media #{$tablet} {
+    margin-top: 3em;
+    margin-bottom: 3em;
+
+    &::before {
+      left: 50%;
+      margin-left: -2px;
+    }
+  }
+}
+
+.tl-timeline-block {
+  position: relative;
+  margin: 2em 0;
+  @include clearfix;
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  @media #{$tablet} {
+    margin: 4em 0;
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.tl-timeline-icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  color: #fff;
+  font-size: 18px;
+  text-align: center;
+  border-radius: 50%;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.26);
+  background-color: $vertical-line-bg;
+
+  img {
+    display: block;
+    width: 24px;
+    height: 24px;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    margin-left: -12px;
+    margin-top: -12px;
+  }
+
+  &.tl-picture {
+    background: $color-4;
+  }
+
+  &.tl-movie {
+    background: $color-2;
+  }
+
+  &.tl-location {
+    background: $color-5;
+  }
+
+  @media #{$tablet} {
+    width: 60px;
+    height: 60px;
+    left: 50%;
+    margin-left: -30px;
+    line-height: 60px;
+    font-size: 26px;
+
+    /* Force Hardware Acceleration in WebKit */
+    -webkit-transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+  }
+}
+
+.tl-timeline-content {
+  position: relative;
+  margin-left: 60px;
+  background: $color-3;
+  padding: 1em;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.26);
+  @include clearfix;
+
+  h2 {
+    color: $color-1;
+  }
+
+  p, .tl-date {
+    font-size: 13px;
+  }
+
+  .tl-date {
+    display: inline-block;
+  }
+
+  p {
+    margin: 1em 0;
+    line-height: 1.6;
+  }
+
+  .tl-date {
+    float: left;
+    padding: .8em 0;
+    opacity: .7;
+  }
+
+  @media #{$mobile} {
+    h2 {
+      font-size: 20px;
+    }
+
+    p {
+      font-size: 16px;
+    }
+
+    .tl-date {
+      font-size: 14px;
+    }
+  }
+
+  @media #{$tablet} {
+    margin-left: 0;
+    padding: 1.6em;
+    width: 45%;
+
+    &::before {
+      top: 24px;
+      left: 100%;
+      border-color: transparent;
+      border-left-color: $color-3;
+    }
+
+    .tl-read-more {
+      float: left;
+    }
+
+    .tl-date {
+      position: absolute;
+      width: 100%;
+      left: 122%;
+      top: 6px;
+      font-size: 16px;
+    }
+
+    .tl-timeline-block:nth-child(even) & {
+      float: right;
+
+      &::before {
+        top: 24px;
+        left: auto;
+        right: 100%;
+        border-color: transparent;
+        border-right-color: $color-3;
+      }
+
+      .tl-read-more {
+        float: right;
+      }
+
+      .tl-date {
+        left: auto;
+        right: 122%;
+        text-align: right;
+      }
+    }
+
+  }
+}

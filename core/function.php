@@ -151,9 +151,9 @@ function translit($st, $ru = true) {
         'Э' => 'E\'',   'Ю' => 'Yu',    'Я' => 'Ya',
     ];
     if ($ru == true) {
-        $res = strtr($st, $translit);
+        $res = strtr(trim($st), $translit);
     } else {
-        $res = strtr($st, array_flip($translit));
+        $res = strtr(trim($st), array_flip($translit));
     }
 
   return $res;
@@ -188,12 +188,12 @@ function translitlow($st, $ru = true) {
         '?' => '',      '!' => '',      '$' => ''
     ];
     if ($ru == true) {
-        $res = strtr($st, $translit);
+        $res = strtr(trim($st), $translit);
     } else {
-        $res = strtr($st, array_flip($translit));
+        $res = strtr(trim($st), array_flip($translit));
     }
 
-  return $res;
+  return strtolower($res);
 }
 
 /**
@@ -287,4 +287,30 @@ function linkBuilder($url, $langInv = false){
     global $langUserInv;
     $ln = ($langInv === true)?$langUserInv:$langUser;
     return '/'.$ln.$url;
+}
+function frontMenuBuild($params, $res, $active) {
+    $list = '';
+    foreach($params as $key => $value) {
+        $i == 0;
+        foreach($value as $key => $index) {
+            $i++;
+            if($key == 'id') $tempId = $index;
+            if(is_array($index)) {
+                $list .= '
+                <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">'.$res[$value['id']]['title'].' <span class="caret"></span></a>
+                <ul class="dropdown-menu">';
+                $list .= frontMenuBuild($index, $res, $active);
+                $list .= '</ul></li>';
+            } else {
+                if ($i !== 1) $list .= '</li>';
+                if (is_array($value['children'])) {
+                } else {
+                    $list .= '<li'.(($active == $res[$index]['alias'])?' class="active"':'').'><a href="'.$res[$index]['path'].'">'.$res[$index]['title'].'</a>';
+                }
+            }
+        }
+    }
+    $list .= '</li>';
+    return $list;
 }

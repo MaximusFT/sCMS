@@ -1,0 +1,49 @@
+/**
+   Component: form-extras.scss
+*/
+
+
+// Rounded Input
+.form-control-rounded {
+  border-radius: 100px;
+}
+
+// Support form feedback without labels
+.form-control-feedback {
+  top: 10px;
+  .input-sm + & {
+    top: 0;
+  }
+}
+
+
+.form-control-feedback {
+  label + .form-control + & {
+    // top: 34px;
+  }
+}
+
+.input-md {
+  width: 260px;
+}
+
+// used in the search layer
+.input-huge {
+
+  background: transparent;
+  border: 0;
+  height: auto;
+  font-weight: 500;
+  font-size: 30px;
+  letter-spacing: -1.1px;
+  padding-left: 0 !important;
+  color: #fff;
+  @include placeholder( rgba(#fff,.6) );
+
+  @media #{$tablet} {
+    font-size: 42px;
+  }
+  @media #{$desktop} {
+    font-size: 82px;
+  }
+}

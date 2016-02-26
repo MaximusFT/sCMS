@@ -1,0 +1,241 @@
+/**
+   Component: panels.scss
+*/
+
+
+// Customized panel styles
+.panel {
+  position: relative;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.26);
+  border-radius: 0;
+  border: 0;
+  .panel-heading {
+    position: relative;
+    border-bottom-width: 0;
+    border-radius: 0;
+    z-index: 10;
+    .panel-title {
+      font-size: 20px;
+      padding-top: 20px;
+      // padding-bottom: 20px;
+      > em {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+      }
+    }
+    &:after {
+      content: "";
+      display: block;
+      box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: -1; // hide shadow behind components
+    }
+    &.no-shadow {
+      &:after {
+        display: none;
+      }
+    }
+    a {
+      text-decoration: none !important;
+    }
+  }
+  &.panel-default {
+    .panel-heading {
+      box-shadow: 0 0 0 0 #000;
+      &:after {
+        display: none;
+      }
+    }
+  }
+
+  &.panel-transparent {
+    border: 0;
+    background-color: transparent;
+    box-shadow: 0 0 0 #000;
+    .panel-heading,
+    .panel-body {
+      background-color: transparent;
+      padding-left: 0;
+      padding-right: 0;
+      box-shadow: 0 0 0 0 #000;
+    }
+    .panel-heading:after {
+      box-shadow: 0 0 0 0 #000 !important;
+    }
+  }
+  .panel-footer {
+    border-radius: 0;
+  }
+}
+
+
+
+//
+// Adds support to use more components inside panels
+//
+
+.panel {
+  .table {
+    margin-bottom: 0;
+    border: 0;
+  }
+}
+
+.panel-flat {
+  margin: 0 !important;
+  border: 0;
+}
+
+.panel-group {
+  .panel-flat {
+    box-shadow: 0 0 0 #000;
+    &:first-child {
+      border-radius: 4px 4px 0 0;
+    }
+    &:last-child {
+      border-radius: 0 0 4px 4px;
+    }
+  }
+}
+
+.panel-heading {
+
+  > .btn, > .btn-group {
+    margin-top: -5px;
+  }
+  > .btn-sm, > .btn-group-sm {
+    margin-top: -3px;
+  }
+  > .btn-xs, > .btn-group-xs {
+    margin-top: -1px;
+  }
+  // right floated labels adjust position
+  > .label.pull-right {
+    margin-top: 3px;
+    + .label.pull-right {
+      margin-right: 10px;
+    }
+  }
+}
+
+.panel-footer {
+  .pagination {
+    margin: 0;
+  }
+  .radial-bar {
+    margin-bottom: 0;
+  }
+  p {
+    margin-bottom: 0;
+  }
+}
+
+// Active class for collapse elements
+.panel-heading-active {
+  background-color: $brand-success !important;
+  font-weight: bold;
+  font-size: 16px;
+  > a {
+    padding: 15px 0;  // Adding padding here improves mobile touch
+    color: #fff !important;
+    @include transition(padding .5s ease);
+  }
+  + .panel-collapse:after {
+    content: "";
+    display: block;
+    width: 60%;
+    margin: 0 auto;
+    height: 0;
+    border-bottom: 1px solid #e1e2e3;
+  }
+}
+
+@mixin panel-extra($border, $heading-text-color, $heading-bg-color, $heading-border) {
+  @include panel-variant($border, $heading-text-color, $heading-bg-color, $heading-border);
+  > .panel-footer {
+    border: 0;
+  }
+}
+
+.panel-inverse {
+  @include panel-extra($panel-global-border, #fff, $brand-inverse, $brand-inverse);
+}
+
+.panel-amber {
+  @include panel-extra($panel-global-border, #fff, $brand-amber, $brand-amber);
+}
+
+.panel-pink {
+  @include panel-extra($panel-global-border, #fff, $brand-pink, $brand-pink);
+}
+
+.panel-purple {
+  @include panel-extra($panel-global-border, #fff, $brand-purple, $brand-purple);
+}
+
+.panel-orange {
+  @include panel-extra($panel-global-border, #fff, $brand-orange, $brand-orange);
+}
+
+
+// Panel Cards
+// -----------------------------------
+
+$panel-card-hg: 380px;
+$panel-card-margin: 10px;
+.panel-card {
+  position: relative;
+  height: $panel-card-hg - $panel-card-margin;
+  margin-bottom: $panel-card-margin;
+  .panel-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border: 0;
+  }
+  &.card-sm {
+    height: ($panel-card-hg * 0.25) - $panel-card-margin;
+  }
+  &.card-md {
+    height: ($panel-card-hg * 0.5) - $panel-card-margin;
+  }
+  &.card-lg {
+    height: ($panel-card-hg * 1.5) - $panel-card-margin;
+  }
+  &.card-xl {
+    height: ($panel-card-hg * 2) - $panel-card-margin;
+  }
+}
+
+
+.panel-card-image {
+  background-size: cover;
+  background-position: 50% 50%;
+  .panel-body {
+    height: 280px;
+  }
+  .panel-footer {
+    background-color: rgba(#111, .7);
+    border: 0;
+    * {
+      color: #fff;
+    }
+  }
+}
+
+.panel-card-map {
+
+  .panel-body {
+    height: 280px;
+  }
+  .panel-footer {
+    background-color: transparent;
+  }
+}

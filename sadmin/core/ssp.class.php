@@ -168,6 +168,9 @@ class SSP {
 			if ( $tmpl === 'print-people' ) {
 				$where = $where . ' AND `id` IN (SELECT people_id FROM print_item WHERE print_id = '.$request['printId'].') ';
 			}
+			if ( $tmpl === 'menu-list' ) {
+				$where = $where . ' AND `menutype_id` = '.$request['menuType'].' ';
+			}
 		} else {
 			if ( $tmpl === 'list-peoples' ) {
 				// var_dump($where);
@@ -178,6 +181,11 @@ class SSP {
 				// var_dump($where);
 				// exit();
 				$where = $where . 'WHERE `id` IN (SELECT people_id FROM print_item WHERE print_id = '.$request['printId'].') ';
+			}
+			if ( $tmpl === 'menu-list' ) {
+				// var_dump($where);
+				// exit();
+				$where = $where . 'WHERE `menutype_id` = '.$request['menuType'].' ';
 			}
 		}
 

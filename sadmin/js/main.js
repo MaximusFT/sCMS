@@ -1,4 +1,5 @@
 'use strict';
+
 function xEdit(){
     $('.xeditAddDate').datepicker({
         format: "yyyy-mm-dd",
@@ -7,6 +8,10 @@ function xEdit(){
     });
     $('.xedit').editable({
         url: '/sadmin/save/',
+        success: function(response, newValue) { xjGrowl(response, newValue) }
+    })
+    $('.xeditcheck').editable({
+        url: '/sadmin/save/check/',
         success: function(response, newValue) { xjGrowl(response, newValue) }
     })
     $('.aCountry').editable({
@@ -22,6 +27,16 @@ function xEdit(){
 }
 
 $(function() {
+
+    $('#appGo').appGo();
+
+    $('#appReload').on('click', function(){
+        $(this).appGo('reload');
+    })
+
+    $('#mainMenu').find('a[data-match-name='+$('#mainMenu').data('match-now')+']').parent().addClass('active');
+
+    /*
     $('.form_datetime').datetimepicker({
         language:  'ru',
         weekStart: 1,
@@ -33,6 +48,8 @@ $(function() {
             console.log(ev);
         }
     });
+    */
+
 
     /**
      * Menu Scripts
@@ -73,7 +90,6 @@ $(function() {
         });
     });
 
-
     /**
      * Content Scripts
      * @return {[type]} [description]
@@ -95,30 +111,19 @@ $(function() {
             $ACont.html(result);
         });
     });
-    $("body").on('click', '.ToTranslit', function(event) {
+
+    $("body").on('click', '.getTranslit', function(event) {
         event.preventDefault();
-        var $this = $(this),
-            id = $this.data('id');
+        var $this = $(this);
         $.ajax({
             type: "POST",
-            url: "/sadmin/ajax/_to-translit.php",
-            data: {
-                params: $this.data('params'),
-                id: $this.data('id')
-            }
-        })
-        .done(function(result) {
-            $this.prev('span').text(result);
-            $.jGrowl('Новое значение поля = '+result, {
-                theme: 'lightness',
-                header: "Состояние запроса:",
-                life: 1500
-            })
+            url: "/sadmin/get/translit/",
+            data: {params: $('#' + $this.data('source')).editable('getValue', true)}
+        }).done(function(result) {
+            $('#' + $this.data('target')).editable('setValue', result);
+            xjGrowl('Значение поля было обновлено!', result);
         });
     });
-
-
-
 
     $('.btnWSave').on('click', function(event){
         event.preventDefault();

@@ -1,0 +1,133 @@
+/**
+   Component: dropdown-extras.scss
+*/
+
+//
+// Dropdopwn extras
+// ------------------------------
+
+
+// place components with more space
+.dropdown-lg > .dropdown-menu {
+  min-width: 200px;
+}
+
+.navbar-nav .open .dropdown-menu {
+  background-color: #fff;
+}
+
+// Allows to mix list group inside dropdowns
+.dropdown-list {
+
+  > .dropdown-menu {
+    padding: 0;
+    min-width: 220px;
+  }
+
+  .list-group {
+    margin: 0;
+  }
+
+  .list-group-item {
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+    &:first-child {
+      border-top: 0;
+    }
+    &:last-child {
+      border-bottom: 0;
+    }
+  }
+}
+
+// Labels inside dropdowns
+.dropdown {
+  > a {
+    position: relative;
+    > .label {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 2px 5px;
+      @media #{$tablet} {
+        right: 0;
+      }
+    }
+  }
+}
+
+// Dropdown header
+.dropdown-menu-header {
+  padding: 10px 15px;
+  background-color: #fafafa;
+  border-bottom: 1px solid $dropdown-border;
+}
+
+
+//
+// OffCanvas Dropdown
+//
+
+.dropdown-menu[offcanvas-dropdown],
+.dropdown-menu[data-offcanvas-dropdown] {
+  // position: relative;
+  overflow: hidden;
+
+  .offcanvas-content {
+    position: absolute;
+    top:0; bottom: 0;
+    left: 0; right: 0;
+    @include translate3d(0, 0, 0);
+    background-color: #fff;
+    overflow-y: auto;
+    transition: all ease .2s;
+    -webkit-transition: all ease .2s;
+    z-index: 1;
+    color: $text-color;
+
+    &.ng-hide {
+      @include translate3d(90%, 0, 0);
+    }
+  }
+
+  // &.open {
+  //   .offcanvas-content {
+  //     right: 0;
+  //     left: 15px;
+  //     box-shadow: 0 0 100px rgba(0, 0, 0, 0.75);
+  //   }
+  //   > li > a {
+  //     -webkit-transform: translateX(-50%);
+  //   }
+  // }
+}
+
+
+.offcanvas-toggle {
+  font-weight: bold;
+  cursor: pointer;
+}
+
+// Scale Animation
+@media #{$tablet} {
+
+  .dropdown.dropdown-scale {
+    .dropdown-menu {
+      display: block;
+      @include transform-origin(0 0);
+      @include scale(0);
+      @include transition-transform(.2s ease-out);
+    }
+    &.open {
+      .dropdown-menu {
+        @include scale(1);
+        @include transition-transform(.2s ease-out);
+      }
+    }
+    .navbar-right & .dropdown-menu {
+      @include transform-origin(100% 0);
+    }
+  }
+
+}

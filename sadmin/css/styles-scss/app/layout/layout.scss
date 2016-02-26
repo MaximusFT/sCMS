@@ -1,0 +1,498 @@
+/**
+   Component: layout.scss
+*/
+
+$aside-wd:                                240px;
+$aside-mini-wd:                           64px;
+
+$header-hg:                               $navbar-height;
+$footer-hg:                               60px;
+$content-padding:                         15px;
+
+$boxed-max-width:                         1140px;
+
+$layout-transition-time:                  0.35s;
+
+$material-space:                          50px;
+
+$z-index-section:                         110;
+$z-index-header:                          $z-index-section + 300;
+$z-index-aside:                           $z-index-section + 200;
+$z-index-footer:                          $z-index-section + 100;
+
+html {
+  height: 100%;
+  // http://updates.html5rocks.com/2013/12/300ms-tap-delay-gone-away
+  -ms-touch-action: manipulation;
+    touch-action: manipulation;
+}
+body {
+  overflow-x: hidden;
+  height: 100%;
+  direction:ltr;
+}
+
+// Main wrapper
+// -----------------------------
+.app-container {
+  position: relative;
+  width: 100%;
+  min-height: 100%;
+  height: auto;
+  // overflow: hidden;
+  // background-color: $body-bg;
+
+  > header {
+    position: relative;
+    z-index: $z-index-header;
+    box-shadow: 0 0 4px rgba(0,0,0,.14),0 4px 8px rgba(0,0,0,.28);
+  }
+
+  // Contains the main sidebar
+  > aside {
+    position: absolute;
+    top: $header-hg;
+    left: 0;
+    bottom: 0;
+    width: $aside-wd;
+    box-shadow: 0 0 4px rgba(0,0,0,.14),2px 4px 8px rgba(0,0,0,.28);
+    z-index: $z-index-aside;
+    @include transition(all $layout-transition-time ease 0s);
+    will-change: margin;
+  }
+
+  // Contains the main content
+  > section {
+    height: 100%;
+    margin-left: 0;
+    z-index: $z-index-section;
+    @include transition(margin $layout-transition-time ease 0s);
+    will-change: margin;
+  }
+
+  // Page Footer
+  > footer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: $footer-hg;
+    padding: $content-padding;
+    border-top: 1px solid $gray-lighter;
+    background-color: $body-bg;
+    z-index: $z-index-footer;
+    @include transition(margin $layout-transition-time ease 0s);
+    will-change: margin;
+    > p {
+      margin: 0;
+    }
+  }
+
+  @media #{$tablet} {
+    // move all to place the sidebar
+    > section,
+    > footer {
+      margin-left: $aside-wd;
+    }
+
+  }
+}
+
+
+// App main content (where the view loads)
+// -----------------------------
+.app {
+  padding: $content-padding;
+  padding-bottom: $footer-hg + 20; // ensure a space for the footer
+  width: 100%;
+  .container,
+  .container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  // expand over wrapper padding
+  .unwrap {
+    margin: -$content-padding;
+  }
+
+}
+
+.app-view-header {
+  @include clearfix;
+  font-size: $font-size-h3;
+  margin: 20px 0 30px 0;
+  padding: 0;
+  > small {
+    display: block;
+    font-size: 12px;
+    color: $text-muted;
+    line-height: 2;
+    margin-left: 6px; // some space
+    @media #{$mobile} {
+      display: inline-block;
+    }
+  }
+  > button, > .btn {
+    margin: 10px 10px 0 0;
+  }
+  @media #{$tablet} {
+    > button, > .btn {
+      margin: 0;
+    }
+  }
+}
+
+// Aside offscreen layout
+// -----------------------------
+
+.aside-offscreen {
+  .app-container {
+    > section,
+    > footer {
+      margin-left: 0;
+    }
+    > aside {
+      margin-left: -$aside-wd;
+    }
+  }
+}
+
+// HW accelerate transform for mobile
+// @media #{$upto-tablet} {
+  .csstransforms3d {
+    .app-container {
+      @include backface-visibility(hidden);
+      > aside {
+        margin-left: 0;
+        transform-style: preserve-3d;
+        @include translate3d(0,0,0);
+        @include transition-transform($layout-transition-time);
+      }
+    }
+    .aside-offscreen {
+      .app-container {
+        > aside {
+          @include translate3d(-$aside-wd,0,0);
+        }
+      }
+    }
+  }
+// }
+
+
+// Fixed layout
+// -----------------------------
+.layout-fixed {
+
+  .app-container {
+    > aside,
+    > header {
+      position: fixed;
+    }
+
+    @media #{$desktop} {
+      > aside {
+        // height: 1px;
+        // min-height: 100%;
+        // .backface-visibility(hidden);
+      }
+    }
+
+    > header {
+      width: 100%;
+    }
+    > section {
+      padding-top: $header-hg;
+    }
+  }
+}
+
+// Boxed layout
+// -----------------------------
+.layout-boxed {
+  .app-container {
+    > section {
+      max-width: $boxed-max-width;
+      margin: 0 auto !important; // content always centered
+    }
+    > header {
+      width: 100%;
+    }
+  }
+
+  .container-fh {
+    max-width: $boxed-max-width;
+    margin: 0 auto;
+  }
+  .hidden-boxed {
+    display: none;
+  }
+  .fw-boxed {
+    width: 100%;
+  }
+}
+
+// Dock Layout
+// -----------------------------------
+
+.layout-dock {
+  .app-container {
+    > section  {
+      margin-left: auto !important;
+      margin-right: auto !important;
+      max-width: 1100px;
+    }
+  }
+}
+
+// Hidden Footer
+// -----------------------------------
+
+.footer-hidden {
+  .container-fh {
+    bottom: 0;
+  }
+  .app {
+    padding-bottom: 0;
+  }
+  .app-container > footer {
+    display: none;
+  }
+}
+
+
+// Full Height Layout
+// -----------------------------------
+.app-fh {
+  position: absolute;
+  width: auto;
+  overflow: auto;
+  top: $header-hg;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  padding: 0;
+  @include transition(left $layout-transition-time ease);
+  will-change: left;
+  -webkit-overflow-scrolling: touch;
+
+  @media #{$tablet} {
+    left: $aside-wd;
+  }
+  .aside-offscreen &,
+  .layout-boxed & {
+    left: 0;
+  }
+}
+.container-fh {
+  height: 100%;
+}
+
+// Table based layout
+// -----------------------------------
+
+// Table display types to use under .layout-fs
+.l-table,
+.l-table-fixed {
+  display: table;
+  width: 100%;
+  height: 100%;
+  min-height: 240px;
+  border-spacing: 0;
+}
+
+.l-table-fixed {
+  table-layout: fixed;
+}
+
+.l-row {
+  display: table-row;
+  height: 100%;
+}
+
+.l-cell,
+.l-cell-wrapper {
+  position: relative;
+  display: table-cell;
+  height: 100%;
+  width: 100%;
+  vertical-align: top;
+  overflow: auto;
+}
+
+// used as a variant to include
+// content with variable height
+.l-cell-wrapper {
+  display: block;
+  .l-cell-inner {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+}
+
+// Use .l-table-fixed to make columns fixed
+// and stacked on mobiles (below tablets)
+@media #{$upto-tablet} {
+  .l-table-fixed {
+    display: block;
+    > .l-cell {
+      display: block;
+      width: auto;
+      height: auto;
+    }
+  }
+}
+
+/* Target Firefox only */
+@-moz-document url-prefix() {
+  .l-table, .l-table-desktop {
+    height: 240px;
+    min-height: 100%;
+  }
+  .l-cell-inner {
+    overflow: auto;
+  }
+}
+
+// layout helpers
+.fh {
+  height: 100% !important;
+}
+.fw {
+  width: 100% !important;
+}
+.mfh {
+  max-height: 100% !important;
+}
+.mfw {
+  max-width: 100% !important;
+}
+.v-middle {
+  vertical-align: middle;
+}
+.v-top {
+  vertical-align: top;
+}
+.scroll {
+  overflow: auto;
+}
+.scroll-y {
+  overflow-y: auto;
+}
+.scroll-y {
+  overflow-y: auto;
+}
+
+.layout-material {
+  @extend .layout-fixed;
+  @media #{$tablet} {
+    .app-container {
+      // -webkit-overflow-scrolling: touch;
+      // overflow: auto;
+      > header {
+        z-index: $z-index-section - 1;
+        > nav {
+          padding-top: $material-space;
+          .navbar-nav {
+            margin-top: -$material-space;
+          }
+        }
+      }
+      > aside {
+        top: $header-hg + $material-space;
+        z-index: $z-index-section - 2;
+        margin-left: 0 !important;
+      }
+      > section {
+        position: absolute;
+        padding-top: 0;
+        top: 0;
+        right: $material-space*2;
+        left: $aside-wd;
+        margin-top: $material-space;
+        margin-left: 0;
+        max-width: none;
+        height: calc(100% - #{$material-space});
+        > .app {
+          padding-bottom: 0;
+          background-color: #fff;
+          @include shadow-z1;
+        }
+      }
+      > footer {
+        display: none;
+      }
+      .btn-offset {
+        padding-top: $material-space;
+        right: 30px;
+      }
+    }
+    .app {
+      min-height: 100%;
+      padding-bottom: 20px;
+    }
+    .app-fh {
+      top: 0;
+      left: 0;
+    }
+  }  // @media #{$tablet}
+
+  .hidden-material {
+    display: none !important;
+  }
+}
+
+
+@media #{$tablet} {
+
+  .aside-mini {
+    .app-container {
+
+      // move all to place the sidebar
+      > section,
+      > footer {
+        margin-left: $aside-mini-wd;
+      }
+
+      > aside {
+        width: $aside-mini-wd;
+        // restore all transitions because sidebar mini
+        // animates the slide movement and the width
+        @include transition(all $layout-transition-time ease 0s);
+        &:hover {
+          width: $aside-wd;
+        }
+      }
+    }
+
+    .app-fh {
+      left: 0;
+      margin-left: inherit;
+    }
+  }
+  // override margin when sidebar hidden
+  .aside-mini.aside-offscreen {
+    .app-container {
+      > section,
+      > footer {
+        margin-left: 0;
+      }
+    }
+  }
+  // rewrite transformations
+  .csstransforms3d {
+    .aside-mini.aside-offscreen {
+      .app-container {
+        > aside {
+          margin: 0;
+          @include translate3d(-$aside-mini-wd,0,0);
+        }
+      }
+    }
+  }
+
+}

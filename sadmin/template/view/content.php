@@ -1,3 +1,4 @@
+<h2>Страницы сайта</h2>
 <div class="row">
     <div class="col-md-6">
         <h3>Получить переменные сайта в CSV</h3>
@@ -19,13 +20,25 @@
 
 <div class="row">
     <div class="col-md-12">
-        <h2>Страницы сайта
-            <a class="btn btn-success pull-right"
-                id="RowAdd"
-                data-params="content|"
-                href="/sadmin/ajax/_row-add.php">Добавить статью</a>
+        <table id="myTable" class="table table-condensed table-striped table-bordered" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>LN</th>
+                    <th>Type</th>
+                    <th>Ext</th>
+                    <th>Method</th>
+                    <th>Func</th>
+                    <th>home</th>
+                    <th>Title</th>
+                    <th>Alias</th>
+                    <th>Path</th>
+                    <th>Pos</th>
+                    <th>Pub</th>
+                </tr>
+            </thead>
+        </table>
 
-        </h2>
         <table class="table table-condensed table-hover table-bordered">
             <tr class="active">
                 <th></th>
