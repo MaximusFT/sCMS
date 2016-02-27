@@ -1,5 +1,5 @@
     <!-- Page footer-->
-    <footer><span>&copy; 2015 - Application Name</span></footer>
+    <footer><span>&copy; 2016 - sCMS</span></footer>
 </div>
 </body>
 </html>

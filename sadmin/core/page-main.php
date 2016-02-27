@@ -76,6 +76,7 @@ function ContentCrtl() {
     $qContent = $db->select("content", "*");
 
     return [
+        'appGoPost'       => true,
         'qContent'        => $qContent,
         'params'          => qToDB($match),
         'pageContent'     => $pathTo.$match['name'].'.php'
