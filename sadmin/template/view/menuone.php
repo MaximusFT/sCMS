@@ -344,7 +344,7 @@ $(function() {
             path = '/'+src+'/',
             parentId = $this.parents('.dd-item').parents('.dd-item').data('id');
         if (parentId !== undefined) {
-            path = '/'+ $('#menuEditAlias'+parentId).editable('getValue', true) +path;
+            path = ($('#menuEditPath'+parentId).editable('getValue', true) + path).replace(/\/\//g,'/');
             $('#' + $this.data('target')).editable('setValue', path).editable('submit');
             sCMSAletr('', 'success');
         } else {

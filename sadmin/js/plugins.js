@@ -18,7 +18,6 @@ function sCMSAletr(response, theme, newValue){
     $.jGrowl(response + newValue, {themeState: theme, header: "Состояние запроса:", life: 1500});
 }
 
-
 ;(function($, window, document){
     'use strict';
 

@@ -92,6 +92,7 @@ function ContentOneCrtl($id) {
         ]);
 
     return [
+        'appGoPost'       => true,
         'qContent'        => $qContent,
         'params'          => qToDB($match),
         'pageContent'     => $pathTo.$match['name'].'.php'

@@ -105,6 +105,7 @@ function getFromDBSelectStatic($title = '') {
             $array = [
                 ['value' => 'component', 'text' => 'component'],
                 ['value' => 'module', 'text' => 'module'],
+                ['value' => 'category', 'text' => 'category'],
                 ['value' => 'snippet', 'text' => 'snippet'],
             ];
             break;

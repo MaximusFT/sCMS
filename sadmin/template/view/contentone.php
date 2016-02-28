@@ -4,25 +4,32 @@ session_start();
 $_SESSION['id'] = $res->qContent[0]->id;
 ?>
 
-<hr>
-
-<div class="row">
-    <div class="col-md-6 col-sm-4"><h2><?php echo $res->qContent[0]->h1;?></h2></div>
-    <div class="col-md-6  col-sm-8 text-right"> 
-        <button type="button" class="btn btn-warning btn-lg" href="/sadmin/content/">Назад</button>
-        <button type="button" class="btn btn-default btn-lg sv-cont" data-params="content|full_text" data-cid="<?=$res->qContent[0]->id;?>">Сохранить и продолжить</button>
-        <button type="button" class="btn btn-primary btn-lg sv-exit">Сохранить и закрыть</button>
-    </div>
-</div>
-
 <div class="row">
     <div class="col-md-12">
-        <div id="fullText" data-><?php echo $res->qContent[0]->full_text;?></div>
+        <h2><?php echo $res->qContent[0]->h1;?></h2>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <button type="button" class="btn btn-success btn-sm sv-cont" data-params="content|full_text" data-cid="<?=$res->qContent[0]->id;?>">Save & stay</button>
+                <button type="button" class="btn btn-primary btn-sm sv-exit">Save & close</button>
+                <div class="pull-right">
+                    <button type="button" class="btn btn-default btn-sm" href="/sadmin/content/">Назад</button>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div id="fullText">
+                    <?php echo $res->qContent[0]->full_text;?>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
+$(function() {
     tinymce.init({
         selector: '#fullText',
         height: 500,
@@ -42,6 +49,7 @@ document.addEventListener("DOMContentLoaded", function() {
             title: 'Test template 2',
             content: 'Test 2'
         }],
+        apply_source_formatting : true,
         content_css: [
             'http://fast.fonts.net/cssapi/e6dc9b99-64fe-4292-ad98-6974f93cd2a2.css',
             'http://www.tinymce.com/css/codepen.min.css'
