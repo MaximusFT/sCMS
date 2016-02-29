@@ -109,7 +109,7 @@ $columns = array(
                     data-title="Заголовок">'.$d.'</a>';
         }
     ),
-    array('db' => 'catid', 'dt' => 'catid',
+    array('db' => 'extension_id', 'dt' => 'extension_id',
         'formatter' => function( $d, $row, $table ) {
             return '
                 <a href="#" class="xedit"
@@ -117,7 +117,7 @@ $columns = array(
                     data-type="select"
                     data-value="'.$d.'"
                     data-source="/sadmin/get/group/extension/title/type/category/"
-                    data-params=\'{"name":"catid","table":"'.$table.'"}\'
+                    data-params=\'{"name":"extension_id","table":"'.$table.'"}\'
                     data-title="Language"></a>';
         }
     ),

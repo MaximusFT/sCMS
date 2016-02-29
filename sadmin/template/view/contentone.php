@@ -1,5 +1,4 @@
 <?
-//var_dump($res);
 session_start();
 $_SESSION['id'] = $res->qContent[0]->id;
 ?>
@@ -78,11 +77,7 @@ $(function() {
             }
         })
         .done(function(result) {
-            $.jGrowl('Запись успешно изменена.' /*'Новое значение поля = '+result*/ , {
-                theme: 'lightness',
-                header: "Состояние запроса:",
-                life: 1500
-            })
+            sCMSAletr(result, 'success');
         });
     });
     $('.sv-exit').on('click', function(event) {

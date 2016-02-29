@@ -22,6 +22,25 @@ function saveToDB() {
     echo json_encode($response);
     exit();
 }
+function saveToDBTypeHead() {
+    global $match;
+    global $db;
+
+    if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
+    header('Content-Type: application/json;');
+
+    $db->update($_POST['table'], [
+        $_POST['name'] => $_POST['tokens']
+    ], [
+        'id' => $_POST['pk']
+    ]);
+    $response = [
+        'msg' => 'Новое значение поля = '.$_POST['value']
+    ];
+
+    echo json_encode($response);
+    exit();
+}
 function saveToDBCheck() {
     global $match;
     global $db;
@@ -122,6 +141,29 @@ function getFromDBSelectStatic($title = '') {
                 ['value' => 'sitemapXMLCtrl', 'text' => 'sitemapXMLCtrl'],
                 ['value' => 'subscribeCtrl', 'text' => 'subscribeCtrl'],
                 ['value' => 'unsubscribeCtrl', 'text' => 'unsubscribeCtrl'],
+            ];
+            break;
+        case 'position':
+            $array = [
+                ['value' => 'tech', 'text' => 'tech'],
+                ['value' => 'nav-top', 'text' => 'nav-top'],
+                ['value' => 'after-nav', 'text' => 'after-nav'],
+                ['value' => 'container-top', 'text' => 'container-top'],
+                ['value' => 'page-header-bottom', 'text' => 'page-header-bottom'],
+                ['value' => 'breadcrumb', 'text' => 'breadcrumb'],
+                ['value' => 'before-content-1', 'text' => 'before-content-1'],
+                ['value' => 'before-content-2', 'text' => 'before-content-2'],
+                ['value' => 'after-content-1', 'text' => 'after-content-1'],
+                ['value' => 'after-content-2', 'text' => 'after-content-2'],
+                ['value' => 'aside-1', 'text' => 'aside-1'],
+                ['value' => 'aside-2', 'text' => 'aside-2'],
+                ['value' => 'aside-3', 'text' => 'aside-3'],
+                ['value' => 'container-bottom', 'text' => 'container-bottom'],
+                ['value' => 'after-container', 'text' => 'after-container'],
+                ['value' => 'footer-pos-left', 'text' => 'footer-pos-left'],
+                ['value' => 'footer-pos-center', 'text' => 'footer-pos-center'],
+                ['value' => 'footer-pos-right', 'text' => 'footer-pos-right'],
+                ['value' => 'after-footer', 'text' => 'after-footer'],
             ];
             break;
 

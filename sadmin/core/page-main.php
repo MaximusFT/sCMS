@@ -34,13 +34,15 @@ function MenuOneCrtl($type) {
     ]);
 
     $menuItems_alt = $db->select("menu", [
-        "[>]extension" => ["extension_id" => "id"]
+        "[>]extension" => ["extension_id" => "id"],
+        "[>]content" => ["link_id" => "id"]
     ], [
         "menu.id",
         "menu.extension_id",
         "menu.menutype_id",
         "extension.title(extension_title)",
         "menu.link_id",
+        "content.h1(link_title)",
         "menu.title",
         "menu.alias",
         "menu.path",

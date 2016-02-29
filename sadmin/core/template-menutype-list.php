@@ -24,6 +24,18 @@ $columns = array(
                     data-title="Language">'.$d.'</a>';
         }
     ),
+    array('db' => 'position', 'dt' => 'position',
+        'formatter' => function( $d, $row, $table ) {
+            return '
+            <a href="#" class="xedit"
+                    data-pk="'.$row['id'].'"
+                    data-type="select"
+                    data-value="'.$d.'"
+                    data-source="/sadmin/get/group/static/position/"
+                    data-params=\'{"name":"position","table":"'.$table.'"}\'
+                    data-title="Language">'.$d.'</a>';
+        }
+    ),
     array('db' => 'title', 'dt' => 'title',
         'formatter' => function( $d, $row, $table ) {
             return '

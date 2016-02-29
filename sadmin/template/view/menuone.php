@@ -62,65 +62,68 @@ function build_list($array, $res) {
                         <hr>
                         <div class="well well-sm">
                             <div class="row">
-                                <div class="col-md-6">
-                                <dl class="dl-horizontal">
-                                    <dt><small>Тип расширения</small></dt>
-                                    <dd>
-                                        <a href="#" class="xedit"
-                                            data-pk="'.$res->$index->id.'"
-                                            data-type="select"
-                                            data-value="'.$res->$index->extension_id.'"
-                                            data-source="/sadmin/get/group/extension/title/type/component/"
-                                            data-params=\'{"name":"extension_id","table":"menu"}\'
-                                            data-title="Тип расширения">'.$res->$index->extension_title.'</a>
-                                    </dd>
+                                <div class="col-md-4">
+                                    <dl class="dl-horizontal">
+                                        <dt><small>Тип расширения</small></dt>
+                                        <dd>
+                                            <a href="#" class="xedit"
+                                                data-pk="'.$res->$index->id.'"
+                                                data-type="select"
+                                                data-value="'.$res->$index->extension_id.'"
+                                                data-source="/sadmin/get/group/extension/title/type/component/"
+                                                data-params=\'{"name":"extension_id","table":"menu"}\'
+                                                data-title="Тип расширения">'.$res->$index->extension_title.'</a>
+                                        </dd>
 
-                                    <dt><small>Путь</small>
-                                        <a class="btn btn-xs btn-primary buildPath" title="Перевести в транслит из h1"
-                                            data-toggle="tooltip"
-                                            data-source="menuEditAlias'.$res->$index->id.'"
-                                            data-target="menuEditPath'.$res->$index->id.'"
-                                            data-params=""><span class="fa fa-undo"></span></a>
-                                    </dt>
-                                    <dd>
-                                        <a href="#" class="xedit" id="menuEditPath'.$res->$index->id.'"
-                                            data-pk="'.$res->$index->id.'"
-                                            data-value="'.$res->$index->path.'"
-                                            data-params=\'{"name":"path","table":"menu"}\'
-                                            data-title="Путь">'.$res->$index->path.'</a>
-                                    </dd>
+                                        <dt><small>Путь</small>
+                                            <a class="btn btn-xs btn-primary buildPath" title="Перевести в транслит из h1"
+                                                data-toggle="tooltip"
+                                                data-source="menuEditAlias'.$res->$index->id.'"
+                                                data-target="menuEditPath'.$res->$index->id.'"
+                                                data-params=""><span class="fa fa-undo"></span></a>
+                                        </dt>
+                                        <dd>
+                                            <a href="#" class="xedit" id="menuEditPath'.$res->$index->id.'"
+                                                data-pk="'.$res->$index->id.'"
+                                                data-value="'.$res->$index->path.'"
+                                                data-params=\'{"name":"path","table":"menu"}\'
+                                                data-title="Путь">'.$res->$index->path.'</a>
+                                        </dd>
 
-                                    <dt><small>Метод вызова</small></dt>
-                                    <dd>
-                                        <a href="#" class="xedit"
-                                            data-pk="'.$res->$index->id.'"
-                                            data-type="select"
-                                            data-source="/sadmin/get/group/static/menu-method/"
-                                            data-value="'.$res->$index->method.'"
-                                            data-params=\'{"name":"method","table":"menu"}\'
-                                            data-title="Метод вызова">'.$res->$index->method.'</a>
-                                    </dd>
+                                        <dt><small>Метод вызова</small></dt>
+                                        <dd>
+                                            <a href="#" class="xedit"
+                                                data-pk="'.$res->$index->id.'"
+                                                data-type="select"
+                                                data-source="/sadmin/get/group/static/menu-method/"
+                                                data-value="'.$res->$index->method.'"
+                                                data-params=\'{"name":"method","table":"menu"}\'
+                                                data-title="Метод вызова">'.$res->$index->method.'</a>
+                                        </dd>
 
-                                    <dt><small>Ссылка на материал</small></dt>
-                                    <dd>
-                                        <a href="#" class="xedit"
-                                            data-pk="'.$res->$index->id.'"
-                                            data-value="'.$res->$index->link_id.'"
-                                            data-params=\'{"name":"link_id","table":"menu"}\'
-                                            data-title="Ссылка на материал">'.$res->$index->link_id.'</a>
-                                    </dd>
-
-                                    <dt><small>Функция</small></dt>
-                                    <dd>
-                                        <a href="#" class="xedit"
-                                            data-pk="'.$res->$index->id.'"
-                                            data-value="'.$res->$index->function.'"
-                                            data-params=\'{"name":"function","table":"menu"}\'
-                                            data-title="Функция">'.$res->$index->function.'</a>
-                                    </dd>
-                                </dl>
+                                        <dt><small>Функция</small></dt>
+                                        <dd>
+                                            <a href="#" class="xedit"
+                                                data-pk="'.$res->$index->id.'"
+                                                data-value="'.$res->$index->function.'"
+                                                data-params=\'{"name":"function","table":"menu"}\'
+                                                data-title="Функция">'.$res->$index->function.'</a>
+                                        </dd>
+                                    </dl>
                                 </div>
                                 <div class="col-md-6">
+                                    <dl>
+                                        <dt><small>Ссылка на материал</small></dt>
+                                        <dd>
+                                            <a href="#" class="thMenuLinkId"
+                                                data-pk="'.$res->$index->id.'"
+                                                data-type="typeaheadjs"
+                                                data-params=\'{"name":"link_id","table":"menu"}\'
+                                                data-title="Ссылка на материал">'.$res->$index->link_title.'</a>
+                                        </dd>
+                                    </dl>
+                                </div>
+                                <div class="col-md-2">
                                     <a class="btn btn-danger btn-xs delMenuItem" data-id="'.$res->$index->id.'" data-menutypeid="'.$res->$index->menutype_id.'" data-toggle="modal" data-target="#modalMenuDel" role="button" href="#">Delete <i class="fa fa-trash"></i></a>
                                 </div>
                             </div>
@@ -139,9 +142,7 @@ $menuArray = json_decode($res->menuArray->params, true);
 ?>
 <div class="app-view-header">Menu: <?php echo $res->menuArray->title;?> - <span class="label label-info"><?php echo $res->menuArray->lang;?></span></div>
 <div class="row">
-    <!-- START dashboard content-->
     <div class="col-md-12 fw-boxed">
-        <!-- START Tabbed panel-->
         <div class="panel panel-info">
             <div class="panel-heading">
                 <div class="clearfix">
@@ -464,5 +465,14 @@ $(function() {
         });
     });
     /* MenuRefresh> */
+
+    $('.thMenuLinkId').editable({
+        url: '/sadmin/saveth/',
+        typeahead: {name: 'link_id', remote: {url: '/sadmin/get/typeahead/content/h1/h1/?q=%QUERY'}},
+        success: function(response, newValue) {
+            // addElemA(this, response, newValue);
+            sCMSAletr(response, 'success', newValue);
+        }
+    });
 });
 </script>

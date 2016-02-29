@@ -28,23 +28,21 @@
                 </div>
             </div>
             <div class="panel-body">
-                <div class="table-responsive">
-                    <table id="myTable" class="table table-condensed table-striped table-bordered" cellspacing="0" width="100%">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>published</th>
-                                <th>Category</th>
-                                <th>Favorite</th>
-                                <th>Title (h1)</th>
-                                <th>Alias</th>
-                                <th>subTitle (h1Small)</th>
-                                <th>Language</th>
-                                <th>editFull</th>
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
+                <table id="myTable" class="table table-condensed table-striped table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>published</th>
+                            <th>Category</th>
+                            <th>Favorite</th>
+                            <th>Title (h1)</th>
+                            <th>Alias</th>
+                            <th>subTitle (h1Small)</th>
+                            <th>Language</th>
+                            <th>editFull</th>
+                        </tr>
+                    </thead>
+                </table>
             </div>
         </div>
     </div>
@@ -97,7 +95,7 @@ $(function() {
                 "defaultContent": ""
             },
             { "data": "published" },
-            { "data": "catid" },
+            { "data": "extension_id" },
             { "data": "favorite" },
             { "data": "h1" },
             { "data": "alias" },

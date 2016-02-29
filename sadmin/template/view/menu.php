@@ -17,18 +17,17 @@
                 </div>
             </div>
             <div class="panel-body">
-                <div class="table-responsive">
-                    <table id="myTable" class="table table-condensed table-striped table-bordered" cellspacing="0" width="100%">
-                        <thead>
-                            <tr>
-                                <th>Edit items</th>
-                                <th>Language</th>
-                                <th>Name</th>
-                                <th>Title</th>
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
+                <table id="myTable" class="table table-condensed table-striped table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Edit items</th>
+                            <th>Language</th>
+                            <th>Name</th>
+                            <th>Title</th>
+                            <th>Position</th>
+                        </tr>
+                    </thead>
+                </table>
             </div>
         </div>
     </div>
@@ -113,11 +112,6 @@
 'use strict';
 
 function addInfoDT(d){return d.addInfoRowDT;}
-function addElemA (argument) {
-    var par = $(argument).data('params');
-    $(argument).before('<a href="#" class="myeditable hidden killreset" data-type="text" data-name="'+par.name+'-id">'+par.tokens+'</a>');
-}
-
 $(function() {
     var detailRows = [];
     var myTab = $('#myTable');
@@ -135,7 +129,8 @@ $(function() {
             { "data": "link" },
             { "data": "lang" },
             { "data": "name" },
-            { "data": "title" }
+            { "data": "title" },
+            { "data": "position" },
         ],
         "drawCallback": function(settings){
             xEdit();
@@ -186,8 +181,5 @@ $(function() {
         $('.killreset').remove();
         $('.myeditable').editable();
     });
-    $('.aExMother').editable({
-        typeahead: {remote: {url: '/sadmin/get/typeaheadmf/mother/?q=%QUERY'}},
-        success: function(response, newValue) {addElemA(this)}});
 });
 </script>

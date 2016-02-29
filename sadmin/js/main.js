@@ -14,16 +14,16 @@ function xEdit(){
         url: '/sadmin/save/check/',
         success: function(response, newValue) { xjGrowl(response, newValue) }
     })
-    $('.aCountry').editable({
-        url: '/sadmin/save/',
-        typeahead: {
-            name: 'name',
-            remote: {
-                url: '/sadmin/get/typeahead/country/name/name/?q=%QUERY'
-            }
-        },
-        success: function(response, newValue) { xjGrowl(response, newValue) }
-    })
+    // $('.thMenuLinkIds').editable({
+    //     url: '/sadmin/save/',
+    //     typeahead: {
+    //         name: 'name',
+    //         remote: {
+    //             url: '/sadmin/get/typeahead/country/name/name/?q=%QUERY'
+    //         }
+    //     },
+    //     success: function(response, newValue) { xjGrowl(response, newValue) }
+    // })
 }
 
 $(function() {

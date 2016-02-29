@@ -1,7 +1,6 @@
 <?php
 require_once P_TEMP.'_head.php';
 ?>
-
     <nav class="navbar navbar-default" role="navigation">
         <div class="container">
             <div class="navbar-header">
@@ -15,6 +14,7 @@ require_once P_TEMP.'_head.php';
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav">
+                    <?php echo funPos('module', 'nav-top');?>
                     <?php
                         echo frontMenuBuild(json_decode($res->qMenus->mainmenu->params, true), json_decode(json_encode($res->qMenus->mainmenu->items), true), $res->qMenuCurr->alias);
                     ?>

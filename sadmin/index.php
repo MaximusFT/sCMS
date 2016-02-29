@@ -50,6 +50,7 @@ $router->map('POST', '/printrem/[i:id]/', 'PrintRemoveCrtl', 'print-remove');
  * SAVE Route
  */
 $router->map('POST|PUT','/save/', 'saveToDB', 'save-to-db', null, 'ajax');
+$router->map('POST|PUT','/saveth/', 'saveToDBTypeHead', 'save-to-db-th', null, 'ajax');
 $router->map('POST|PUT','/savemf/', 'saveToDBMF', 'save-to-db-mf', null, 'ajax');
 $router->map('POST|PUT','/save/check/', 'saveToDBCheck', 'save-to-db-check', null, 'ajax');
 
