@@ -12,6 +12,13 @@ function build_list($array, $res) {
                 $resHomeClass = ($res->$index->home == true)?'btn-success disabled':'btn-info btn-HomeSet';
                 $resHomeVal = ($res->$index->home == true)?'true':'false';
                 if ($i !== 1) $list .= '</li>';
+                $catStatic = 'hidden';
+                $catCategory = 'hidden';
+                if ($res->$index->extension_id == 1) {
+                    $catStatic = '';
+                } elseif ($res->$index->extension_id == 3 || $res->$index->extension_id == 4) {
+                    $catCategory = '';
+                }
                 $list .= '<li data-id="'.$index.'" class="dd-item dd3-item"><div class="dd-handle dd3-handle"><span class="fa fa-bars"></span></div>
                 <div class="dd3-content">
                     <div class="row">
@@ -34,7 +41,7 @@ function build_list($array, $res) {
                                 data-params=\'{"name":"home","table":"menu"}\'
                                 data-title="Главная">'.$resHomeVal.'</a>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-5">
                             <small>Заголовок</small><br>
                             <a href="#" class="xedit" id="menuEditTitle'.$res->$index->id.'"
                                 data-pk="'.$res->$index->id.'"
@@ -42,9 +49,9 @@ function build_list($array, $res) {
                                 data-params=\'{"name":"title","table":"menu"}\'
                                 data-title="Заголовок">'.$res->$index->title.'</a>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <small>Алиас</small>
-                            <a class="btn btn-xs btn-primary getTranslitAlias" title="Перевести в транслит из h1"
+                            <a class="btn btn-xs getTranslitAlias" title="Перевести в транслит из h1"
                                 data-toggle="tooltip"
                                 data-source="menuEditTitle'.$res->$index->id.'"
                                 data-target="menuEditAlias'.$res->$index->id.'"
@@ -56,6 +63,20 @@ function build_list($array, $res) {
                                 data-params=\'{"name":"alias","table":"menu"}\'
                                 data-title="Алиас">'.$res->$index->alias.'</a>
                         </div>
+                        <div class="col-md-2">
+                            <small>Путь</small>
+                            <a class="btn btn-xs buildPath" title="Перевести в транслит из h1"
+                                data-toggle="tooltip"
+                                data-source="menuEditAlias'.$res->$index->id.'"
+                                data-target="menuEditPath'.$res->$index->id.'"
+                                data-params=""><span class="fa fa-undo"></span></a>
+                            <br>
+                            <a href="#" class="xedit" id="menuEditPath'.$res->$index->id.'"
+                                data-pk="'.$res->$index->id.'"
+                                data-value="'.$res->$index->path.'"
+                                data-params=\'{"name":"path","table":"menu"}\'
+                                data-title="Путь">'.$res->$index->path.'</a>
+                        </div>
                         <div class="col-md-1"><a class="btn btn-primary pull-right" role="button" data-toggle="collapse" href="#collapse'.$res->$index->id.'" aria-expanded="false" aria-controls="collapseExample">Edit <i class="fa fa-angle-double-down"></i></a></div>
                     </div>
                     <div class="collapse" id="collapse'.$res->$index->id.'">
@@ -64,32 +85,6 @@ function build_list($array, $res) {
                             <div class="row">
                                 <div class="col-md-4">
                                     <dl class="dl-horizontal">
-                                        <dt><small>Тип расширения</small></dt>
-                                        <dd>
-                                            <a href="#" class="xedit"
-                                                data-pk="'.$res->$index->id.'"
-                                                data-type="select"
-                                                data-value="'.$res->$index->extension_id.'"
-                                                data-source="/sadmin/get/group/extension/title/type/component/"
-                                                data-params=\'{"name":"extension_id","table":"menu"}\'
-                                                data-title="Тип расширения">'.$res->$index->extension_title.'</a>
-                                        </dd>
-
-                                        <dt><small>Путь</small>
-                                            <a class="btn btn-xs btn-primary buildPath" title="Перевести в транслит из h1"
-                                                data-toggle="tooltip"
-                                                data-source="menuEditAlias'.$res->$index->id.'"
-                                                data-target="menuEditPath'.$res->$index->id.'"
-                                                data-params=""><span class="fa fa-undo"></span></a>
-                                        </dt>
-                                        <dd>
-                                            <a href="#" class="xedit" id="menuEditPath'.$res->$index->id.'"
-                                                data-pk="'.$res->$index->id.'"
-                                                data-value="'.$res->$index->path.'"
-                                                data-params=\'{"name":"path","table":"menu"}\'
-                                                data-title="Путь">'.$res->$index->path.'</a>
-                                        </dd>
-
                                         <dt><small>Метод вызова</small></dt>
                                         <dd>
                                             <a href="#" class="xedit"
@@ -101,29 +96,46 @@ function build_list($array, $res) {
                                                 data-title="Метод вызова">'.$res->$index->method.'</a>
                                         </dd>
 
-                                        <dt><small>Функция</small></dt>
+                                        <dt><small>Тип расширения</small></dt>
                                         <dd>
-                                            <a href="#" class="xedit"
+                                            <a href="#" class="xeditExt"
                                                 data-pk="'.$res->$index->id.'"
-                                                data-value="'.$res->$index->function.'"
-                                                data-params=\'{"name":"function","table":"menu"}\'
-                                                data-title="Функция">'.$res->$index->function.'</a>
+                                                data-type="select"
+                                                data-value="'.$res->$index->extension_id.'"
+                                                data-source="/sadmin/get/group/extension/title/type/component/"
+                                                data-params=\'{"name":"extension_id","table":"menu"}\'
+                                                data-title="Тип расширения">'.$res->$index->extension_title.'</a>
                                         </dd>
+
+                                        <div id="extFun'.$res->$index->id.'" class="'.$catCategory.'">
+                                            <dt><small>Функция</small></dt>
+                                            <dd>
+                                                <a href="#" class="xedit"
+                                                    data-pk="'.$res->$index->id.'"
+                                                    data-type="select"
+                                                    data-value="'.$res->$index->function.'"
+                                                    data-source="/sadmin/get/group/extension/title/type/category/"
+                                                    data-params=\'{"name":"function","table":"menu"}\'
+                                                    data-title="Функция">'.$res->$index->function_title.'</a>
+                                            </dd>
+                                        </div>
                                     </dl>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-7">
                                     <dl>
-                                        <dt><small>Ссылка на материал</small></dt>
-                                        <dd>
-                                            <a href="#" class="thMenuLinkId"
-                                                data-pk="'.$res->$index->id.'"
-                                                data-type="typeaheadjs"
-                                                data-params=\'{"name":"link_id","table":"menu"}\'
-                                                data-title="Ссылка на материал">'.$res->$index->link_title.'</a>
-                                        </dd>
+                                        <div id="extLink'.$res->$index->id.'" class="'.$catStatic.'">
+                                            <dt><small>Ссылка на материал</small></dt>
+                                            <dd>
+                                                <a href="#" class="thMenuLinkId"
+                                                    data-pk="'.$res->$index->id.'"
+                                                    data-type="typeaheadjs"
+                                                    data-params=\'{"name":"link_id","table":"menu"}\'
+                                                    data-title="Ссылка на материал">'.$res->$index->link_title.'</a>
+                                            </dd>
+                                        </div>
                                     </dl>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-1">
                                     <a class="btn btn-danger btn-xs delMenuItem" data-id="'.$res->$index->id.'" data-menutypeid="'.$res->$index->menutype_id.'" data-toggle="modal" data-target="#modalMenuDel" role="button" href="#">Delete <i class="fa fa-trash"></i></a>
                                 </div>
                             </div>
@@ -181,7 +193,7 @@ $menuArray = json_decode($res->menuArray->params, true);
                         <div class="col-md-12">
                             <table class="table table-condensed table-striped table-bordered" cellspacing="0" width="100%">
                                 <tbody>
-                                   <tr class="hidden"><td>Заголовок</td>
+                                   <tr class="hidden"><td>Тип меню</td>
                                         <td>
                                         <a href="#" class="myeditable"
                                             data-type="text"
@@ -202,11 +214,6 @@ $menuArray = json_decode($res->menuArray->params, true);
                                             data-type="text"
                                             data-name="alias"
                                             data-title="Алиас"></a>
-                                        <a class="btn btn-sm btn-primary pull-right getTranslit" title="Перевести в транслит из h1"
-                                            data-toggle="tooltip"
-                                            data-source="menuAddTitle"
-                                            data-target="menuAddAlias"
-                                            data-params=""><span class="fa fa-undo"></span></a>
                                         </td></tr>
                                    <tr><td>Method</td>
                                         <td><a href="#" class="myeditable"
@@ -215,16 +222,23 @@ $menuArray = json_decode($res->menuArray->params, true);
                                             data-value="GET"
                                             data-source="/sadmin/get/group/static/menu-method/"
                                             data-original-title="menutype_id"></a></td></tr>
+                                   <tr class="hidden"><td>Lang</td>
+                                        <td><a href="#" class="myeditable"
+                                            data-type="select"
+                                            data-name="lang"
+                                            data-value="<?php echo $res->menuArray->lang;?>"
+                                            data-source="/sadmin/get/group/static/lang/"
+                                            data-original-title="lang"></a></td></tr>
                                    <tr><td>Тип расширения</td>
                                         <td>
                                         <a href="#" class="myeditable"
                                             data-type="select"
                                             data-name="extension_id"
-                                            data-value="2"
+                                            data-value="1"
                                             data-source="/sadmin/get/group/extension/title/type/component/"
                                             data-title="Тип расширения"></a>
                                         </td></tr>
-                                   <tr><td>function</td>
+                                   <tr class="hidden"><td>function</td>
                                         <td><a href="#" class="myeditable"
                                             data-type="select"
                                             data-name="function"
@@ -325,6 +339,32 @@ $(function() {
     'use strict';
     xEdit();
     $('.myeditable').editable();
+    $('.xeditExt').editable({
+        url: '/sadmin/save/',
+        success: function(response, newValue) {
+            var q = $(this).data('pk');
+            newValue = parseInt(newValue);
+            if (newValue === 1) {
+                $('#extFun'+q).hide()
+                    .find('a').editable('setValue', '').editable('submit');
+                $('#extLink'+q).show()
+                    .find('a').editable('setValue', '').editable('submit');
+            } else if (newValue === 3) {
+                $('#extLink'+q).hide()
+                    .find('a').editable('setValue', '').editable('submit');
+                $('#extFun'+q).show()
+                    .find('a').editable('setValue', 17).editable('submit');
+            } else if (newValue === 4) {
+                $('#extLink'+q).hide()
+                    .find('a').editable('setValue', '').editable('submit');
+                $('#extFun'+q).show()
+                    .find('a').editable('setValue', '').editable('submit');
+            }
+            /*
+            sCMSAletr('', 'success');
+            */
+        }
+    })
 
     $("body").on('click', '.getTranslitAlias', function(event) {
         var $this = $(this);
@@ -380,7 +420,6 @@ $(function() {
             success: function(data, config) {
                 $('#modalMenuAdd').modal('hide');
                 sCMSAletr(result, 'success', data);
-                // xjGrowl('Добавлен новый пункт меню": ', data, 'success');
             },
             error: function(errors) {
                 sCMSAletr(errors, 'warning');

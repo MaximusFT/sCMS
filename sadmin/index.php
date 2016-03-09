@@ -24,6 +24,9 @@ $router->map( 'GET', '/subscribers/', 'SubscribersCrtl', 'subscribers');
 $router->map( 'GET', '/askings/', 'AskingsCrtl', 'askings');
 
 $router->map('POST|GET', '/menu/', 'MenuCrtl', 'menu');
+$router->map('POST|PUT', '/save/menutype/add/', 'saveMenuTypeAdd', 'save-menutype-add', null, 'ajax');
+$router->map('POST|PUT', '/save/menutype/del/', 'saveMenuTypeDel', 'save-menutype-del', null, 'ajax');
+
 $router->map('POST|GET', '/menu/[i:type]/', 'MenuOneCrtl', 'menuone');
 $router->map('POST|PUT', '/save/menu/add/', 'saveMenuAdd', 'save-menu-add', null, 'ajax');
 $router->map('POST|PUT', '/save/menu/del/', 'saveMenuDel', 'save-menu-del', null, 'ajax');
@@ -31,6 +34,8 @@ $router->map('POST|PUT', '/save/menu/refresh/', 'saveMenuRefresh', 'save-menu-re
 
 $router->map('POST|GET', '/content/', 'ContentCrtl', 'content');
 $router->map('POST|GET', '/content/[i:id]/', 'ContentOneCrtl', 'contentone');
+$router->map('POST|PUT', '/save/content/add/', 'saveContentAdd', 'save-content-add', null, 'ajax');
+$router->map('POST|PUT', '/save/content/del/', 'saveContentDel', 'save-content-del', null, 'ajax');
 $router->map('POST', '/content/csv-to-mysql/', 'appCSVtoMysql', 'content-csv-to-mysql');
 $router->map( 'GET', '/content/mysql-to-csv/', 'appMysqlToCSV', 'content-mysql-to-csv');
 
@@ -105,6 +110,7 @@ if($match && is_callable($match['target'])) {
 /* Debuging */
 if (isset($_GET['d'])) {
     echo '<div class="debug"><pre>';
+    print_r($router);
     print_r($match);
     print_r($res);
     echo '</pre></div>';

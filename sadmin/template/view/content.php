@@ -1,29 +1,11 @@
-<div class="row">
-    <div class="col-md-4">
-        <h2>Menu Types</h2>
-    </div>
-    <div class="col-md-4">
-        <h3>Получить переменные сайта в CSV</h3>
-        <a href="/sadmin/content/mysql-to-csv/" class="btn btn-success">mysql-to-csv</a>
-    </div>
-    <div class="col-md-4">
-        <h3>Загрузить переменные сайта базу</h3>
-        <form role="form" class="form-inline" enctype="multipart/form-data" action="/sadmin/content/csv-to-mysql/" method="post">
-            <div class="form-group">
-                <label for="csvfile">Выберите файл</label>
-                <input type="file" name="csvfile">
-            </div>
-            <button class="btn btn-primary" type="submit">Загрузить</button>
-        </form>
-    </div>
-</div>
+<div class="app-view-header">Content list</div>
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-info">
             <div class="panel-heading">
                 <div class="clearfix">
                     <div id="nestable-menu" class="pull-left">
-                        <button type="button" data-toggle="modal" data-target="#modalMenuAdd" class="btn btn-success btn-xs"><i class="fa fa-plus"></i> Add MenuType</button>
+                        <button id="addArticle" type="button" class="btn btn-success btn-xs"><i class="fa fa-plus"></i> Add Article</button>
                     </div>
                 </div>
             </div>
@@ -47,21 +29,22 @@
         </div>
     </div>
 </div>
-
-<!-- Modal for Edit Page -->
-<div class="modal fade" id="modalContentEdit" tabindex="-1" role="dialog" aria-labelledby="contentEdit" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="contentEdit">Редактировать страницу</h4>
+<div class="row">
+    <div class="col-md-4">
+    </div>
+    <div class="col-md-4">
+        <h4>Получить переменные сайта в CSV</h4>
+        <a href="/sadmin/content/mysql-to-csv/" class="btn btn-success btn-sm">mysql-to-csv</a>
+    </div>
+    <div class="col-md-4">
+        <h4>Загрузить переменные сайта базу</h4>
+        <form role="form" class="form-inline" enctype="multipart/form-data" action="/sadmin/content/csv-to-mysql/" method="post">
+            <div class="form-group">
+                <label for="csvfile">Выберите файл</label>
+                <input type="file" name="csvfile">
             </div>
-            <div class="modal-body" id="ajaxContent" data-contentid=""></div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
-                <button type="button" class="btn btn-primary">Сохранить</button>
-            </div>
-        </div>
+            <button class="btn btn-primary btn-sm" type="submit">Загрузить</button>
+        </form>
     </div>
 </div>
 
@@ -82,7 +65,8 @@ $(function() {
         "serverSide": true,
         "deferRender": true,
         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-        stateSave: true,
+        "pageLength": 25,
+        "stateSave": true,
         "ajax": {
             "url": "/sadmin/get/data/content/content-list/",
             "type": "POST"
@@ -103,7 +87,7 @@ $(function() {
             { "data": "lang" },
             { "data": "editFull" },
         ],
-        "order": [[1, 'asc']],
+        "order": [[2, 'asc'], [4, 'asc']],
         "drawCallback": function(settings){
             xEdit();
         }
@@ -134,6 +118,16 @@ $(function() {
         });
     });
 
+    $('#addArticle').on('click', function() {
+        $.ajax({
+            type: "POST",
+            url: '/sadmin/save/content/add/',
+        }).done(function(result) {
+            sCMSAletr(result, 'success');
+            dt.draw();
+            // $('#appReload').appGo('reload');
+        });
+    });
     $("body").on('click', '.getTranslitAlias', function(event) {
         var $this = $(this);
         event.preventDefault();
