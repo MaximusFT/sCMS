@@ -9,6 +9,7 @@ function AdminCrtl() {
     $qTable = $db->select("page", "*");
 
     return [
+        'appGoPost'       => true,
         'params'          => qToDB($match),
         'pageContent'     => $pathTo.$match['name'].'.php'
     ];
@@ -34,7 +35,8 @@ function MenuOneCrtl($type) {
     ]);
 
     $menuItems_alt = $db->select("menu", [
-        "[>]extension" => ["extension_id" => "id"],
+        "[>]extension(extension)" => ["extension_id" => "id"],
+        "[>]extension(function)" => ["function" => "id"],
         "[>]content" => ["link_id" => "id"]
     ], [
         "menu.id",
@@ -48,6 +50,7 @@ function MenuOneCrtl($type) {
         "menu.path",
         "menu.method",
         "menu.function",
+        "function.title(function_title)",
         "menu.published",
         "menu.img",
         "menu.home",
@@ -121,6 +124,7 @@ function ModuleCrtl() {
     ]);
 
     return [
+        'appGoPost'       => true,
         'qContent'        => $qContent,
         'params'          => qToDB($match),
         'pageContent'     => $pathTo.$match['name'].'.php'
@@ -134,6 +138,7 @@ function ExtensionCrtl() {
     $qContent = $db->select("extension", "*");
 
     return [
+        'appGoPost'       => true,
         'qContent'        => $qContent,
         'params'          => qToDB($match),
         'pageContent'     => $pathTo.$match['name'].'.php'
@@ -160,6 +165,7 @@ function CommentsCrtl() {
     ]);
 
     return [
+        'appGoPost'       => true,
         'qContent'        => $qContent,
         'params'          => qToDB($match),
         'pageContent'     => $pathTo.$match['name'].'.php'
@@ -186,6 +192,7 @@ function SubscribersCrtl() {
     ]);
 
     return [
+        'appGoPost'       => true,
         'qContent'        => $qContent,
         'params'          => qToDB($match),
         'pageContent'     => $pathTo.$match['name'].'.php'
@@ -212,6 +219,7 @@ function AskingsCrtl() {
     ]);
 
     return [
+        'appGoPost'       => true,
         'qContent'        => $qContent,
         'params'          => qToDB($match),
         'pageContent'     => $pathTo.$match['name'].'.php'
@@ -276,64 +284,8 @@ function appCSVtoMysql() {
         ]);
     }
     return [
+        'appGoPost'       => true,
         'params'          => qToDB($match),
         'pageContent'     => $pathTo.$match['name'].'.php'
     ];
-}
-
-function PeoplesCrtl() {
-    global $match;
-    global $db;
-
-    return array(
-        'qContent'        => $qContent,
-        'params'          => qToDB($match),
-        'pageContent'     => $pathTo.$match['name'].'.php'
-    );
-}
-function PeopleAddCrtl() {
-    global $match;
-    global $db;
-
-    require( A_VIEW.$match['name'].'.php' );
-
-    exit();
-}
-function FamiliesCrtl() {
-    global $match;
-    global $db;
-
-    return array(
-        'qContent'        => $qContent,
-        'params'          => qToDB($match),
-        'pageContent'     => $pathTo.$match['name'].'.php'
-    );
-}
-function PrintsCrtl() {
-    global $match;
-    global $db;
-
-    return array(
-        'qContent'        => $qContent,
-        'params'          => qToDB($match),
-        'pageContent'     => $pathTo.$match['name'].'.php'
-    );
-}
-function PrintCrtl($id) {
-    global $match;
-    global $db;
-
-    /*
-    $ress = $db->select('print', '*', array(
-        "id" => $id
-    ));
-    */
-
-    return array(
-        'printId'         => $id,
-        'resId'         => $ress,
-        'qContent'        => $qContent,
-        'params'          => qToDB($match),
-        'pageContent'     => $pathTo.$match['name'].'.php'
-    );
 }

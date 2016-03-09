@@ -77,11 +77,22 @@ function getFromDBSelect($table, $table_name, $table_cond = null, $table_param =
             "id", $table_name
         ]);
     } else {
-        $res = $db->select($table, [
-            "id", $table_name
-        ], [
-            $table_cond => $table_param
-        ]);
+        if ($table_param == 'component') {
+            $res = $db->select($table, [
+                "id", $table_name
+            ], [
+                'AND' => [
+                    $table_cond => $table_param,
+                    'enabled' => 1,
+                ]
+            ]);
+        } else {
+            $res = $db->select($table, [
+                "id", $table_name
+            ], [
+                $table_cond => $table_param,
+            ]);
+        }
     }
 
     foreach($res as $r) {
@@ -126,21 +137,6 @@ function getFromDBSelectStatic($title = '') {
                 ['value' => 'module', 'text' => 'module'],
                 ['value' => 'category', 'text' => 'category'],
                 ['value' => 'snippet', 'text' => 'snippet'],
-            ];
-            break;
-        case 'menu-function':
-            $array = [
-                ['value' => 'articlesPageCtrl', 'text' => 'articlesPageCtrl'],
-                ['value' => 'askingCtrl', 'text' => 'askingCtrl'],
-                ['value' => 'askingDoCtrl', 'text' => 'askingDoCtrl'],
-                ['value' => 'commentCtrl', 'text' => 'commentCtrl'],
-                ['value' => 'commonPageCtrl', 'text' => 'commonPageCtrl'],
-                ['value' => 'mainPageCtrl', 'text' => 'mainPageCtrl'],
-                ['value' => 'mainPageMoreCtrl', 'text' => 'mainPageMoreCtrl'],
-                ['value' => 'sitemapCtrl', 'text' => 'sitemapCtrl'],
-                ['value' => 'sitemapXMLCtrl', 'text' => 'sitemapXMLCtrl'],
-                ['value' => 'subscribeCtrl', 'text' => 'subscribeCtrl'],
-                ['value' => 'unsubscribeCtrl', 'text' => 'unsubscribeCtrl'],
             ];
             break;
         case 'position':
@@ -280,6 +276,9 @@ function getTranslitAlias() {
 
 
 
+
+
+
 function saveMenuAdd() {
     global $match;
     global $db;
@@ -295,6 +294,7 @@ function saveMenuAdd() {
         "title" => $_POST['title'],
         "alias" => $_POST['alias'],
         "path" => $_POST['path'],
+        "lang" => $_POST['lang'],
         "method" => $_POST['method'],
         "menutype_id" => $_POST['menutype_id'],
         "extension_id" => $_POST['extension_id'],
@@ -415,6 +415,73 @@ function saveMenuRefresh() {
 
     $response = array(
         'msg' => 'Дерево меню сброшено!'
+    );
+
+    echo json_encode($response);
+    exit();
+}
+
+function saveMenuTypeAdd() {
+    global $match;
+    global $db;
+
+    if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
+    header('Content-Type: application/json; charset=utf-8');
+
+    $last_id = $db->insert("menutype", array(
+        "title" => $_POST['title'],
+        "name" => $_POST['name'],
+        "lang" => $_POST['lang'],
+        "position" => $_POST['position']
+    ));
+
+    $response = array(
+        'msg' => 'Добавлен новый пункт меню'
+    );
+
+    echo json_encode($response);
+    exit();
+}
+
+function saveMenuTypeDel() {
+    global $match;
+    global $db;
+
+    if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
+    header('Content-Type: application/json; charset=utf-8');
+
+    $db->delete("menutype", [
+        "id" => intval($_POST['id'])
+    ]);
+
+    $response = array(
+        'msg' => 'Пункт меню удален'
+    );
+
+    // var_dump($db->log());
+    // var_dump($db->error());
+
+    echo json_encode($response);
+    exit();
+}
+
+function saveContentAdd() {
+    global $match;
+    global $db;
+
+    if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
+    header('Content-Type: application/json; charset=utf-8');
+
+    $last_id = $db->insert("content", array(
+        "alias" => 'newrecord',
+        "published" => 0,
+        "extension_id" => 20,
+        "h1" => 'NewRecord',
+        "lang" => 'ru',
+    ));
+
+    $response = array(
+        'msg' => 'Добавлен новый пункт меню'
     );
 
     echo json_encode($response);
