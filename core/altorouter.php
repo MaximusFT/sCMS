@@ -272,9 +272,7 @@ class AltoRouter {
 						]
 					]
 				);
-
 				$resMenu['extension'] = $this->db->get("extension", '*', ["id"=>$resMenu['extension_id']]);
-
 				$resMenu['extension']['params'] = json_decode($resMenu['extension']['params']);
 				$resContent = $this->db->get("content", '*', [
 					"id" => $resMenu['link_id']
@@ -289,15 +287,32 @@ class AltoRouter {
 				}
 
 				return [
+					'routerCurrent' => [
+						'basePath' => $this->basePath,
+						'requestUrl' => $requestUrl,
+						'url' => $this->basePath.$requestUrl,
+						'target' => $target,
+						'method' => $method,
+						'name' => $name,
+						'params' => $params,
+						'fileType' => $fileType,
+					],
+					'extensionCurrent' => $resMenu['extension'],
+					'menuItemCurrent' => $resMenu,
+					'menuItems' => $Menus,
+					'contentCurrent' => $resContent,
+					/* NOT DELETE NEED FOR SADMIN */
 					'target' => $target,
 					'method' => $method,
-					'params' => $params,
 					'name' => $name,
+					'params' => $params,
+					/* DELETE */
 					'fileType' => $fileType,
 					'qMenuCurr' => $resMenu,
 					'qCont' => $resContent,
 					'qContId' => $resMenu['link_id'],
 					'qMenus' => $Menus,
+					/* END DELETE */
 				];
 			}
 		}
@@ -306,8 +321,8 @@ class AltoRouter {
 			$qTmp = $this->db->select("menu", '*', [
 				"AND" => [
 					"menutype_id"=>$value['id'],
-					"lang"=>$this->lang,
-					"level"=>1,
+					// "lang"=>$this->lang,
+					// "level"=>1,
 					"published" => 1
 					],
 				"ORDER" => ['pos ASC']
@@ -317,6 +332,7 @@ class AltoRouter {
 		}
 
 		return [
+			'menuItems' => $Menus,
 			'qMenus' => $Menus,
 		];
 	}
@@ -355,15 +371,35 @@ class AltoRouter {
 	}
 
 	public function mapdb() {
-		$res = $this->db->select("menu", '*', [
-			"AND" => [
-				"lang"=>$this->lang,
-				"published" => 1
+		$res = $this->db->select("menu", [
+	        	"[>]extension" => ["extension_id" => "id"]
+		    ], [
+		        "menu.id",
+		        "menu.method",
+		        "menu.extension_id",
+		        "menu.path",
+		        "menu.params",
+		        "extension.function(extension_function)",
+		    ], [
+				"AND" => [
+					"lang"=>$this->lang,
+					"published" => 1
+					]
 				]
-			]
-		);
+			);
 	    foreach ($res as $value) {
-			$this->routes[] = [$value['method'], $value['path'], $value['function'], '', $value['id'], 'view'];
+			$this->routes[] = [$value['method'], $value['path'], $value['extension_function'], '', $value['id'], 'view'];
+			if ($value['extension_id'] == 3 || $value['extension_id'] == 4) {
+				// $value['params'] = json_decode(json_encode($value['params']), FALSE);
+				$value['params'] = json_decode($value['params'], true);
+				$qres = $this->db->get("extension", '*', [
+						"AND" => [
+							"id" => $value['params']['category']
+							]
+						]
+					);
+				$this->routes[] = [$value['method'], $value['path'].'[*:articleOne]/', $qres['function'], $value['params']['category'], $value['id'], 'view'];
+			}
 	    }
 
 		return;

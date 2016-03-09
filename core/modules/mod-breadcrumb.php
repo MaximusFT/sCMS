@@ -34,5 +34,6 @@ if (isset($page) && !empty($page)){
 $breadcrumb = $bread.$sbread.$ssbread;
 ?>
 <ol class="breadcrumb">
-    <li><a href="/" title="Главная страница"><?php echo S_URLName;?></a></li><?=$breadcrumb;?>
+    <li><a href="/" title="Главная страница"><?php echo S_URLName;?></a></li>
+    <?=$breadcrumb;?>
 </ol>

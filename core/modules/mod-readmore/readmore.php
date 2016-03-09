@@ -2,7 +2,7 @@
 $qRMore = $db->select("content", array(
     "readmore"
 ), array(
-    "id" => $res->qContId
+    "id" => $res->contentCurrent->id
 ));
 if ($qRMore['0']['readmore'] != '') {
 ?>

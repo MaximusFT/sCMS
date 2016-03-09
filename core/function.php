@@ -7,27 +7,55 @@
  */
 function funPos($type='', $pos=''){
     global $db;
+    global $langUser;
     global $rd;
     global $res;
 
     if (!$db->has("module", array("position" => $pos))) return false;
-
-    $qRes = $db->select("module", '*', array("AND" => array("position" => $pos, "published" => 1)));
+    $qRes = $db->select("module", [
+        "[>]extension" => ["extension_id" => "id"]
+    ], [
+        "module.id",
+        "module.title",
+        "module.published",
+        "module.ordering",
+        "module.position",
+        "module.view",
+        "module.visible",
+        "module.params",
+        "extension.id(extension_id)",
+        "extension.title(extension_title)",
+        "extension.type(extension_type)",
+        "extension.fileName(extension_fileName)",
+        "extension.function(extension_function)",
+        "extension.enabled(extension_enabled)",
+        "extension.params(extension_params)",
+    ], [
+            "AND" => [
+                "lang" => $langUser,
+                "position" => $pos,
+                "published" => 1
+            ]
+        ]
+    );
     foreach ($qRes as $key => $value) {
-        $qRes[$key]['extension'] = $db->get("extension", '*', array("id" => $value['extension_id']));
         $qRes[$key]['visible'] = json_decode(stripslashes($qRes[$key]['visible']), true);
         $qRes[$key]['params'] = json_decode(stripslashes($qRes[$key]['params']), true);
-        if ($qRes[$key]['view'] == 'default') $view = '';
-        else $view = '-'.$qRes[$key]['view'];
-
-        if ($qRes[$key]['visible']) {
-            if (in_array($res->qMenuCurr->id, $qRes[$key]['visible'])) {
-                include P_MODL.'mod-'.$qRes[$key]['extension']['fileName'].'/'.$qRes[$key]['extension']['fileName'].$view.'.php';
-            } else {
-                continue;
-            }
+        if ($qRes[$key]['extension_id'] == 16) {
+            echo frontMenuBuild(json_decode($res->menuItems->$qRes[$key]['params']['menutype']->params, true), json_decode(json_encode($res->menuItems->$qRes[$key]['params']['menutype']->items), true), $res->menuItemCurrent->alias, $langUser);
         } else {
-            include P_MODL.'mod-'.$qRes[$key]['extension']['fileName'].'/'.$qRes[$key]['extension']['fileName'].$view.'.php';
+            if ($qRes[$key]['view'] == 'default') $view = '';
+            else $view = '-'.$qRes[$key]['view'];
+
+            if ($qRes[$key]['visible']) {
+                if (in_array($res->qMenuCurr->id, $qRes[$key]['visible'])) {
+                    include P_MODL.'mod-'.$qRes[$key]['extension_fileName'].'/'.$qRes[$key]['extension_fileName'].$view.'.php';
+                } else {
+                    continue;
+                }
+            } else {
+                include P_MODL.'mod-'.$qRes[$key]['extension_fileName'].'/'.$qRes[$key]['extension_fileName'].$view.'.php';
+            }
         }
     }
 }
@@ -228,7 +256,7 @@ function Analyze() {
 		$db->update("content", [
 			"hits[+]" => 1
 		], [
-		    "id" => $res->qContId
+		    "id" => $res->contentCurrent->id
 		]);
     }
 }
@@ -282,31 +310,48 @@ function inverseHex($color) {
 
     return ($prependHash?'#':NULL).$r.$g.$b;
 }
-function linkBuilder($url, $langInv = false){
+function linkBuilder($alias = null, $langInv = false){
+    global $res;
     global $langUser;
     global $langUserInv;
     $ln = ($langInv === true)?$langUserInv:$langUser;
-    return '/'.$ln.$url;
+    $array[] = trim($ln, "/");
+    $array[] = trim($res->routerCurrent->requestUrl, "/");
+    if ($alias !== null || !empty($alias)) {
+        $array[] = trim($alias, "/");
+    }
+    return '/'.trim(implode("/", $array), "/").'/';
 }
-function frontMenuBuild($params, $res, $active) {
+function menuLinkBuilder($alias, $langInv = false){
+    global $langUser;
+    global $langUserInv;
+    $ln = ($langInv === true)?$langUserInv:$langUser;
+    $array[] = $ln;
+    $array[] = trim($alias, "/");
+    return '/'.(implode("/", $array)).'/';
+}
+function frontMenuBuild($params, $res, $active, $langUser) {
     $list = '';
     foreach($params as $key => $value) {
         $i == 0;
         foreach($value as $key => $index) {
             $i++;
             if($key == 'id') $tempId = $index;
-            if(is_array($index)) {
-                $list .= '
-                <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">'.$res[$value['id']]['title'].' <span class="caret"></span></a>
-                <ul class="dropdown-menu">';
-                $list .= frontMenuBuild($index, $res, $active);
-                $list .= '</ul></li>';
-            } else {
-                if ($i !== 1) $list .= '</li>';
-                if (is_array($value['children'])) {
+            if ($res[$value['id']]['id'] == $value['id']) {
+                if(is_array($index)) {
+                    $list .= '
+                    <li class="btn-group'.(($active == $res[$value['id']]['alias'])?' active':'').'">
+                        <a href="/'.$langUser.$res[$value['id']]['path'].'" class="btn">'.$res[$value['id']]['title'].'</a>
+                        <a href="#" class="dropdown-toggle btn" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></a>
+                    <ul class="dropdown-menu">';
+                    $list .= frontMenuBuild($index, $res, $active, $langUser);
+                    $list .= '</ul></li>';
                 } else {
-                    $list .= '<li'.(($active == $res[$index]['alias'])?' class="active"':'').'><a href="'.$res[$index]['path'].'">'.$res[$index]['title'].'</a>';
+                    if ($i !== 1) $list .= '</li>';
+                    if (is_array($value['children'])) {
+                    } else {
+                        $list .= '<li'.(($active == $res[$index]['alias'])?' class="active"':'').'><a href="/'.$langUser.$res[$index]['path'].'">'.$res[$index]['title'].'</a>';
+                    }
                 }
             }
         }

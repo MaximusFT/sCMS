@@ -9,7 +9,7 @@ $router->setBasePath('/'.$langUser);
 $router->mapdb();
 $res = new stdClass();
 $resDecode = json_decode(json_encode($router->match()), FALSE);
-$res = ($resDecode == '')? (new stdClass()):$resDecode;
+$res = ($resDecode == '')?(new stdClass()):$resDecode;
 $res->addToHead = '';
 
 /**
@@ -18,71 +18,123 @@ $res->addToHead = '';
  *	$router->map( 'GET', '/module/', 'ModuleCrtl', 'module');
  */
 
-function articlesPageCtrl() {
+function comStaticPageCtrl() {
     global $res;
     global $db;
-
-    $qListContent = $db->select("menu", [
-        "[>]content" => ["link_id" => "id"]
-    ], [
-        "menu.id",
-        "menu.path",
-        "menu.alias",
-        "menu.link_id",
-        "menu.published",
-        "content.id(content_id)",
-        "content.catid(catid)",
-        "content.h1(content_h1)",
-        "content.h1Small(content_h1Small)",
-        "content.alias(content_alias)",
-        "content.full_text(content_full_text)",
-        "content.publish_up(content_publish_up)"
-    ], [
-        "AND" => [
-            "menu.published" => 1,
-            "menu.extension_id" => 2
-        ],
-        "ORDER" => "content.publish_up DESC"
-    ]);
-
-    $res->qListContent = json_decode(json_encode($qListContent), FALSE);
-    $res->fileName = $qListContent->content_full_text;
 
     return;
 }
-
-function mainPageCtrl() {
+function comArticleOnePageCtrl($articleOne) {
     global $res;
     global $db;
 
-    $qListContent = $db->select("menu", [
-        "[>]content" => ["link_id" => "id"]
-    ], [
-        "menu.id",
-        "menu.path",
-        "menu.title",
-        "menu.alias",
-        "menu.link_id",
-        "menu.published",
-        "content.published(content_published)",
-        "content.id(content_id)",
-        "content.h1(content_h1)",
-        "content.h1Small(content_h1Small)",
-        "content.h1Description(content_h1Description)",
-        "content.alias(content_alias)",
-        "content.publish_up(content_publish_up)"
-    ], [
+    $qExt = $db->get("extension", '*', [
         "AND" => [
-            "menu.published" => 1,
+            "id" => $res->routerCurrent->name,
+        ]
+    ]);
+    $qListContent = $db->get("content", '*', [
+        "AND" => [
+            "alias" => $articleOne,
+            "extension_id" => $res->routerCurrent->name,
+            "published" => 1,
+        ]
+    ]);
+
+    $res->contentCurrent = json_decode(json_encode($qListContent), FALSE);
+    $res->extensionCurrent->fileName = $qExt['fileName'];
+    $res->extensionCurrent->params = json_decode($qExt['params'], FALSE);
+
+    return;
+}
+function comArticleListPageCtrl() {
+    global $res;
+    global $langUser;
+    global $db;
+
+    $qListContent = $db->select("content", '*', [
+        "AND" => [
+            "content.lang" => $langUser,
             "content.published" => 1,
-            "menu.extension_id" => 2
+            "content.extension_id" => 17
         ],
         "ORDER" => "content.publish_up DESC",
-        "LIMIT" => 3
+        "LIMIT" => 10
     ]);
 
     // echo $db->last_query();
     // var_dump($db->error());
+
+    $res->articleList = json_decode(json_encode($qListContent), FALSE);
+    return;
+}
+function comCategoryOnePageCtrl() {
+    global $res;
+    global $langUser;
+    global $db;
+
+    $qListContent = $db->select("content", '*', [
+        "AND" => [
+            "content.lang" => $langUser,
+            "content.published" => 1,
+            "content.extension_id" => $res->menuItemCurrent->function,
+        ],
+        "ORDER" => "content.publish_up DESC",
+        "LIMIT" => 10
+    ]);
+
+    // echo $db->last_query();
+    // var_dump($db->error());
+
+    $res->articleList = json_decode(json_encode($qListContent), FALSE);
+    return;
+}
+function comCategoryListPageCtrl() {
+    global $res;
+    global $db;
+
+    return;
+}
+function comOnlyFilePageCtrl() {
+    global $res;
+    global $db;
+
+    return;
+}
+function comPostRequestPageCtrl() {
+    global $res;
+    global $db;
+
+    return;
+}
+function comSitemapXLMPageCtrl() {
+    global $res;
+    global $db;
+
+    header ("content-type: text/xml");
+
+    $qListContent = $db->select("menu", [
+        "[>]content" => ["link_id" => "id"]
+    ], [
+        "menu.id",
+        "menu.path",
+        "menu.alias",
+        "menu.link_id",
+        "menu.published",
+        "content.id(content_id)",
+        "content.h1(content_h1)",
+        "content.h1Small(content_h1Small)",
+        "content.alias(content_alias)",
+        "content.publish_up(content_publish_up)"
+    ], [
+        "AND" => [
+            "menu.id[!]" => array(2,3,9,19),
+            "menu.published" => 1,
+            "menu.extension_id" => array(1, 2)
+        ],
+        "ORDER" => "content.publish_up DESC"
+    ]);
+    // echo $db->last_query();
 
     $res->qListContent = json_decode(json_encode($qListContent), FALSE);
 
@@ -209,37 +261,6 @@ function sitemapCtrl() {
 }
 
 function sitemapXMLCtrl() {
-    global $res;
-    global $db;
-
-    header ("content-type: text/xml");
-
-    $qListContent = $db->select("menu", [
-        "[>]content" => ["link_id" => "id"]
-    ], [
-        "menu.id",
-        "menu.path",
-        "menu.alias",
-        "menu.link_id",
-        "menu.published",
-        "content.id(content_id)",
-        "content.h1(content_h1)",
-        "content.h1Small(content_h1Small)",
-        "content.alias(content_alias)",
-        "content.publish_up(content_publish_up)"
-    ], [
-        "AND" => [
-            "menu.id[!]" => array(2,3,9,19),
-            "menu.published" => 1,
-            "menu.extension_id" => array(1, 2)
-        ],
-        "ORDER" => "content.publish_up DESC"
-    ]);
-    // echo $db->last_query();
-
-    $res->qListContent = json_decode(json_encode($qListContent), FALSE);
-
-    return;
 }
 
 function commentCtrl() {
@@ -304,9 +325,9 @@ function commonPageCtrl() {
 /**
  * Обработка вызванного роутера
  */
-if($res && is_callable($res->target)) {
+if($res && is_callable($res->routerCurrent->target)) {
     Analyze();
-    $resFunc = call_user_func_array($res->target, $res->params);
+    $resFunc = call_user_func_array($res->routerCurrent->target, json_decode(json_encode($res->routerCurrent->params), true));
     $resFunc = json_decode(json_encode($resFunc), FALSE);
 } else {
     if ($res->header == 301) {
@@ -326,5 +347,5 @@ if($res && is_callable($res->target)) {
         echo '</pre></div>';
     }
     */
-    $res->fileName = P_VIEW.'404.php';
+    $res->extensionCurrent->fileName = P_VIEW.'404';
 }
