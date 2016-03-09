@@ -421,6 +421,15 @@ function saveMenuRefresh() {
     exit();
 }
 
+
+
+
+
+
+
+
+
+
 function saveMenuTypeAdd() {
     global $match;
     global $db;
@@ -465,6 +474,15 @@ function saveMenuTypeDel() {
     exit();
 }
 
+
+
+
+
+
+
+
+
+
 function saveContentAdd() {
     global $match;
     global $db;
@@ -487,3 +505,64 @@ function saveContentAdd() {
     echo json_encode($response);
     exit();
 }
+
+
+
+
+
+
+
+
+
+
+
+function saveExtensionAdd() {
+    global $match;
+    global $db;
+
+    if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
+    header('Content-Type: application/json; charset=utf-8');
+
+    $last_id = $db->insert("menutype", array(
+        "title" => $_POST['title'],
+        "name" => $_POST['name'],
+        "lang" => $_POST['lang'],
+        "position" => $_POST['position']
+    ));
+
+    $response = array(
+        'msg' => 'Добавлен новый пункт меню'
+    );
+
+    echo json_encode($response);
+    exit();
+}
+
+function saveExtensionDel() {
+    global $match;
+    global $db;
+
+    if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
+    header('Content-Type: application/json; charset=utf-8');
+
+    $db->delete("menutype", [
+        "id" => intval($_POST['id'])
+    ]);
+
+    $response = array(
+        'msg' => 'Пункт меню удален'
+    );
+
+    // var_dump($db->log());
+    // var_dump($db->error());
+
+    echo json_encode($response);
+    exit();
+}
+
+
+
+
+
+
+

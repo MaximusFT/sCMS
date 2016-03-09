@@ -347,5 +347,5 @@ if($res && is_callable($res->routerCurrent->target)) {
         echo '</pre></div>';
     }
     */
-    $res->extensionCurrent->fileName = P_VIEW.'404';
+    $res->extensionCurrent->fileName = '404-'.$langUser;
 }

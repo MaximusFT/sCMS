@@ -88,6 +88,21 @@ function ContentCrtl() {
     ];
 }
 
+function ExtensionCrtl() {
+    global $match;
+    global $db;
+
+    $qContent = $db->select("extension", "*");
+
+    return [
+        'appGoPost'       => true,
+        'qContent'        => $qContent,
+        'params'          => qToDB($match),
+        'pageContent'     => $pathTo.$match['name'].'.php'
+    ];
+}
+
+
 function ContentOneCrtl($id) {
     global $match;
     global $db;
@@ -122,20 +137,6 @@ function ModuleCrtl() {
         "module.params",
         "extension.title(extension_title)"
     ]);
-
-    return [
-        'appGoPost'       => true,
-        'qContent'        => $qContent,
-        'params'          => qToDB($match),
-        'pageContent'     => $pathTo.$match['name'].'.php'
-    ];
-}
-
-function ExtensionCrtl() {
-    global $match;
-    global $db;
-
-    $qContent = $db->select("extension", "*");
 
     return [
         'appGoPost'       => true,

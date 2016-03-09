@@ -165,12 +165,13 @@
                         <li><a href="<?=A_URLh;?>" data-match-name="sadmin" title="Главная" data-ripple=""><div class="label pull-right label-success">4</div><em class="sidebar-item-icon icon-pie-graph"></em><span>Главная</span></a></li>
                         <li><a href="<?=A_URLh;?>menu/" data-match-name="menu" title="Меню" data-ripple=""><em class="sidebar-item-icon icon-stack"></em><span>Меню</span></a></li>
                         <li><a href="<?=A_URLh;?>content/" data-match-name="content" title="Материалы" data-ripple=""><em class="sidebar-item-icon icon-stack"></em><span>Материалы</span></a></li>
+                        <li><a href="<?=A_URLh;?>extension/" data-match-name="extension" title="Расширения" data-ripple=""><em class="sidebar-item-icon icon-stack"></em><span>Расширения</span></a></li>
+                        <li><a href="<?=A_URLh;?>module/" data-match-name="module" title="Модули" data-ripple=""><em class="sidebar-item-icon icon-stack"></em><span>Модули</span></a></li>
                         <li><a href="<?=A_URLh;?>comments/" data-match-name="comments" title="Комментарии" data-ripple=""><em class="sidebar-item-icon icon-stack"></em><span>Комментарии</span></a></li>
                         <li><a href="<?=A_URLh;?>askings/" data-match-name="askings" title="Вопросы с сайта" data-ripple=""><em class="sidebar-item-icon icon-stack"></em><span>Вопросы с сайта</span></a></li>
                         <li><a href="<?=A_URLh;?>subscribers/" data-match-name="subscribers" title="Подписчики" data-ripple=""><em class="sidebar-item-icon icon-stack"></em><span>Подписчики</span></a></li>
-                        <li><a href="<?=A_URLh;?>module/" data-match-name="module" title="Модули" data-ripple=""><em class="sidebar-item-icon icon-stack"></em><span>Модули</span></a></li>
-                        <li><a href="<?=A_URLh;?>extension/" data-match-name="extension" title="Расширения" data-ripple=""><em class="sidebar-item-icon icon-stack"></em><span>Расширения</span></a></li>
 
+                        <li><hr></li>
                         <li><hr></li>
                         <li class="nav-heading"><span class="text-muted">Addons</span></li>
                         <li><a href="/sadmin/template/media/dialog.php?type=0&lang=ru_RU&popup=0&crossdomain=0&field_id=&relative_url=0&akey=key&fldr=" target="_blank">Media</a></li>

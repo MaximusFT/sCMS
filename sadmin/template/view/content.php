@@ -87,7 +87,7 @@ $(function() {
             { "data": "lang" },
             { "data": "editFull" },
         ],
-        "order": [[2, 'asc'], [4, 'asc']],
+        "order": [[1, 'asc'], [7, 'asc'], [2, 'asc'], [4, 'asc']],
         "drawCallback": function(settings){
             xEdit();
         }

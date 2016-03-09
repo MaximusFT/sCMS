@@ -1,3 +1,88 @@
+<div class="app-view-header">Content list</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <div class="clearfix">
+                    <div id="nestable-menu" class="pull-left">
+                        <button id="addArticle" type="button" class="btn btn-success btn-xs"><i class="fa fa-plus"></i> Add Article</button>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table id="myTable" class="table table-condensed table-striped table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>published</th>
+                            <th>Category</th>
+                            <th>Favorite</th>
+                            <th>Title (h1)</th>
+                            <th>Alias</th>
+                            <th>subTitle (h1Small)</th>
+                            <th>Language</th>
+                            <th>editFull</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+'use strict';
+
+$(function() {
+    var detailRows = [];
+    var myTab = $('#myTable');
+    var dt = myTab.DataTable({
+        "processing": true,
+        "serverSide": true,
+        "deferRender": true,
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "pageLength": 25,
+        "stateSave": true,
+        "ajax": {
+            "url": "/sadmin/get/data/content/content-list/",
+            "type": "POST"
+        },
+        "columns": [
+            {
+                "class":          "details-control",
+                "orderable":      false,
+                "data":           null,
+                "defaultContent": ""
+            },
+            { "data": "published" },
+            { "data": "extension_id" },
+            { "data": "favorite" },
+            { "data": "h1" },
+            { "data": "alias" },
+            { "data": "h1Small" },
+            { "data": "lang" },
+            { "data": "editFull" },
+        ],
+        "order": [[1, 'asc'], [7, 'asc'], [2, 'asc'], [4, 'asc']],
+        "drawCallback": function(settings){
+            xEdit();
+        }
+    });
+
+
+    $('#addArticle').on('click', function() {
+        $.ajax({
+            type: "POST",
+            url: '/sadmin/save/content/add/',
+        }).done(function(result) {
+            sCMSAletr(result, 'success');
+            dt.draw();
+            // $('#appReload').appGo('reload');
+        });
+    });
+});
+</script>
+
 <div class="row">
     <div class="col-md-12">
         <h2>Расширения
@@ -55,22 +140,5 @@
     }
     ?>
         </table>
-    </div>
-</div>
-
-<!-- Modal for Edit Page -->
-<div class="modal fade" id="modalContentEdit" tabindex="-1" role="dialog" aria-labelledby="contentEdit" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="contentEdit">Редактировать расширение</h4>
-            </div>
-            <div class="modal-body" id="ajaxContent" data-contentid=""></div>
-            <!--<div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save</button>
-            </div>-->
-        </div>
     </div>
 </div>

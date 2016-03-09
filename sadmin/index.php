@@ -17,8 +17,6 @@ $router->setBasePath('/sadmin');
  * PAGES Route
  */
 $router->map( 'GET', '/', 'AdminCrtl', 'sadmin');
-$router->map( 'GET', '/module/', 'ModuleCrtl', 'module');
-$router->map( 'GET', '/extension/', 'ExtensionCrtl', 'extension');
 $router->map( 'GET', '/comments/', 'CommentsCrtl', 'comments');
 $router->map( 'GET', '/subscribers/', 'SubscribersCrtl', 'subscribers');
 $router->map( 'GET', '/askings/', 'AskingsCrtl', 'askings');
@@ -38,6 +36,14 @@ $router->map('POST|PUT', '/save/content/add/', 'saveContentAdd', 'save-content-a
 $router->map('POST|PUT', '/save/content/del/', 'saveContentDel', 'save-content-del', null, 'ajax');
 $router->map('POST', '/content/csv-to-mysql/', 'appCSVtoMysql', 'content-csv-to-mysql');
 $router->map( 'GET', '/content/mysql-to-csv/', 'appMysqlToCSV', 'content-mysql-to-csv');
+
+$router->map('POST|GET', '/extension/', 'ExtensionCrtl', 'extension');
+$router->map('POST|PUT', '/save/extension/add/', 'saveExtensionAdd', 'save-extension-add', null, 'ajax');
+$router->map('POST|PUT', '/save/extension/del/', 'saveExtensionDel', 'save-extension-del', null, 'ajax');
+
+$router->map( 'GET', '/module/', 'ModuleCrtl', 'module');
+
+
 
 $router->map(' GET', '/people/', 'PeoplesCrtl', 'peoples');
 $router->map(' GET', '/people/[i:id]/', 'PeopleCrtl', 'people');
