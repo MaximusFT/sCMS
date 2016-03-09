@@ -3,7 +3,7 @@ Very simple CMS for light site requirements
 
 ## Features
 
-* Best to simple content resurce
+* Best to simple content resource
 * 2 or more Language
 
 ## Getting started
