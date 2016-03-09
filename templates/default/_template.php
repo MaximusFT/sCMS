@@ -1,6 +1,7 @@
 <?php
 require_once P_TEMP.'_head.php';
 ?>
+    <div class="hidden"><?php echo funPos('module', 'tech');?></div>
     <nav class="navbar navbar-default" role="navigation">
         <div class="container">
             <div class="navbar-header">
@@ -15,9 +16,9 @@ require_once P_TEMP.'_head.php';
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav">
                     <?php echo funPos('module', 'nav-top');?>
-                    <?php
-                        echo frontMenuBuild(json_decode($res->qMenus->mainmenu->params, true), json_decode(json_encode($res->qMenus->mainmenu->items), true), $res->qMenuCurr->alias);
-                    ?>
+                </ul>
+                <ul class="nav navbar-nav pull-right">
+                    <li><a href="<?php echo linkBuilder(null, true);?>"><?php echo $langUserInv;?></a></li>
                 </ul>
             </div>
         </div>
@@ -26,7 +27,7 @@ require_once P_TEMP.'_head.php';
     <?php echo funPos('module', 'after-nav');?>
 
     <?php
-        require_once P_HTML.$res->qMenuCurr->extension->fileName.'.php';
+        require_once P_HTML.$res->extensionCurrent->fileName.'.php';
     ?>
 
     <?php echo funPos('module', 'after-container');?>
