@@ -1,0 +1,8 @@
+{
+    "name": "MaximusFT/sCMS",
+    "description": "Very simple CMS for light site requirements",
+    "require": {
+        "php": ">=5.4.45",
+        "altorouter/altorouter": "1.*"
+    }
+}
