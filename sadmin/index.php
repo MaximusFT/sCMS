@@ -41,7 +41,9 @@ $router->map('POST|GET', '/extension/', 'ExtensionCrtl', 'extension');
 $router->map('POST|PUT', '/save/extension/add/', 'saveExtensionAdd', 'save-extension-add', null, 'ajax');
 $router->map('POST|PUT', '/save/extension/del/', 'saveExtensionDel', 'save-extension-del', null, 'ajax');
 
-$router->map( 'GET', '/module/', 'ModuleCrtl', 'module');
+$router->map('POST|GET', '/module/', 'ModuleCrtl', 'module');
+$router->map('POST|PUT', '/save/module/add/', 'saveModuleAdd', 'save-module-add', null, 'ajax');
+$router->map('POST|PUT', '/save/module/del/', 'saveModuleDel', 'save-module-del', null, 'ajax');
 
 
 
