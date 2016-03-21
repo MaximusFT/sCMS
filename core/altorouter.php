@@ -278,12 +278,17 @@ class AltoRouter {
 					"id" => $resMenu['link_id']
 				]);
 
-				$resSnippet = $this->db->select("extension", '*', ["AND"=>["type" => "snippet","enabled"=>"1"]]);
+				$resSnippet = $this->db->select("module", '*',
+					[
+						"AND"=>[
+							"extension_id" => 22,
+							"published" => 1
+						]
+					]
+				);
 
 				foreach ($resSnippet as $snippet) {
-
-					$resContent['full_text'] = str_replace("{{".$snippet['fileName']."}}","<script>".$snippet['params']."</script>", $resContent['full_text']);
-
+						$resContent['full_text'] = str_replace("{{".$snippet['position']."}}", $snippet['params'], $resContent['full_text']);
 				}
 
 				return [

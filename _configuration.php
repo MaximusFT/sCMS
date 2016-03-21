@@ -64,6 +64,7 @@ $SQL_array = [
 
 require_once P_CORE.'medoo.min.php'; $db = new medoo();
 require_once P_CORE.'altorouter.php';
+require_once P_LANG.$langUser.'.default.php';
 require_once P_CORE.'function.php';
 require_once P_CORE.'dateout.php'; $rd = new DateOut();
 
