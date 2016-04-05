@@ -1,18 +1,18 @@
 <?
 session_start();
-$_SESSION['id'] = $res->qContent[0]->id;
+$_SESSION['id'] = $res->contentCurrent->ent[0]->id;
 ?>
 
 <div class="row">
     <div class="col-md-12">
-        <h2><?php echo $res->qContent[0]->h1;?></h2>
+        <h2><?php echo $res->contentCurrent->ent[0]->h1;?></h2>
     </div>
 </div>
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-info">
             <div class="panel-heading">
-                <button type="button" class="btn btn-success btn-sm sv-cont" data-params="content|full_text" data-cid="<?=$res->qContent[0]->id;?>">Save & stay</button>
+                <button type="button" class="btn btn-success btn-sm sv-cont" data-params="content|full_text" data-cid="<?=$res->contentCurrent->ent[0]->id;?>">Save & stay</button>
                 <button type="button" class="btn btn-primary btn-sm sv-exit">Save & close</button>
                 <div class="pull-right">
                     <button type="button" class="btn btn-default btn-sm" href="/sadmin/content/">Назад</button>
@@ -20,7 +20,7 @@ $_SESSION['id'] = $res->qContent[0]->id;
             </div>
             <div class="panel-body">
                 <div id="fullText">
-                    <?php echo $res->qContent[0]->full_text;?>
+                    <?php echo $res->contentCurrent->ent[0]->full_text;?>
                 </div>
             </div>
         </div>

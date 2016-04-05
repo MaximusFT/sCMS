@@ -1,5 +1,6 @@
 # sCMS
 Very simple CMS for light site requirements
+Version 0.4 (05.04.2016)
 
 ## Features
 

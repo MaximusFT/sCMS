@@ -31,10 +31,27 @@
     </div>
 </div>
 
+<div class="modal fade" id="xModalModuleVisible" tabindex="-1" role="dialog" aria-labelledby="ModuleVisible" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Module Visible</h4>
+                </div>
+                <div class="modal-body" id="ModuleVisible"></div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 <script>
 'use strict';
 
 $(function() {
+    'use strict';
+
     var detailRows = [];
     var myTab = $('#myTable');
     var dt = myTab.DataTable({
@@ -66,7 +83,9 @@ $(function() {
         }
     });
 
-
+    /**
+    *   <ModuleDel
+    */
     $('#addModule').on('click', function() {
         $.ajax({
             type: "POST",
@@ -74,27 +93,29 @@ $(function() {
         }).done(function(result) {
             sCMSAletr(result, 'success');
             dt.draw();
-            // $('#appReload').appGo('reload');
         });
     });
+
+    /**
+    *   <ModuleVisible
+    */
+    $('#xModalModuleVisible').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget),
+            itemId = button.data('id'),
+            modal = $(this);
+        $.ajax({
+            type: 'POST',
+            url: '/sadmin/get/module/visible/',
+            data: {id: itemId}
+        })
+        .done(function(result) {
+            $('#ModuleVisible').html(result);
+            // sCMSAletr(result, 'success');
+        });
+    }).on('hidden.bs.modal', function (e) {
+        $('#ModuleVisible').empty();
+        // $('#appReload').appGo('reload');
+    });
+
 });
 </script>
-
-<!-- Modal for Edit Page -->
-<div class="modal fade" id="modalModuleViewEdit" tabindex="-1" role="dialog" aria-labelledby="contentEdit" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title">Привязка к пунктам меню</h4>
-            </div>
-            <div class="modal-body" id="ajaxModule" data-contentid="">
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save</button>
-            </div>
-        </div>
-    </div>
-</div>

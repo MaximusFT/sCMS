@@ -57,7 +57,7 @@ $columns = array(
     array('db' => 'params', 'dt' => 'params',
         'formatter' => function( $d, $row, $table ) {
             return '
-                <a href="#" class="xModalModuleView btn btn-info btn-xs"
+                <a href="#" class="xModalModuleParams btn btn-info btn-xs"
                     data-pk="'.$row['id'].'"
                     data-value="'.$d.'"
                     data-params=\'{"name":"params","table":"'.$table.'"}\'
@@ -77,11 +77,11 @@ $columns = array(
     array('db' => 'visible', 'dt' => 'visible',
         'formatter' => function( $d, $row, $table ) {
             return '
-                <a href="#" class="xModalModuleView btn btn-info btn-xs"
-                    data-pk="'.$row['id'].'"
-                    data-value="'.$d.'"
-                    data-params=\'{"name":"visible","table":"'.$table.'"}\'
-                    data-title="Заголовок"><i class="fa fa-eye"></i></a>';
+                <a href="#" class="btn btn-info btn-xs"
+                    data-id="'.$row['id'].'"
+                    data-toggle="modal"
+                    data-target="#xModalModuleVisible"
+                    ><i class="fa fa-eye"></i></a>';
         }
     ),
     array('db' => 'description', 'dt' => 'description',

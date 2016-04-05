@@ -5,7 +5,13 @@
  */
 
 $router = new AltoRouter();
-$router->setBasePath('/'.$langUser);
+/**
+ * Проверки IS_LANG нужно будет собрать в функцию...
+ */
+if (IS_LANG === true) {
+    $router->setBasePath('/'.USER_LANG);
+}
+
 $router->mapdb();
 $res = new stdClass();
 $resDecode = json_decode(json_encode($router->match()), FALSE);
@@ -22,70 +28,33 @@ function comStaticPageCtrl() {
     global $res;
     global $db;
 
-    return;
-}
-function comArticleOnePageCtrl($articleOne) {
-    global $res;
-    global $db;
-
-    $qExt = $db->get("extension", '*', [
-        "AND" => [
-            "id" => $res->routerCurrent->name,
-        ]
-    ]);
-    $qListContent = $db->get("content", '*', [
-        "AND" => [
-            "alias" => $articleOne,
-            "extension_id" => $res->routerCurrent->name,
-            "published" => 1,
-        ]
-    ]);
-
-    $res->contentCurrent = json_decode(json_encode($qListContent), FALSE);
-    $res->extensionCurrent->fileName = $qExt['fileName'];
-    $res->extensionCurrent->params = json_decode($qExt['params'], FALSE);
+    $res->extensionCurrent->fileName = P_HTML.'static_one.php';
 
     return;
 }
-function comArticleListPageCtrl() {
+function comArticleOnePageCtrl() {
     global $res;
-    global $langUser;
     global $db;
 
-    $qListContent = $db->select("content", '*', [
-        "AND" => [
-            "content.lang" => $langUser,
-            "content.published" => 1,
-            "content.extension_id" => 17
-        ],
-        "ORDER" => "content.publish_up DESC",
-        "LIMIT" => 10
-    ]);
+    $res->extensionCurrent->fileName = P_HTML.'article_one.php';
 
-    // echo $db->last_query();
-    // var_dump($db->error());
-
-    $res->articleList = json_decode(json_encode($qListContent), FALSE);
     return;
 }
 function comCategoryOnePageCtrl() {
     global $res;
-    global $langUser;
     global $db;
 
     $qListContent = $db->select("content", '*', [
         "AND" => [
-            "content.lang" => $langUser,
+            "content.lang" => USER_LANG,
             "content.published" => 1,
-            "content.extension_id" => $res->menuItemCurrent->function,
+            "content.category_id" => $res->categoryCurrent->id,
         ],
         "ORDER" => "content.publish_up DESC",
         "LIMIT" => 10
     ]);
 
-    // echo $db->last_query();
-    // var_dump($db->error());
-
+    $res->extensionCurrent->fileName = P_HTML.$res->extensionCurrent->fileName.'.php';
     $res->articleList = json_decode(json_encode($qListContent), FALSE);
     return;
 }
@@ -98,6 +67,8 @@ function comCategoryListPageCtrl() {
 function comOnlyFilePageCtrl() {
     global $res;
     global $db;
+
+    $res->extensionCurrent->fileName = P_VIEW.$res->menuItemCurrent->params->fileName;
 
     return;
 }
@@ -302,7 +273,7 @@ function commonPageCtrl() {
         "timecreate"
     ], [
         "AND" => [
-            "content_id" => $res->qCont->id,
+            "content_id" => $res->contentCurrent->id,
             "type" => 'comment',
             "active" => 1
         ]
@@ -310,7 +281,7 @@ function commonPageCtrl() {
 
     $qCount = $db->count("comment", [
         "AND" => [
-            "content_id" => $res->qCont->id,
+            "content_id" => $res->contentCurrent->id,
             "type" => 'comment',
             "active" => 1
         ]
@@ -325,27 +296,16 @@ function commonPageCtrl() {
 /**
  * Обработка вызванного роутера
  */
-if($res && is_callable($res->routerCurrent->target)) {
+if($res && is_callable($res->target)) {
     Analyze();
-    $resFunc = call_user_func_array($res->routerCurrent->target, json_decode(json_encode($res->routerCurrent->params), true));
+    $res->header = 200;
+    $resFunc = call_user_func_array($res->target, json_decode(json_encode($res->params), true));
     $resFunc = json_decode(json_encode($resFunc), FALSE);
 } else {
     if ($res->header == 301) {
         header('HTTP/1.1 301 Moved Permanently');
-        header('Location: '.S_URLh.$langUser.$_SERVER['REQUEST_URI']);
+        header('Location: '.S_URLh.USER_LANG.$_SERVER['REQUEST_URI']);
         exit();
     }
     header( $_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
-    /*
-    require_once P_TEMP."_head.php";
-    require_once P_SITE.'404.php';
-    require_once P_TEMP."_ender.php";
-
-    if (isset($_GET['d'])) {
-        echo '<div class="debug"><pre>';
-        print_r($res);
-        echo '</pre></div>';
-    }
-    */
-    $res->extensionCurrent->fileName = '404-'.$langUser;
 }

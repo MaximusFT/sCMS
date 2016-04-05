@@ -1,5 +1,5 @@
 <form class="form-horizontal" id="questionForm" action="<?php echo S_URLs;?>/asking/do/" method="post" role="form" >
-    <input name="aParams" type="hidden" value="<?php echo S_URLs.$_SERVER['REQUEST_URI'];?>|<?php echo $res->qCont->id;?>">
+    <input name="aParams" type="hidden" value="<?php echo S_URLs.$_SERVER['REQUEST_URI'];?>|<?php echo $res->contentCurrent->->id;?>">
     <div class="form-group">
         <label for="qName" class="col-sm-3 control-label">Имя</label>
         <div class="col-sm-9">

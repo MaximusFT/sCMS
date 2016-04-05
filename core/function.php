@@ -7,7 +7,6 @@
  */
 function funPos($type='', $pos=''){
     global $db;
-    global $langUser;
     global $rd;
     global $res;
 
@@ -32,23 +31,23 @@ function funPos($type='', $pos=''){
         "extension.params(extension_params)",
     ], [
             "AND" => [
-                "lang" => $langUser,
+                "lang" => USER_LANG,
                 "position" => $pos,
                 "published" => 1
             ]
         ]
     );
     foreach ($qRes as $key => $value) {
-        $qRes[$key]['visible'] = json_decode(stripslashes($qRes[$key]['visible']), true);
+        $qRes[$key]['visible'] = json_decode($qRes[$key]['visible'], true);
         $qRes[$key]['params'] = json_decode(stripslashes($qRes[$key]['params']), true);
         if ($qRes[$key]['extension_id'] == 16) {
-            echo frontMenuBuild(json_decode($res->menuItems->$qRes[$key]['params']['menutype']->params, true), json_decode(json_encode($res->menuItems->$qRes[$key]['params']['menutype']->items), true), $res->menuItemCurrent->alias, $langUser);
+            echo frontMenuBuild(json_decode($res->menuItems->$qRes[$key]['params']['menutype']->params, true), json_decode(json_encode($res->menuItems->$qRes[$key]['params']['menutype']->items), true), $res->menuItemCurrent->alias, USER_LANG);
         } else {
             if ($qRes[$key]['view'] == 'default') $view = '';
             else $view = '-'.$qRes[$key]['view'];
 
             if ($qRes[$key]['visible']) {
-                if (in_array($res->qMenuCurr->id, $qRes[$key]['visible'])) {
+                if (in_array($res->menuItemCurrent->id, $qRes[$key]['visible']['visMenu'])) {
                     include P_MODL.'mod-'.$qRes[$key]['extension_fileName'].'/'.$qRes[$key]['extension_fileName'].$view.'.php';
                 } else {
                     continue;
@@ -235,14 +234,14 @@ function Analyze() {
 	$os = getenv("HTTP_USER_AGENT");
 	$host = getenv("REMOTE_HOST");
 	$page = getenv("HTTP_REFERER");
-    $time = date("Y-m-d G:i:s", time()); 
-    
+    $time = date("Y-m-d G:i:s", time());
+
     $qR = $db->select("statistics", "*", [
         "ip[=]" => $ip,
         "ORDER" => "id DESC",
         "LIMIT" => 1
     ]);
-	
+
 	$diffTime = strtotime($time) - strtotime($qR[0]['date']);
 
     if ($diffTime > 600) {
@@ -310,27 +309,39 @@ function inverseHex($color) {
 
     return ($prependHash?'#':NULL).$r.$g.$b;
 }
+
 function linkBuilder($alias = null, $langInv = false){
     global $res;
-    global $langUser;
-    global $langUserInv;
-    $ln = ($langInv === true)?$langUserInv:$langUser;
-    $array[] = trim($ln, "/");
-    $array[] = trim($res->routerCurrent->requestUrl, "/");
-    if ($alias !== null || !empty($alias)) {
-        $array[] = trim($alias, "/");
+    if (IS_LANG === true) {
+        $ln = ($langInv === true)?USER_LANG_INV:USER_LANG;
+        $array[] = trim($ln, "/");
     }
-    return '/'.trim(implode("/", $array), "/").'/';
+    if ($alias !== null || !empty($alias)) {
+        if ($res->categoryCurrent->params->noPath == true) {
+            $array[] = trim($alias, "/");
+        } else {
+            $array[] = trim($res->routerCurrent->requestUrl, "/");
+            $array[] = trim($alias, "/");
+        }
+    }
+    return S_URLh.trim(implode("/", $array), "/").'/';
 }
+
 function menuLinkBuilder($alias, $langInv = false){
-    global $langUser;
-    global $langUserInv;
-    $ln = ($langInv === true)?$langUserInv:$langUser;
-    $array[] = $ln;
+    if (IS_LANG === true) {
+        $ln = ($langInv === true)?USER_LANG_INV:USER_LANG;
+        $array[] = $ln;
+    }
     $array[] = trim($alias, "/");
-    return '/'.(implode("/", $array)).'/';
+    return S_URLh.(implode("/", $array)).'/';
 }
+
 function frontMenuBuild($params, $res, $active, $langUser) {
+    if (IS_LANG === true) {
+        $langUser = $langUser;
+    } else {
+        $langUser = '';
+    }
     $list = '';
     foreach($params as $key => $value) {
         $i == 0;
@@ -338,10 +349,12 @@ function frontMenuBuild($params, $res, $active, $langUser) {
             $i++;
             if($key == 'id') $tempId = $index;
             if ($res[$value['id']]['id'] == $value['id']) {
+                // echo S_URLs.$langUser.$res[$value['id']]['path']; exit();
+                $url = trim(S_URLs.$langUser.$res[$value['id']]['path'], "/").'/';
                 if(is_array($index)) {
                     $list .= '
                     <li class="btn-group'.(($active == $res[$value['id']]['alias'])?' active':'').'">
-                        <a href="/'.$langUser.$res[$value['id']]['path'].'" class="btn">'.$res[$value['id']]['title'].'</a>
+                        <a href="'.$url.'" class="btn">'.$res[$value['id']]['title'].'</a>
                         <a href="#" class="dropdown-toggle btn" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></a>
                     <ul class="dropdown-menu">';
                     $list .= frontMenuBuild($index, $res, $active, $langUser);
@@ -350,7 +363,7 @@ function frontMenuBuild($params, $res, $active, $langUser) {
                     if ($i !== 1) $list .= '</li>';
                     if (is_array($value['children'])) {
                     } else {
-                        $list .= '<li'.(($active == $res[$index]['alias'])?' class="active"':'').'><a href="/'.$langUser.$res[$index]['path'].'">'.$res[$index]['title'].'</a>';
+                        $list .= '<li'.(($active == $res[$index]['alias'])?' class="active"':'').'><a href="'.$url.'">'.$res[$index]['title'].'</a>';
                     }
                 }
             }
@@ -358,4 +371,24 @@ function frontMenuBuild($params, $res, $active, $langUser) {
     }
     $list .= '</li>';
     return $list;
+}
+function adminModuleVisibleBuild($array, $res, $visType, $moduleRes) {
+    $html = '<ol class="dd-list">';
+    foreach($array as $key => $value) {
+        $i = 0;
+        foreach($value as $key => $index) {
+            $i++;
+            if(is_array($index)) {
+                $html .= adminModuleVisibleBuild($index, $res, $visType, $moduleRes);
+                $html .= '</li>';
+            } else {
+                if ($res[$index]['published'] == true) {
+                    $retVal = (array_search($res[$index]['id'], $moduleRes['visible'][$visType]) === false || $moduleRes['visible'][$visType] === null)?'':' checked="checked"';
+                    $html .= '<li data-id="'.$index.'" class="dd-item"><div class="checkbox"><label><input type="checkbox" class="selectTypeVis" data-name="'.$visType.'" data-id="'.$moduleRes['id'].'" name="article'.$res[$index]['id'].'" value="'.$res[$index]['id'].'" '.$retVal.'> '.$res[$index]['title'].' - '.$res[$index]['id'].'</label></div>';
+                }
+            }
+        }
+    }
+    $html .= '</li></ol>';
+    return $html;
 }

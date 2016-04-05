@@ -21,14 +21,17 @@ $router->map( 'GET', '/comments/', 'CommentsCrtl', 'comments');
 $router->map( 'GET', '/subscribers/', 'SubscribersCrtl', 'subscribers');
 $router->map( 'GET', '/askings/', 'AskingsCrtl', 'askings');
 
+
 $router->map('POST|GET', '/menu/', 'MenuCrtl', 'menu');
 $router->map('POST|PUT', '/save/menutype/add/', 'saveMenuTypeAdd', 'save-menutype-add', null, 'ajax');
 $router->map('POST|PUT', '/save/menutype/del/', 'saveMenuTypeDel', 'save-menutype-del', null, 'ajax');
+
 
 $router->map('POST|GET', '/menu/[i:type]/', 'MenuOneCrtl', 'menuone');
 $router->map('POST|PUT', '/save/menu/add/', 'saveMenuAdd', 'save-menu-add', null, 'ajax');
 $router->map('POST|PUT', '/save/menu/del/', 'saveMenuDel', 'save-menu-del', null, 'ajax');
 $router->map('POST|PUT', '/save/menu/refresh/', 'saveMenuRefresh', 'save-menu-refresh', null, 'ajax');
+
 
 $router->map('POST|GET', '/content/', 'ContentCrtl', 'content');
 $router->map('POST|GET', '/content/[i:id]/', 'ContentOneCrtl', 'contentone');
@@ -37,14 +40,28 @@ $router->map('POST|PUT', '/save/content/del/', 'saveContentDel', 'save-content-d
 $router->map('POST', '/content/csv-to-mysql/', 'appCSVtoMysql', 'content-csv-to-mysql');
 $router->map( 'GET', '/content/mysql-to-csv/', 'appMysqlToCSV', 'content-mysql-to-csv');
 
+
 $router->map('POST|GET', '/extension/', 'ExtensionCrtl', 'extension');
 $router->map('POST|PUT', '/save/extension/add/', 'saveExtensionAdd', 'save-extension-add', null, 'ajax');
 $router->map('POST|PUT', '/save/extension/del/', 'saveExtensionDel', 'save-extension-del', null, 'ajax');
 
+
 $router->map('POST|GET', '/module/', 'ModuleCrtl', 'module');
+$router->map('POST|GET', '/get/module/visible/', 'getModuleVisible', 'get-module-visible', null, 'ajax');
+$router->map('POST|GET', '/save/module/visible/', 'saveModuleVisible', 'save-module-visible', null, 'ajax');
 $router->map('POST|PUT', '/save/module/add/', 'saveModuleAdd', 'save-module-add', null, 'ajax');
 $router->map('POST|PUT', '/save/module/del/', 'saveModuleDel', 'save-module-del', null, 'ajax');
 
+
+$router->map('POST|GET', '/category/', 'CategoryCrtl', 'category');
+$router->map('POST|PUT', '/save/categorytype/add/', 'saveCategoryTypeAdd', 'save-categorytype-add', null, 'ajax');
+$router->map('POST|PUT', '/save/categorytype/del/', 'saveCategoryTypeDel', 'save-categorytype-del', null, 'ajax');
+
+
+$router->map('POST|GET', '/category/[i:type]/', 'CategoryOneCrtl', 'categoryone');
+$router->map('POST|PUT', '/save/category/add/', 'saveCategoryAdd', 'save-category-add', null, 'ajax');
+$router->map('POST|PUT', '/save/category/del/', 'saveCategoryDel', 'save-category-del', null, 'ajax');
+$router->map('POST|PUT', '/save/category/refresh/', 'saveCategoryRefresh', 'save-category-refresh', null, 'ajax');
 
 
 $router->map(' GET', '/people/', 'PeoplesCrtl', 'peoples');
@@ -80,6 +97,7 @@ $router->map('POST|PUT','/save/family/people/add/', 'saveFamilyPeopleAdd', 'save
 $router->map('GET|POST',    '/get/data/[*:table]/[*:tmpl]/', 'getFromDB', 'get-from-db', null, 'ajax');
 $router->map('GET|POST',    '/get/list/[*:table]/[*:tmpl]/', 'getListDB', 'get-list-db', null, 'ajax');
 $router->map('GET|POST',    '/get/group/static/[*:title]/', 'getFromDBSelectStatic', 'get-from-db-select-static', null, 'ajax');
+$router->map('GET|POST',    '/get/group/simple/[*:table]/[*:table_name]/', 'getFromDBSimpleSelect', 'get-from-db-simple-select', null, 'ajax');
 $router->map('GET|POST',    '/get/group/[*:table]/[*:table_name]/[*:table_cond]/[*:table_param]/', 'getFromDBSelect', 'get-from-db-select', null, 'ajax');
 $router->map('GET|POST',    '/get/typeahead/[*:table]/[*:table_col]/[*:table_cond]/', 'getTypeAHead', 'get-typea-head', null, 'ajax');
 $router->map('GET|POST',    '/get/typeaheadmf/[*:cond]/', 'getTypeAHeadMF', 'get-typea-head-mf', null, 'ajax');

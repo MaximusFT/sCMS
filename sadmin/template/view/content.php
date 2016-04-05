@@ -79,7 +79,7 @@ $(function() {
                 "defaultContent": ""
             },
             { "data": "published" },
-            { "data": "extension_id" },
+            { "data": "category_id" },
             { "data": "favorite" },
             { "data": "h1" },
             { "data": "alias" },

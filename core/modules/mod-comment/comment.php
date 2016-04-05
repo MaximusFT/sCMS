@@ -7,7 +7,7 @@
     <div id="colOne" class="panel-collapse collapse">
         <div class="panel-body">
             <form class="" id="commentForm" action="<?php echo S_URLs;?>/comment/" method="post" role="form" >
-                <input name="qParams" type="hidden" value="<?php echo S_URLs.$_SERVER['REQUEST_URI'];?>|<?php echo $res->qCont->id;?>">
+                <input name="qParams" type="hidden" value="<?php echo S_URLs.$_SERVER['REQUEST_URI'];?>|<?php echo $res->contentCurrent->id;?>">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">

@@ -65,6 +65,29 @@ function saveToDBCheck() {
  * Ajax function GET from DB
  * @return [type] [description]
  */
+function getFromDBSimpleSelect($table, $table_name) {
+    global $match;
+    global $db;
+
+    if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
+    header('Content-Type: application/json;');
+
+    $res = $db->select($table, [
+        "id", $table_name
+    ]);
+
+    foreach($res as $r) {
+        $i++;
+        $array[] = ['value' => $r['id'], 'text' => $r[$table_name]];
+    }
+
+    print json_encode($array);
+    exit();
+}
+/**
+ * Ajax function GET from DB
+ * @return [type] [description]
+ */
 function getFromDBSelect($table, $table_name, $table_cond = null, $table_param = null) {
     global $match;
     global $db;
@@ -72,27 +95,21 @@ function getFromDBSelect($table, $table_name, $table_cond = null, $table_param =
     if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
     header('Content-Type: application/json;');
 
-    if ($table_cond === null || $table_param === null) {
+    if ($table_param == 'component') {
         $res = $db->select($table, [
             "id", $table_name
+        ], [
+            'AND' => [
+                $table_cond => $table_param,
+                'enabled' => 1,
+            ]
         ]);
     } else {
-        if ($table_param == 'component') {
-            $res = $db->select($table, [
-                "id", $table_name
-            ], [
-                'AND' => [
-                    $table_cond => $table_param,
-                    'enabled' => 1,
-                ]
-            ]);
-        } else {
-            $res = $db->select($table, [
-                "id", $table_name
-            ], [
-                $table_cond => $table_param,
-            ]);
-        }
+        $res = $db->select($table, [
+            "id", $table_name
+        ], [
+            $table_cond => $table_param,
+        ]);
     }
 
     foreach($res as $r) {
@@ -143,6 +160,7 @@ function getFromDBSelectStatic($title = '') {
             $array = [
                 ['value' => 'tech', 'text' => 'tech'],
                 ['value' => 'nav-top', 'text' => 'nav-top'],
+                ['value' => 'nav-top-right', 'text' => 'nav-top-right'],
                 ['value' => 'after-nav', 'text' => 'after-nav'],
                 ['value' => 'container-top', 'text' => 'container-top'],
                 ['value' => 'page-header-bottom', 'text' => 'page-header-bottom'],
@@ -422,6 +440,140 @@ function saveMenuRefresh() {
 }
 
 
+function saveCategoryAdd() {
+    global $match;
+    global $db;
+
+    if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
+    header('Content-Type: application/json; charset=utf-8');
+
+    $last_id = $db->insert("category", array(
+        "title" => $_POST['title'],
+        "lang" => $_POST['lang'],
+        "categorytype_id" => $_POST['categorytype_id'],
+        "published" => 0
+    ));
+
+    $categoryArray = $db->get("categorytype", "params", [
+        "id" => $_POST['categorytype_id']
+    ]);
+
+    $categoryArray = json_decode($categoryArray);
+    array_push($categoryArray, array('id' => intval($last_id)));
+    $categoryArray = json_encode($categoryArray);
+
+    $db->update("categorytype", [
+        'params' => $categoryArray
+    ], [
+        'id' => $_POST['categorytype_id']
+    ]);
+
+    $response = array(
+        // 'msg' => $menuArray.' ||| '.$last_id
+        'msg' => 'Добавлен новый пункт меню'
+    );
+
+    // var_dump($db->log());
+    // var_dump($db->error());
+
+    echo json_encode($response);
+    exit();
+}
+
+function saveCategoryDel() {
+    global $match;
+    global $db;
+
+    if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
+    header('Content-Type: application/json; charset=utf-8');
+
+    $categoryArray = $db->get("categorytype", "params", [
+        "id" => intval($_POST['categorytype_id'])
+    ]);
+
+    function delId($array, $delId, $parent) {
+        $newArr = [];
+        foreach ($array as $key => $item) {
+            if ($item['id'] === $delId && $item['children']) {
+                foreach ($item['children'] as $key => $ite) {
+                    $newArr[] = $ite;
+                }
+            } elseif ($item['id'] === $delId){
+            } elseif ($item['children']){
+                $newArr[$key] = $item;
+                $item = delId($item['children'], $delId, $array[$key]);
+                $newArr[$key]['children'] = $item;
+                if (count($newArr[$key]['children']) == 0) {
+                    unset($newArr[$key]['children']);
+                }
+            } else {
+                $newArr[] = $item;
+            }
+        }
+        return $newArr;
+    }
+
+    $categoryArrayTemp = json_decode($categoryArray, true);
+    $temp[0]['id'] = 0;
+    $temp[0]['children'] = $categoryArrayTemp;
+
+    $newArraytemp = delId($temp, intval($_POST['id']), $temp);
+    $newArray = json_encode($newArraytemp[0]['children'], true);
+
+    $db->update("categorytype", [
+        'params' => $newArray
+    ], [
+        'id' => $_POST['categorytype_id']
+    ]);
+
+    $db->delete("category", [
+        "id" => intval($_POST['id'])
+    ]);
+
+    $response = array(
+        'msg' => 'Пункт меню удален'
+    );
+
+    // var_dump($db->log());
+    // var_dump($db->error());
+
+    echo json_encode($response);
+    exit();
+}
+
+function saveCategoryRefresh() {
+    global $match;
+    global $db;
+
+    if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
+    header('Content-Type: application/json; charset=utf-8');
+
+    $categoryArray = $db->select("category", "*", [
+        "categorytype_id" => $_POST['id']
+    ]);
+
+    $i = 0;
+    foreach ($categoryArray as $key => $value) {
+        $temp[$i]['id'] = $value['id'];
+        $i++;
+    }
+    $newArray = json_encode($temp, true);
+
+    $db->update("categorytype", [
+        'params' => $newArray
+    ], [
+        'id' => $_POST['id']
+    ]);
+
+    $response = array(
+        'msg' => 'Дерево меню сброшено!'
+    );
+
+    echo json_encode($response);
+    exit();
+}
+
+
 
 
 
@@ -460,6 +612,49 @@ function saveMenuTypeDel() {
     header('Content-Type: application/json; charset=utf-8');
 
     $db->delete("menutype", [
+        "id" => intval($_POST['id'])
+    ]);
+
+    $response = array(
+        'msg' => 'Пункт меню удален'
+    );
+
+    // var_dump($db->log());
+    // var_dump($db->error());
+
+    echo json_encode($response);
+    exit();
+}
+function saveCategoryTypeAdd() {
+    global $match;
+    global $db;
+
+    if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
+    header('Content-Type: application/json; charset=utf-8');
+
+    $last_id = $db->insert("categorytype", array(
+        "title" => $_POST['title'],
+        "name" => $_POST['name'],
+        "lang" => $_POST['lang'],
+        "position" => $_POST['position']
+    ));
+
+    $response = array(
+        'msg' => 'Добавлен новый пункт меню'
+    );
+
+    echo json_encode($response);
+    exit();
+}
+
+function saveCategoryTypeDel() {
+    global $match;
+    global $db;
+
+    if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
+    header('Content-Type: application/json; charset=utf-8');
+
+    $db->delete("categorytype", [
         "id" => intval($_POST['id'])
     ]);
 
@@ -563,6 +758,242 @@ function saveExtensionDel() {
 
 
 
+
+function getModuleVisible() {
+    global $langArrayU;
+    global $match;
+    global $db;
+
+    if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
+    header('Content-Type: text/html; charset=utf-8');
+
+    $articleRes = $db->select("content", '*', [
+        "AND" => [
+            "published" => 1
+        ],
+        "ORDER" => "publish_up DESC"
+    ]);
+
+    $menuTypeRes = $db->select("menutype", "*", [
+            "AND" => [
+                "published" => 1
+            ]
+        ]
+    );
+    foreach ($menuTypeRes as $key => $value) {
+        $menuTypeRes[$value['id']]['params'] = json_decode($value['params'], true);
+    }
+
+    $menuRes_alt = $db->select("menu", "*", [
+            "AND" => [
+                "menu.published" => 1
+            ]
+        ]
+    );
+    foreach ($menuRes_alt as $key => $value) {
+        $menuRes[$value['id']] = $value;
+    }
+
+    $catTypeRes = $db->select("categorytype", "*", [
+            "AND" => [
+                "published" => 1
+            ]
+        ]
+    );
+
+    foreach ($catTypeRes as $key => $value) {
+        $catTypeRes[$value['id']]['params'] = json_decode($value['params'], true);
+    }
+
+    $catRes_alt = $db->select("category", "*", [
+            "AND" => [
+                "published" => 1
+            ]
+        ]
+    );
+    foreach ($catRes_alt as $key => $value) {
+        $catRes[$value['id']] = $value;
+    }
+
+    $moduleRes = $db->get("module", "*", [
+            "AND" => [
+                "id" => $_POST['id']
+            ]
+        ]
+    );
+    $moduleRes['params'] = json_decode($moduleRes['params'], true);
+    $moduleRes['visible'] = json_decode($moduleRes['visible'], true);
+
+    $classActive1 = ($moduleRes['visible']['typeVis'] === 1)?'success active':'info';
+    $classActive2 = ($moduleRes['visible']['typeVis'] === 2)?'success active':'info';
+    $classActive3 = ($moduleRes['visible']['typeVis'] === 3)?'success active':'info';
+    $classActive4 = ($moduleRes['visible']['typeVis'] === 4)?'success active':'info';
+
+    $classActive5 = ($moduleRes['visible']['primary'] === 'menu')?'success active':'info';
+    $classActive6 = ($moduleRes['visible']['primary'] === 'article')?'success active':'info';
+
+    $html .= '
+    <div class="btn-group" data-toggle="buttons">
+        <label class="selectTypeVisBtn btn btn-xs btn-'.$classActive1.'">
+            <input type="radio" name="options" id="option1" class="" value="1" data-name="typeVis" data-id="'.$moduleRes['id'].'" autocomplete="off"> On all pages
+        </label>
+        <label class="selectTypeVisBtn btn btn-xs btn-'.$classActive2.'">
+            <input type="radio" name="options" id="option2" class="" value="2" data-name="typeVis" data-id="'.$moduleRes['id'].'" autocomplete="off"> No pages
+        </label>
+        <label class="selectTypeVisBtn btn btn-xs btn-'.$classActive3.'">
+            <input type="radio" name="options" id="option3" class="" value="3" data-name="typeVis" data-id="'.$moduleRes['id'].'" autocomplete="off"> Only on the pages selected
+        </label>
+        <label class="selectTypeVisBtn btn btn-xs btn-'.$classActive4.'">
+            <input type="radio" name="options" id="option4" class="" value="4" data-name="typeVis" data-id="'.$moduleRes['id'].'" autocomplete="off"> On all pages except those selected
+        </label>
+    </div>
+    <div class="btn-group pull-right" data-toggle="buttons">
+        <label class="selectTypeVisBtn btn btn-xs btn-'.$classActive5.'">
+            <input type="radio" name="primary" id="option5" value="menu" data-name="primary" data-id="'.$moduleRes['id'].'" autocomplete="off"> Menu
+        </label>
+        <label class="selectTypeVisBtn btn btn-xs btn-'.$classActive6.'">
+            <input type="radio" name="primary" id="option6" value="article" data-name="primary" data-id="'.$moduleRes['id'].'" autocomplete="off"> Article
+        </label>
+    </div>
+    <hr>
+    ';
+    $html .= '<ul id="visibleByLang" class="nav nav-tabs" role="tablist">';
+    foreach ($langArrayU as $key => $langValue) {
+        $html .= '<li role="presentation" class="">
+            <a href="#menu-'.$langValue.'" aria-controls="'.$langValue.'" role="tab" data-toggle="tab">Menu-'.$langValue.'</a></li>';
+    }
+    foreach ($langArrayU as $key => $langValue) {
+        $html .= '<li role="presentation" class="">
+            <a href="#article-'.$langValue.'" aria-controls="'.$langValue.'" role="tab" data-toggle="tab">Article-'.$langValue.'</a></li>';
+    }
+    $html .= '</ul>';
+    $html .= '<div class="tab-content">';
+    foreach ($langArrayU as $key => $langValue) {
+        $html .= '<div role="tabpanel" class="tab-pane" id="menu-'.$langValue.'">';
+        $html .= '<h3>Menu</h3>';
+        foreach ($menuTypeRes as $menuValue) {
+            if ($menuValue['lang'] == $langValue) {
+                $html .= '<h4>'.$menuValue['title'].'</h4>';
+                $html .= adminModuleVisibleBuild($menuTypeRes[$menuValue['id']]['params'], $menuRes, 'visMenu', $moduleRes);
+            }
+        }
+        $html .= '<h3>Category</h3>';
+        foreach ($catTypeRes as $catValue) {
+            if ($catValue['lang'] == $langValue) {
+                $html .= '<h4>'.$catValue['title'].'</h4>';
+                $html .= adminModuleVisibleBuild($catTypeRes[$catValue['id']]['params'], $catRes, 'visCat', $moduleRes);
+            }
+        }
+        $html .= '</div>';
+    }
+    foreach ($langArrayU as $key => $langValue) {
+        $html .= '<div role="tabpanel" class="tab-pane" id="article-'.$langValue.'">';
+        foreach ($articleRes as $articleVal) {
+            if ($articleVal['lang'] == $langValue) {
+                $retVal = (array_search($articleVal['id'], $moduleRes['visible']['visArticle']) === false || $moduleRes['visible']['visArticle'] === null)?'':' checked="checked"';
+                $html .= '<div class="checkbox"><label><input class="selectTypeVis" type="checkbox" data-name="visArticle" data-id="'.$moduleRes['id'].'" name="article'.$articleVal['id'].'" value="'.$articleVal['id'].'" '.$retVal.'> '.$articleVal['h1'].' - '.$articleVal['id'].'</label></div>';
+            }
+        }
+        $html .= '</div>';
+    }
+    $html .= '</div>';
+    $html .= '<div id="outpuut"></div>';
+    $html .= "
+    <script>
+        $(function() {
+            $('.selectTypeVisBtn').on('click', function () {
+                var ths = $(this),
+                    sfind = ths.find('input'),
+                    sPar = ths.parent(),
+                    iID = parseInt(sfind.data('id')),
+                    iVal = sfind.attr('value'),
+                    iName = sfind.data('name');
+                $.ajax({
+                    type: 'POST',
+                    url: '/sadmin/save/module/visible/',
+                    data: {id: iID, value: iVal, name: iName}
+                })
+                .done(function(result) {
+                    $('#outpuut').empty().html(result);
+                    sPar.find('.btn-success').removeClass('btn-success').addClass('btn-info');
+                    ths.removeClass('btn-info').addClass('btn-success');
+                    console.log(1);
+                    // sCMSAletr(result, 'success');
+                });
+            })
+            $('.selectTypeVis').on('click', function () {
+                var sfind = $(this),
+                    iID = parseInt(sfind.data('id')),
+                    iVal = parseInt(sfind.attr('value')),
+                    iName = sfind.data('name');
+                $.ajax({
+                    type: 'POST',
+                    url: '/sadmin/save/module/visible/',
+                    data: {id: iID, value: iVal, name: iName}
+                })
+                .done(function(result) {
+                    $('#outpuut').empty().html(result);
+                    console.log(1);
+                    // sCMSAletr(result, 'success');
+                });
+            })
+            $('#visibleByLang a:first').tab('show');
+        });
+    </script>";
+
+    echo $html;
+    exit();
+}
+function saveModuleVisible() {
+    global $match;
+    global $db;
+
+    if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
+    header('Content-Type: text/html; charset=utf-8');
+    // header('Content-Type: application/json; charset=utf-8');
+
+    /**
+     *
+     * 1 = On all pages
+     * 2 = No pages
+     * 3 = Only on the pages selected
+     * 4 = On all pages except those selected
+     *
+     */
+
+    $moduleRes = $db->get("module", "*", [
+            "AND" => [
+                "id" => $_POST['id']
+            ]
+        ]
+    );
+
+    $moduleRes['visible'] = json_decode($moduleRes['visible'], true);
+
+    if ($_POST['name'] == 'visMenu' || $_POST['name'] == 'visCat' || $_POST['name'] == 'visArticle') {
+        if (isset($moduleRes['visible'][$_POST['name']][$_POST['value']])) {
+            unset($moduleRes['visible'][$_POST['name']][$_POST['value']]);
+        } else {
+            $moduleRes['visible'][$_POST['name']][$_POST['value']] = intval($_POST['value']);
+        }
+    } elseif ($_POST['name'] == 'primary') {
+        $moduleRes['visible'][$_POST['name']] = $_POST['value'];
+        echo $_POST['value'];
+    } elseif ($_POST['name'] == 'typeVis') {
+        $moduleRes['visible'][$_POST['name']] = intval($_POST['value']);
+    }
+
+    $db->update("module", [
+            "visible" => json_encode($moduleRes['visible'])
+        ], [
+            "AND" => [
+                "id" => $_POST['id']
+            ]
+        ]
+    );
+
+    exit();
+}
 
 function saveModuleAdd() {
     global $match;

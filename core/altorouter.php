@@ -26,6 +26,7 @@ class AltoRouter {
 		$this->addRoutes($routes);
 		$this->setBasePath($basePath);
 		$this->addMatchTypes($matchTypes);
+		$this->lang = USER_LANG;
 		$this->db = new medoo();
 	}
 
@@ -64,8 +65,6 @@ class AltoRouter {
 	 */
 	public function setBasePath($basePath) {
 		$this->basePath = $basePath;
-		$this->lang = substr($basePath, 1);
-		// echo '<pre>'; print_r($this->lang); echo '</pre>';
 	}
 
 	/**
@@ -98,6 +97,203 @@ class AltoRouter {
 
 		}
 
+		return;
+	}
+
+
+	private function recursCategory($array, $res, $articleList, $firstId) {
+	    foreach($array as $key => $value) {
+	        $i = 0;
+	        foreach($value as $key => $index) {
+	            $i++;
+	            if(is_array($index)) {
+	                $this->recursCategory($index, $res, $articleList, $firstId);
+	            } else {
+			    	if ($index != $firstId) {
+						$this->routes[] = [
+							'GET',
+							$res[$index]['path'],
+							'comCategoryOnePageCtrl',
+							'',
+							$res[$index]['id'],
+							'view'
+						];
+						$catResParams = json_decode($res[$index]['params'], true);
+					    foreach ($articleList as $articleVal) {
+					    	if ($articleVal['category_id'] == $res[$index]['id']) {
+						    	if ($catResParams['noPath'] === true) {
+						    		$articlePath = '/'.$articleVal['alias'].'/';
+						    	} else {
+						    		$articlePath = $res[$index]['path'].$articleVal['alias'].'/';
+						    	}
+								$this->routes[] = [
+									'GET',
+									$articlePath,
+									'comArticleOnePageCtrl',
+									$articleVal['id'],
+									$res[$index]['id'],
+									'view'
+								];
+					    	}
+						}
+			    	}
+	            }
+	        }
+	    }
+	}
+
+	/**
+	 * Map a AUTO route to a target by MySQL request
+	 *
+	 * @param string $method One of 5 HTTP Methods, or a pipe-separated list of multiple HTTP Methods (GET|POST|PATCH|PUT|DELETE)
+	 * @param string $route The route regex, custom regex must start with an @. You can use multiple pre-set regex filters, like [i:id]
+	 * @param mixed $target The target where this route should point to. Can be anything.
+	 * @param string $name Optional name of this route. Supply if you want to reverse route this url in your application.
+	 */
+	public function mapdb() {
+		/* Все статьи */
+		$tempArticleRes = $this->db->select("content", '*', [
+		    "AND" => [
+		        "content.lang" => $this->lang,
+		        "content.published" => 1
+		    ],
+		    "ORDER" => "content.publish_up DESC"
+		]);
+		foreach ($tempArticleRes as $key => $value) {
+			$articleRes[$value['id']] = $value;
+		}
+
+		$menuRes = $this->db->select("menu", [
+	        	"[>]extension" => ["menu.extension_id" => "id"],
+	        	"[>]category" => ["menu.category_id" => "id"],
+		    ], [
+		        "menu.id",
+		        "menu.menutype_id",
+		        "menu.extension_id",
+		        "menu.category_id",
+		        "menu.link_id",
+		        "menu.method",
+		        "menu.path",
+		        "menu.params",
+		        "extension.function(extension_function)",
+		        "category.categorytype_id(category_categorytype_id)",
+		        "category.params(category_params)",
+		    ], [
+				"AND" => [
+					"menu.lang" => $this->lang,
+					"menu.published" => 1
+					]
+				]
+			);
+
+	    // echo $this->db->last_query();
+    	// var_dump($this->db->error());
+
+	    foreach ($menuRes as $menuValue) {
+			if ($menuValue['extension_id'] == 1 || $menuValue['extension_id'] == 2) {
+				$this->routes[] = [
+					$menuValue['method'],
+					$menuValue['path'],
+					$menuValue['extension_function'],
+					$menuValue['link_id'],
+					$menuValue['id'],
+					'view'
+				];
+			} elseif ($menuValue['extension_id'] == 4) {
+				$this->routes[] = [
+					$menuValue['method'],
+					$menuValue['path'],
+					$menuValue['extension_function'],
+					'',
+					$menuValue['id'],
+					'view'
+				];
+
+				$menuCatParams = json_decode($menuValue['category_params'], true);
+			    foreach ($articleRes as $articleVal) {
+			    	if ($articleVal['category_id'] == $menuValue['category_id']) {
+				    	if ($menuCatParams['noPath'] === true) {
+				    		$articlePath = '/'.$articleVal['alias'].'/';
+				    	} else {
+				    		$articlePath = $menuValue['path'].$articleVal['alias'].'/';
+				    	}
+						$this->routes[] = [
+							'GET',
+							$articlePath,
+							'comArticleOnePageCtrl',
+							$articleVal['id'],
+							$menuValue['id'],
+							'view'
+						];
+			    	}
+				}
+			} elseif ($menuValue['extension_id'] == 5) {
+				$catTypeRes = $this->db->get("categorytype", "*",
+					[
+						"AND" => [
+							"id" => $menuValue['category_id'],
+							"lang" => $this->lang,
+						]
+					]
+				);
+
+				$catTypeResParams = json_decode($catTypeRes['params'], true);
+				$catResFirstId = $catTypeResParams[0]['id'];
+				$catResFirst = $this->db->get("category", "*", ["id" => $catResFirstId]);
+
+				$this->routes[] = [
+					'GET',
+					$menuValue['path'],
+					'comCategoryOnePageCtrl',
+					'',
+					$menuValue['id'],
+					'view'
+				];
+
+		    	$catResFirstParams = json_decode($catResFirst['params'], true);
+			    foreach ($articleRes as $articleVal) {
+			    	if ($articleVal['category_id'] == $catResFirst['id']) {
+						if ($catResFirstParams['noPath'] === true) {
+							$articlePath = '/'.$articleVal['alias'].'/';
+						} else {
+							$articlePath = $catResFirst['path'].$articleVal['alias'].'/';
+						}
+						$this->routes[] = [
+							'GET',
+							$articlePath,
+							'comArticleOnePageCtrl',
+							$articleVal['id'],
+							$menuValue['id'],
+							'view'
+						];
+			    	}
+				}
+
+				$catRes_alt = $this->db->select("category", "*",
+					[
+						"AND" => [
+							"categorytype_id" => $catTypeRes['id'],
+							"path[!]" => null,
+							"published" => 1
+						]
+					]
+				);
+			    foreach ($catRes_alt as $key => $value) {
+			        $catRes[$value['id']] = $value;
+			    }
+
+				$recursCatRoute = $this->recursCategory($catTypeResParams, $catRes, $articleRes, $catResFirstId);
+			} else {
+				$this->routes[] = [
+					$menuValue['method'],
+					$menuValue['path'],
+					$menuValue['extension_function'],
+					'',
+					$menuValue['id'],
+					'view'
+				];
+			}
+	    }
 		return;
 	}
 
@@ -167,7 +363,9 @@ class AltoRouter {
 		if ($pos2 !== false) {
 			$requestUrl = substr($requestUrl, strlen($this->basePath));
 		} else {
-			$notLng = true;
+			if (IS_LANG === true) {
+				$notLng = true;
+			}
 		}
 
 		// Strip query string (?a=b) from Request Url
@@ -185,6 +383,12 @@ class AltoRouter {
 		$_REQUEST = array_merge($_GET, $_POST);
 
 		foreach($this->routes as $handler) {
+			/*
+			echo '<pre>';
+			print_r($this->routes);
+			echo '</pre>';
+			exit();
+			*/
 			list($method, $_route, $target, $name, $id, $fileType) = $handler;
 
 			$methods = explode('|', $method);
@@ -251,7 +455,7 @@ class AltoRouter {
 				}
 
 				$resMenus = $this->db->select("menutype", '*', [
-						"lang"=>$this->lang,
+						"lang" => $this->lang,
 					]);
 				foreach ($resMenus as $key => $value) {
 					$qTmp = $this->db->select("menu", '*', [
@@ -272,15 +476,29 @@ class AltoRouter {
 						]
 					]
 				);
-				$resMenu['extension'] = $this->db->get("extension", '*', ["id"=>$resMenu['extension_id']]);
-				$resMenu['extension']['params'] = json_decode($resMenu['extension']['params']);
-				$resContent = $this->db->get("content", '*', [
-					"id" => $resMenu['link_id']
-				]);
+				$resMenu['params'] = json_decode($resMenu['params']);
 
+				$resMenu['extension'] = $this->db->get("extension", '*', ["id" => $resMenu['extension_id']]);
+				$resMenu['extension']['params'] = json_decode($resMenu['extension']['params']);
+				if ($resMenu['extension_id'] == 5) {
+					$resMenu['categorytype'] = $this->db->get("categorytype", '*', ["id" => $resMenu['category_id']]);
+					$tempParams = json_decode($resMenu['categorytype']['params'], true);
+					$resMenu['category'] = $this->db->get("category", '*', ["id" => $tempParams[0]['id']]);
+					$resMenu['category']['params'] = json_decode($resMenu['category']['params']);
+				} else {
+					$resMenu['category'] = $this->db->get("category", '*', ["id" => $resMenu['category_id']]);
+					$resMenu['category']['params'] = json_decode($resMenu['category']['params']);
+				}
+
+				$resContent = $this->db->get("content", '*', [
+					"id" => $name
+				]);
+				/*
+				Надо переделать !!!!!!!!!!!!!!!!
+				*/
 				$resSnippet = $this->db->select("module", '*',
 					[
-						"AND"=>[
+						"AND" =>[
 							"extension_id" => 22,
 							"published" => 1
 						]
@@ -288,7 +506,7 @@ class AltoRouter {
 				);
 
 				foreach ($resSnippet as $snippet) {
-						$resContent['full_text'] = str_replace("{{".$snippet['position']."}}", $snippet['params'], $resContent['full_text']);
+					$resContent['full_text'] = str_replace("{{".$snippet['position']."}}", $snippet['params'], $resContent['full_text']);
 				}
 
 				return [
@@ -298,32 +516,28 @@ class AltoRouter {
 						'url' => $this->basePath.$requestUrl,
 						'target' => $target,
 						'method' => $method,
+						'id' => $id,
 						'name' => $name,
 						'params' => $params,
 						'fileType' => $fileType,
 					],
 					'extensionCurrent' => $resMenu['extension'],
+					'categoryTypeCurrent' => $resMenu['categorytype'],
+					'categoryCurrent' => $resMenu['category'],
 					'menuItemCurrent' => $resMenu,
-					'menuItems' => $Menus,
 					'contentCurrent' => $resContent,
+					'menuItems' => $Menus,
 					/* NOT DELETE NEED FOR SADMIN */
 					'target' => $target,
 					'method' => $method,
 					'name' => $name,
 					'params' => $params,
-					/* DELETE */
-					'fileType' => $fileType,
-					'qMenuCurr' => $resMenu,
-					'qCont' => $resContent,
-					'qContId' => $resMenu['link_id'],
-					'qMenus' => $Menus,
-					/* END DELETE */
 				];
 			}
 		}
 
 		$resMenus = $this->db->select("menutype", '*', [
-				"lang"=>$this->lang,
+				"lang" => $this->lang,
 			]);
 		foreach ($resMenus as $key => $value) {
 			$qTmp = $this->db->select("menu", '*', [
@@ -339,6 +553,7 @@ class AltoRouter {
 		}
 
 		return [
+			'header' => 404,
 			'routerCurrent' => [
 				'basePath' => $this->basePath,
 				'requestUrl' => $requestUrl,
@@ -349,7 +564,9 @@ class AltoRouter {
 				'params' => $params,
 				'fileType' => $fileType,
 			],
-			'extensionCurrent' => $resMenu['extension'],
+			'extensionCurrent' => [
+				'fileName' => P_HTML.'404-'.USER_LANG.'.php',
+			],
 			'menuItems' => $Menus,
 		];
 	}
@@ -386,40 +603,4 @@ class AltoRouter {
 		}
 		return "`^$route$`u";
 	}
-
-	public function mapdb() {
-		$res = $this->db->select("menu", [
-	        	"[>]extension" => ["extension_id" => "id"]
-		    ], [
-		        "menu.id",
-		        "menu.method",
-		        "menu.extension_id",
-		        "menu.path",
-		        "menu.params",
-		        "extension.function(extension_function)",
-		    ], [
-				"AND" => [
-					"lang"=>$this->lang,
-					"published" => 1
-					]
-				]
-			);
-	    foreach ($res as $value) {
-			$this->routes[] = [$value['method'], $value['path'], $value['extension_function'], '', $value['id'], 'view'];
-			if ($value['extension_id'] == 3 || $value['extension_id'] == 4) {
-				// $value['params'] = json_decode(json_encode($value['params']), FALSE);
-				$value['params'] = json_decode($value['params'], true);
-				$qres = $this->db->get("extension", '*', [
-						"AND" => [
-							"id" => $value['params']['category']
-							]
-						]
-					);
-				$this->routes[] = [$value['method'], $value['path'].'[*:articleOne]/', $qres['function'], $value['params']['category'], $value['id'], 'view'];
-			}
-	    }
-
-		return;
-	}
-
 }

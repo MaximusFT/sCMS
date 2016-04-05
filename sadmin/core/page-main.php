@@ -36,21 +36,21 @@ function MenuOneCrtl($type) {
 
     $menuItems_alt = $db->select("menu", [
         "[>]extension(extension)" => ["extension_id" => "id"],
-        "[>]extension(function)" => ["function" => "id"],
+        "[>]category(category)" => ["category_id" => "id"],
         "[>]content" => ["link_id" => "id"]
     ], [
         "menu.id",
         "menu.extension_id",
         "menu.menutype_id",
         "extension.title(extension_title)",
+        "menu.category_id",
+        "category.title(category_title)",
         "menu.link_id",
         "content.h1(link_title)",
         "menu.title",
         "menu.alias",
         "menu.path",
         "menu.method",
-        "menu.function",
-        "function.title(function_title)",
         "menu.published",
         "menu.img",
         "menu.home",
@@ -70,6 +70,58 @@ function MenuOneCrtl($type) {
         'menuItems'       => $menuItems,
         'params'          => qToDB($match),
         'menuTypeId'      => $type,
+        'pageContent'     => $pathTo.$match['name'].'.php'
+    ];
+}
+
+function CategoryCrtl() {
+    global $match;
+    global $db;
+
+    return [
+        'appGoPost'       => true,
+        'params'          => qToDB($match),
+        'pageContent'     => $pathTo.$match['name'].'.php'
+    ];
+}
+
+function CategoryOneCrtl($type) {
+    global $match;
+    global $db;
+
+    $categoryArray = $db->get("categorytype", ["title", "params", "lang"], [
+        "id" => $type
+    ]);
+
+    $categoryItems_alt = $db->select("category", [
+        "[>]extension(function)" => ["function" => "id"]
+    ], [
+        "category.id",
+        "category.categorytype_id",
+        "category.title",
+        "category.alias",
+        "category.path",
+        "category.fileName",
+        "category.function",
+        "function.title(function_title)",
+        "category.published",
+        "category.lang",
+        "category.params"
+    ], [
+        "categorytype_id" => $type
+    ]);
+
+    foreach ($categoryItems_alt as $key => $value) {
+        $categoryItems[$value['id']] = $value;
+    }
+
+    return [
+        'appGoPost'       => true,
+        'categoryLang'    => $categoryLang,
+        'categoryArray'   => $categoryArray,
+        'categoryItems'   => $categoryItems,
+        'params'          => qToDB($match),
+        'categoryTypeId'  => $type,
         'pageContent'     => $pathTo.$match['name'].'.php'
     ];
 }

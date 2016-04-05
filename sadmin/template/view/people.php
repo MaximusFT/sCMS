@@ -22,7 +22,7 @@
     <?
     /*
             <tbody>
-    foreach(json_decode(json_encode($res->qContent), true) as $r) {
+    foreach(json_decode(json_encode($res->contentCurrent->ent), true) as $r) {
     ?>
         <tr>
             <td><a href="#" class="xedit"

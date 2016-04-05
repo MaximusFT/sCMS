@@ -109,15 +109,15 @@ $columns = array(
                     data-title="Заголовок">'.$d.'</a>';
         }
     ),
-    array('db' => 'extension_id', 'dt' => 'extension_id',
+    array('db' => 'category_id', 'dt' => 'category_id',
         'formatter' => function( $d, $row, $table ) {
             return '
                 <a href="#" class="xedit"
                     data-pk="'.$row['id'].'"
                     data-type="select"
                     data-value="'.$d.'"
-                    data-source="/sadmin/get/group/extension/title/type/category/"
-                    data-params=\'{"name":"extension_id","table":"'.$table.'"}\'
+                    data-source="/sadmin/get/group/simple/category/title/"
+                    data-params=\'{"name":"category_id","table":"'.$table.'"}\'
                     data-title="Language"></a>';
         }
     ),

@@ -7,23 +7,23 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title><?php echo $res->qCont->metaTitle;?></title>
-    <meta name="description" content="<?php echo $res->qCont->metaDescription;?>">
-    <meta name="keywords" content="<?php echo $res->qCont->metaKeywords;?>">
+    <title><?php echo $res->contentCurrent->metaTitle;?></title>
+    <meta name="description" content="<?php echo $res->contentCurrent->metaDescription;?>">
+    <meta name="keywords" content="<?php echo $res->contentCurrent->metaKeywords;?>">
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
     <?php echo $metaAdd;?>
 
     <!-- Facebook Meta Tags -->
-    <meta property="og:title" content="<?php echo $res->qCont->metaOgTitle;?>" />
-    <meta property="og:type" content="<?php echo $res->qCont->metaOgType;?>" />
+    <meta property="og:title" content="<?php echo $res->contentCurrent->metaOgTitle;?>" />
+    <meta property="og:type" content="<?php echo $res->contentCurrent->metaOgType;?>" />
     <meta property="og:url" content="<?php echo $metaOgUrl;?>" />
     <meta property="og:image" content="<?php echo $metaOgImage;?>" />
-    <meta property="og:site_name" content="<?php echo $res->qCont->metaOgSiteName;?>" />
-    <meta property="og:description" content="<?php echo $res->qCont->metaOgDescription;?>" />
-    <meta property="article:section" content="<?php echo $res->qCont->metaOgSection;?>" />
-    <meta property="article:tag" content="<?php echo $res->qCont->metaOgTag;?>" />
+    <meta property="og:site_name" content="<?php echo $res->contentCurrent->metaOgSiteName;?>" />
+    <meta property="og:description" content="<?php echo $res->contentCurrent->metaOgDescription;?>" />
+    <meta property="article:section" content="<?php echo $res->contentCurrent->metaOgSection;?>" />
+    <meta property="article:tag" content="<?php echo $res->contentCurrent->metaOgTag;?>" />
     <meta property="og:locale" content="<?php echo $metaOgLocale;?>" />
 <?php
 if (count($_GET) > 0) {

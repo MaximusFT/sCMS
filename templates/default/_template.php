@@ -1,6 +1,7 @@
 <?php
 require_once P_TEMP.'_head.php';
 ?>
+
     <div class="hidden"><?php echo funPos('module', 'tech');?></div>
     <nav class="navbar navbar-default" role="navigation">
         <div class="container">
@@ -18,7 +19,15 @@ require_once P_TEMP.'_head.php';
                     <?php echo funPos('module', 'nav-top');?>
                 </ul>
                 <ul class="nav navbar-nav pull-right">
-                    <li><a href="<?php echo linkBuilder(null, true);?>"><?php echo $langUserInv;?></a></li>
+                    <?php echo funPos('module', 'nav-top-right');?>
+                    <?php
+                    // Временное решение ))))
+                    if (IS_LANG === true) {
+                    ?>
+                    <li><a href="<?php echo linkBuilder(null, true);?>"><?php echo USER_LANG_INV;?></a></li>
+                    <?
+                    }
+                    ?>
                 </ul>
             </div>
         </div>
@@ -27,7 +36,8 @@ require_once P_TEMP.'_head.php';
     <?php echo funPos('module', 'after-nav');?>
 
     <?php
-        require_once P_HTML.$res->extensionCurrent->fileName.'.php';
+        require_once $res->extensionCurrent->fileName;
+        // include_once $res->extensionCurrent->fileName;
     ?>
 
     <?php echo funPos('module', 'after-container');?>
