@@ -43,17 +43,40 @@ function funPos($type='', $pos=''){
         if ($qRes[$key]['extension_id'] == 16) {
             echo frontMenuBuild(json_decode($res->menuItems->$qRes[$key]['params']['menutype']->params, true), json_decode(json_encode($res->menuItems->$qRes[$key]['params']['menutype']->items), true), $res->menuItemCurrent->alias, USER_LANG);
         } else {
-            if ($qRes[$key]['view'] == 'default') $view = '';
-            else $view = '-'.$qRes[$key]['view'];
-
-            if ($qRes[$key]['visible']) {
-                if (in_array($res->menuItemCurrent->id, $qRes[$key]['visible']['visMenu'])) {
-                    include P_MODL.'mod-'.$qRes[$key]['extension_fileName'].'/'.$qRes[$key]['extension_fileName'].$view.'.php';
-                } else {
-                    continue;
-                }
+            if ($qRes[$key]['view'] == 'default') {
+                $view = '';
             } else {
+                $view = '-'.$qRes[$key]['view'];
+            }
+
+            if ($qRes[$key]['visible']['typeVis'] == 1) {
                 include P_MODL.'mod-'.$qRes[$key]['extension_fileName'].'/'.$qRes[$key]['extension_fileName'].$view.'.php';
+            } elseif ($qRes[$key]['visible']['typeVis'] == 3) {
+                if ($qRes[$key]['visible']['primary'] == 'menu') {
+                    if (in_array($res->menuItemCurrent->id, $qRes[$key]['visible']['visMenu']) || in_array($res->menuItemCurrent->id, $qRes[$key]['visible']['visCat'])) {
+                        include P_MODL.'mod-'.$qRes[$key]['extension_fileName'].'/'.$qRes[$key]['extension_fileName'].$view.'.php';
+                    } else {
+                        continue;
+                    }
+                } elseif ($qRes[$key]['visible']['primary'] == 'article') {
+                    if (in_array($res->contentCurrent->id, $qRes[$key]['visible']['visArticle'])) {
+                        include P_MODL.'mod-'.$qRes[$key]['extension_fileName'].'/'.$qRes[$key]['extension_fileName'].$view.'.php';
+                    }
+                }
+            } elseif ($qRes[$key]['visible']['typeVis'] == 4) {
+                if ($qRes[$key]['visible']['primary'] == 'menu') {
+                    if (!in_array($res->menuItemCurrent->id, $qRes[$key]['visible']['visMenu']) || !in_array($res->menuItemCurrent->id, $qRes[$key]['visible']['visCat'])) {
+                        include P_MODL.'mod-'.$qRes[$key]['extension_fileName'].'/'.$qRes[$key]['extension_fileName'].$view.'.php';
+                    } else {
+                        continue;
+                    }
+                } elseif ($qRes[$key]['visible']['primary'] == 'article') {
+                    if (!in_array($res->contentCurrent->id, $qRes[$key]['visible']['visArticle'])) {
+                        include P_MODL.'mod-'.$qRes[$key]['extension_fileName'].'/'.$qRes[$key]['extension_fileName'].$view.'.php';
+                    }
+                }
+            } elseif ($qRes[$key]['visible']['typeVis'] == 2) {
+                    continue;
             }
         }
     }
