@@ -39,6 +39,17 @@ class AltoRouter {
 		return $this->routes;
 	}
 
+	public function getRoutesNamed() {
+		foreach ($this->routes as $key => $value) {
+			$this->routesNamed[$key]['url'] = $this->basePath.$value[1];
+			$this->routesNamed[$key]['function'] = $value[2];
+			$this->routesNamed[$key]['menuId'] = $value[6];
+			$this->routesNamed[$key]['categoryId'] = $value[7];
+			$this->routesNamed[$key]['articleId'] = $value[8];
+		}
+		return $this->routesNamed;
+	}
+
 	/**
 	 * Add multiple routes at once from array in the following format:
 	 *
@@ -84,9 +95,9 @@ class AltoRouter {
 	 * @param mixed $target The target where this route should point to. Can be anything.
 	 * @param string $name Optional name of this route. Supply if you want to reverse route this url in your application.
 	 */
-	public function map($method, $route, $target, $name = null, $id = null, $type = 'view') {
+	public function map($method, $route, $target, $name = null, $id = null, $type = 'view', $menuId = null, $catId = null, $artId = null) {
 
-		$this->routes[] = array($method, $route, $target, $name, $id, $type);
+		$this->routes[] = array($method, $route, $target, $name, $id, $type, $menuId, $catId, $artId);
 
 		if($name) {
 			if(isset($this->namedRoutes[$name])) {
@@ -101,13 +112,13 @@ class AltoRouter {
 	}
 
 
-	private function recursCategory($array, $res, $articleList, $firstId) {
+	private function recursCategory($array, $res, $articleList, $firstId, $menu) {
 	    foreach($array as $key => $value) {
 	        $i = 0;
 	        foreach($value as $key => $index) {
 	            $i++;
 	            if(is_array($index)) {
-	                $this->recursCategory($index, $res, $articleList, $firstId);
+	                $this->recursCategory($index, $res, $articleList, $firstId, $menu);
 	            } else {
 			    	if ($index != $firstId) {
 						$this->routes[] = [
@@ -116,7 +127,10 @@ class AltoRouter {
 							'comCategoryOnePageCtrl',
 							'',
 							$res[$index]['id'],
-							'view'
+							'view',
+							$menu['id'],
+							$res[$index]['id'],
+							''
 						];
 						$catResParams = json_decode($res[$index]['params'], true);
 					    foreach ($articleList as $articleVal) {
@@ -130,9 +144,12 @@ class AltoRouter {
 									'GET',
 									$articlePath,
 									'comArticleOnePageCtrl',
-									$articleVal['id'],
+									'',
 									$res[$index]['id'],
-									'view'
+									'view',
+									$menu['id'],
+									$res[$index]['id'],
+									$articleVal['id']
 								];
 					    	}
 						}
@@ -197,7 +214,10 @@ class AltoRouter {
 					$menuValue['extension_function'],
 					$menuValue['link_id'],
 					$menuValue['id'],
-					'view'
+					'view',
+					$menuValue['id'],
+					'',
+					$menuValue['link_id']
 				];
 			} elseif ($menuValue['extension_id'] == 4) {
 				$this->routes[] = [
@@ -206,7 +226,10 @@ class AltoRouter {
 					$menuValue['extension_function'],
 					'',
 					$menuValue['id'],
-					'view'
+					'view',
+					$menuValue['id'],
+					'',
+					''
 				];
 
 				$menuCatParams = json_decode($menuValue['category_params'], true);
@@ -223,7 +246,10 @@ class AltoRouter {
 							'comArticleOnePageCtrl',
 							$articleVal['id'],
 							$menuValue['id'],
-							'view'
+							'view',
+							$menuValue['id'],
+							'',
+							$articleVal['id']
 						];
 			    	}
 				}
@@ -247,7 +273,10 @@ class AltoRouter {
 					'comCategoryOnePageCtrl',
 					'',
 					$menuValue['id'],
-					'view'
+					'view',
+					$menuValue['id'],
+					'',
+					''
 				];
 
 		    	$catResFirstParams = json_decode($catResFirst['params'], true);
@@ -264,7 +293,10 @@ class AltoRouter {
 							'comArticleOnePageCtrl',
 							$articleVal['id'],
 							$menuValue['id'],
-							'view'
+							'view',
+							$menuValue['id'],
+							'',
+							$articleVal['id']
 						];
 			    	}
 				}
@@ -282,7 +314,7 @@ class AltoRouter {
 			        $catRes[$value['id']] = $value;
 			    }
 
-				$recursCatRoute = $this->recursCategory($catTypeResParams, $catRes, $articleRes, $catResFirstId);
+				$recursCatRoute = $this->recursCategory($catTypeResParams, $catRes, $articleRes, $catResFirstId, $menuValue);
 			} else {
 				$this->routes[] = [
 					$menuValue['method'],
@@ -290,7 +322,10 @@ class AltoRouter {
 					$menuValue['extension_function'],
 					'',
 					$menuValue['id'],
-					'view'
+					'view',
+					$menuValue['id'],
+					'',
+					''
 				];
 			}
 	    }
@@ -383,13 +418,7 @@ class AltoRouter {
 		$_REQUEST = array_merge($_GET, $_POST);
 
 		foreach($this->routes as $handler) {
-			/*
-			echo '<pre>';
-			print_r($this->routes);
-			echo '</pre>';
-			exit();
-			*/
-			list($method, $_route, $target, $name, $id, $fileType) = $handler;
+			list($method, $_route, $target, $name, $id, $fileType, $menuId, $catId, $artId) = $handler;
 
 			$methods = explode('|', $method);
 			$method_match = false;
@@ -471,7 +500,7 @@ class AltoRouter {
 				}
 				$resMenu = $this->db->get("menu", '*', [
 					"AND" => [
-						"id" => $id,
+						"id" => $menuId,
 						"published" => 1
 						]
 					]
@@ -491,7 +520,7 @@ class AltoRouter {
 				}
 
 				$resContent = $this->db->get("content", '*', [
-					"id" => $name
+					"id" => $artId
 				]);
 				/*
 				Надо переделать !!!!!!!!!!!!!!!!
@@ -513,13 +542,16 @@ class AltoRouter {
 					'routerCurrent' => [
 						'basePath' => $this->basePath,
 						'requestUrl' => $requestUrl,
+						'method' => $method,
 						'url' => $this->basePath.$requestUrl,
 						'target' => $target,
-						'method' => $method,
 						'id' => $id,
 						'name' => $name,
-						'params' => $params,
 						'fileType' => $fileType,
+						'menuId' => $menuId,
+						'catId' => $catId,
+						'artI' => $artId,
+						'params' => $params,
 					],
 					'extensionCurrent' => $resMenu['extension'],
 					'categoryTypeCurrent' => $resMenu['categorytype'],
@@ -532,6 +564,7 @@ class AltoRouter {
 					'method' => $method,
 					'name' => $name,
 					'params' => $params,
+					'routers' => $this->getRoutesNamed(),
 				];
 			}
 		}
@@ -557,17 +590,22 @@ class AltoRouter {
 			'routerCurrent' => [
 				'basePath' => $this->basePath,
 				'requestUrl' => $requestUrl,
+				'method' => $method,
 				'url' => $this->basePath.$requestUrl,
 				'target' => $target,
-				'method' => $method,
+				'id' => $id,
 				'name' => $name,
-				'params' => $params,
 				'fileType' => $fileType,
+				'menuId' => $menuId,
+				'catId' => $catId,
+				'artI' => $artId,
+				'params' => $params,
 			],
 			'extensionCurrent' => [
 				'fileName' => P_HTML.'404-'.USER_LANG.'.php',
 			],
 			'menuItems' => $Menus,
+			'routers' => $this->getRoutesNamed(),
 		];
 	}
 

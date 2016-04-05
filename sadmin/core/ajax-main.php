@@ -897,7 +897,6 @@ function getModuleVisible() {
         $html .= '</div>';
     }
     $html .= '</div>';
-    $html .= '<div id="outpuut"></div>';
     $html .= "
     <script>
         $(function() {
@@ -917,8 +916,7 @@ function getModuleVisible() {
                     $('#outpuut').empty().html(result);
                     sPar.find('.btn-success').removeClass('btn-success').addClass('btn-info');
                     ths.removeClass('btn-info').addClass('btn-success');
-                    console.log(1);
-                    // sCMSAletr(result, 'success');
+                    sCMSAletr(result, 'success');
                 });
             })
             $('.selectTypeVis').on('click', function () {
@@ -932,9 +930,7 @@ function getModuleVisible() {
                     data: {id: iID, value: iVal, name: iName}
                 })
                 .done(function(result) {
-                    $('#outpuut').empty().html(result);
-                    console.log(1);
-                    // sCMSAletr(result, 'success');
+                    sCMSAletr(result, 'success');
                 });
             })
             $('#visibleByLang a:first').tab('show');
@@ -989,6 +985,85 @@ function saveModuleVisible() {
             "AND" => [
                 "id" => $_POST['id']
             ]
+        ]
+    );
+
+    exit();
+}
+
+function getModuleParams() {
+    global $rd;
+    global $db;
+
+    if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
+    header('Content-Type: text/html; charset=utf-8');
+
+    $modRes = $db->get("module", [
+        "[>]extension" => ["extension_id" => "id"]
+    ], [
+        "module.id",
+        "module.title",
+        "module.description",
+        "module.published",
+        "module.ordering",
+        "module.position",
+        "module.lang",
+        "module.view",
+        "module.visible",
+        "module.params",
+        "extension.id(extension_id)",
+        "extension.title(extension_title)",
+        "extension.type(extension_type)",
+        "extension.fileName(extension_fileName)",
+        "extension.function(extension_function)",
+        "extension.enabled(extension_enabled)",
+        "extension.params(extension_params)",
+    ], [
+            "module.id" => $_POST['id']
+        ]
+    );
+
+    $articleRes = $db->select("content", '*', [
+        "AND" => [
+            "published" => 1,
+            "lang" => $modRes['lang']
+        ],
+        "ORDER" => "publish_up DESC"
+    ]);
+
+    $modRes['params'] = json_decode($modRes['params'], true);
+    $modRes['visible'] = json_decode($modRes['visible'], true);
+    $modRes['extension_params'] = json_decode($modRes['extension_params'], true);
+
+    $modPath = A_AJAX.$modRes['extension_fileName'].'/extension-'.$modRes['extension_fileName'].'.php';
+
+    // var_dump($db->log());
+    // var_dump($db->error());
+
+    include $modPath;
+
+    exit();
+}
+function saveModuleParams() {
+    global $match;
+    global $db;
+
+    if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
+    // header('Content-Type: text/html; charset=utf-8');
+    header('Content-Type: application/json; charset=utf-8');
+
+    $modRes = $db->get("module", "*", ["id" => $_POST['id']]);
+
+    $modRes['params'] = json_decode($modRes['params'], true);
+
+    if ($_POST['name'] == 'links') {
+        $modRes['params'][$_POST['name']][$_POST['value']] = intval($_POST['value']);
+    }
+
+    $db->update("module", [
+            "params" => json_encode($modRes['params'])
+        ], [
+            "id" => $_POST['id']
         ]
     );
 

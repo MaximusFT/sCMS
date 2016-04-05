@@ -57,11 +57,11 @@ $columns = array(
     array('db' => 'params', 'dt' => 'params',
         'formatter' => function( $d, $row, $table ) {
             return '
-                <a href="#" class="xModalModuleParams btn btn-info btn-xs"
-                    data-pk="'.$row['id'].'"
-                    data-value="'.$d.'"
-                    data-params=\'{"name":"params","table":"'.$table.'"}\'
-                    data-title="Заголовок"><i class="fa fa-cog"></i></a>';
+                <a href="#" class="btn btn-info btn-xs"
+                    data-id="'.$row['id'].'"
+                    data-toggle="modal"
+                    data-target="#xModalModuleParams"
+                    ><i class="fa fa-cog"></i></a>';
         }
     ),
     array('db' => 'view', 'dt' => 'view',

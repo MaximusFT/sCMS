@@ -1,17 +1,29 @@
-    <div class="panel panel-info">
-        <div class="panel-heading">
-            <h3 class="panel-title"><?php echo $qRes[$key]['title'];?></h3>
-        </div>
-        <div class="panel-body small"><?php echo $qRes[$key]['description'];?></div>
-        <ul class="list-group">
-            <?php
-            foreach ($qRes[$key]['params']['links'] as $qkey => $qval) {
-                $qAsideUseful = $db->get('link', '*', array(
-                    'id' => $qval
-                ));
-            ?>
-            <li class="list-group-item"><a href="<?php echo $qAsideUseful['url'];?>" title="<?php echo $qAsideUseful['title'];?>" ><?php echo $qAsideUseful['title'];?></a></li>
-            <?php }?>
-        </ul>
-    </div>
-    <hr>
+<?php
+/**
+ * @package     sCMS.Module
+ * @subpackage  mod_link-favorite
+ *
+ * @copyright   Copyright (C) 2005-2016 Open Source Matters, Inc. All rights reserved.
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ *
+ * $res - global variable
+ * $db - global variable to use MySQL
+ * $rd - global variable to use TimeFormat
+ * $modRes - main variable with all params by Module
+ */
+
+defined('ISsCMS') or die;
+
+$modUsefulArticle = $db->select("content", [
+        "id",
+        "alias",
+        "h1",
+        "hits"
+    ], [
+        "id" => $modRes['params']['links'],
+        "ORDER" => array('hits DESC'),
+        "LIMIT" => 6
+    ]);
+
+include $modPathView;
+?>

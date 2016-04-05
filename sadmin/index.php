@@ -48,7 +48,9 @@ $router->map('POST|PUT', '/save/extension/del/', 'saveExtensionDel', 'save-exten
 
 $router->map('POST|GET', '/module/', 'ModuleCrtl', 'module');
 $router->map('POST|GET', '/get/module/visible/', 'getModuleVisible', 'get-module-visible', null, 'ajax');
+$router->map('POST|GET', '/get/module/params/', 'getModuleParams', 'get-module-params', null, 'ajax');
 $router->map('POST|GET', '/save/module/visible/', 'saveModuleVisible', 'save-module-visible', null, 'ajax');
+$router->map('POST|GET', '/save/module/params/', 'saveModuleParams', 'save-module-params', null, 'ajax');
 $router->map('POST|PUT', '/save/module/add/', 'saveModuleAdd', 'save-module-add', null, 'ajax');
 $router->map('POST|PUT', '/save/module/del/', 'saveModuleDel', 'save-module-del', null, 'ajax');
 
@@ -115,7 +117,6 @@ if ($match['type'] === 'view' || $match['type'] === null){
 } elseif ($match['type'] === 'ajax'){
 	$pathTo = A_AJAX;
 }
-
 
 if($match && is_callable($match['target'])) {
     $res = call_user_func_array($match['target'], $match['params']);

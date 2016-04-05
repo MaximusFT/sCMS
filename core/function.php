@@ -16,6 +16,7 @@ function funPos($type='', $pos=''){
     ], [
         "module.id",
         "module.title",
+        "module.description",
         "module.published",
         "module.ordering",
         "module.position",
@@ -38,44 +39,47 @@ function funPos($type='', $pos=''){
         ]
     );
     foreach ($qRes as $key => $value) {
-        $qRes[$key]['visible'] = json_decode($qRes[$key]['visible'], true);
-        $qRes[$key]['params'] = json_decode(stripslashes($qRes[$key]['params']), true);
-        if ($qRes[$key]['extension_id'] == 16) {
-            echo frontMenuBuild(json_decode($res->menuItems->$qRes[$key]['params']['menutype']->params, true), json_decode(json_encode($res->menuItems->$qRes[$key]['params']['menutype']->items), true), $res->menuItemCurrent->alias, USER_LANG);
+        $modRes = $qRes[$key];
+        $modRes['visible'] = json_decode($modRes['visible'], true);
+        $modRes['params'] = json_decode(stripslashes($modRes['params']), true);
+        if ($modRes['extension_id'] == 16) {
+            echo frontMenuBuild(json_decode($res->menuItems->$modRes['params']['menutype']->params, true), json_decode(json_encode($res->menuItems->$modRes['params']['menutype']->items), true), $res->menuItemCurrent->alias);
         } else {
-            if ($qRes[$key]['view'] == 'default') {
+            if ($modRes['view'] == 'default') {
                 $view = '';
             } else {
-                $view = '-'.$qRes[$key]['view'];
+                $view = '-'.$modRes['view'];
             }
+            $modPath = P_MODL.'mod-'.$modRes['extension_fileName'].'/'.$modRes['extension_fileName'].$view.'.php';
+            $modPathView = P_MODL.'mod-'.$modRes['extension_fileName'].'/view-'.$modRes['extension_fileName'].$view.'.php';
 
-            if ($qRes[$key]['visible']['typeVis'] == 1) {
-                include P_MODL.'mod-'.$qRes[$key]['extension_fileName'].'/'.$qRes[$key]['extension_fileName'].$view.'.php';
-            } elseif ($qRes[$key]['visible']['typeVis'] == 3) {
-                if ($qRes[$key]['visible']['primary'] == 'menu') {
-                    if (in_array($res->menuItemCurrent->id, $qRes[$key]['visible']['visMenu']) || in_array($res->menuItemCurrent->id, $qRes[$key]['visible']['visCat'])) {
-                        include P_MODL.'mod-'.$qRes[$key]['extension_fileName'].'/'.$qRes[$key]['extension_fileName'].$view.'.php';
+            if ($modRes['visible']['typeVis'] == 1) {
+                include $modPath;
+            } elseif ($modRes['visible']['typeVis'] == 3) {
+                if ($modRes['visible']['primary'] == 'menu') {
+                    if (in_array($res->menuItemCurrent->id, $modRes['visible']['visMenu']) || in_array($res->menuItemCurrent->id, $modRes['visible']['visCat'])) {
+                        include $modPath;
                     } else {
                         continue;
                     }
-                } elseif ($qRes[$key]['visible']['primary'] == 'article') {
-                    if (in_array($res->contentCurrent->id, $qRes[$key]['visible']['visArticle'])) {
-                        include P_MODL.'mod-'.$qRes[$key]['extension_fileName'].'/'.$qRes[$key]['extension_fileName'].$view.'.php';
+                } elseif ($modRes['visible']['primary'] == 'article') {
+                    if (in_array($res->contentCurrent->id, $modRes['visible']['visArticle'])) {
+                        include $modPath;
                     }
                 }
-            } elseif ($qRes[$key]['visible']['typeVis'] == 4) {
-                if ($qRes[$key]['visible']['primary'] == 'menu') {
-                    if (!in_array($res->menuItemCurrent->id, $qRes[$key]['visible']['visMenu']) || !in_array($res->menuItemCurrent->id, $qRes[$key]['visible']['visCat'])) {
-                        include P_MODL.'mod-'.$qRes[$key]['extension_fileName'].'/'.$qRes[$key]['extension_fileName'].$view.'.php';
+            } elseif ($modRes['visible']['typeVis'] == 4) {
+                if ($modRes['visible']['primary'] == 'menu') {
+                    if (!in_array($res->menuItemCurrent->id, $modRes['visible']['visMenu']) || !in_array($res->menuItemCurrent->id, $modRes['visible']['visCat'])) {
+                        include $modPath;
                     } else {
                         continue;
                     }
-                } elseif ($qRes[$key]['visible']['primary'] == 'article') {
-                    if (!in_array($res->contentCurrent->id, $qRes[$key]['visible']['visArticle'])) {
-                        include P_MODL.'mod-'.$qRes[$key]['extension_fileName'].'/'.$qRes[$key]['extension_fileName'].$view.'.php';
+                } elseif ($modRes['visible']['primary'] == 'article') {
+                    if (!in_array($res->contentCurrent->id, $modRes['visible']['visArticle'])) {
+                        include $modPath;
                     }
                 }
-            } elseif ($qRes[$key]['visible']['typeVis'] == 2) {
+            } elseif ($modRes['visible']['typeVis'] == 2) {
                     continue;
             }
         }
@@ -333,38 +337,38 @@ function inverseHex($color) {
     return ($prependHash?'#':NULL).$r.$g.$b;
 }
 
-function linkBuilder($alias = null, $langInv = false){
+function menuLinkBuilder($type, $id = null){
     global $res;
-    if (IS_LANG === true) {
-        $ln = ($langInv === true)?USER_LANG_INV:USER_LANG;
-        $array[] = trim($ln, "/");
+
+    switch ($type) {
+        case 'menu':
+            foreach ($res->routers as $value) {
+                if ($value->menuId == $id) {
+                    return S_URLs.$value->url;
+                }
+            }
+        break;
+        case 'category':
+            foreach ($res->routers as $value) {
+                if ($value->categoryId == $id) {
+                    return S_URLs.$value->url;
+                }
+            }
+        break;
+        case 'article':
+            foreach ($res->routers as $value) {
+                if ($value->articleId == $id) {
+                    return S_URLs.$value->url;
+                }
+            }
+        break;
+        case 'inverse':
+            return S_URLh.USER_LANG_INV.$res->routerCurrent->requestUrl;
+        break;
     }
-    if ($alias !== null || !empty($alias)) {
-        if ($res->categoryCurrent->params->noPath == true) {
-            $array[] = trim($alias, "/");
-        } else {
-            $array[] = trim($res->routerCurrent->requestUrl, "/");
-            $array[] = trim($alias, "/");
-        }
-    }
-    return S_URLh.trim(implode("/", $array), "/").'/';
 }
 
-function menuLinkBuilder($alias, $langInv = false){
-    if (IS_LANG === true) {
-        $ln = ($langInv === true)?USER_LANG_INV:USER_LANG;
-        $array[] = $ln;
-    }
-    $array[] = trim($alias, "/");
-    return S_URLh.(implode("/", $array)).'/';
-}
-
-function frontMenuBuild($params, $res, $active, $langUser) {
-    if (IS_LANG === true) {
-        $langUser = $langUser;
-    } else {
-        $langUser = '';
-    }
+function frontMenuBuild($params, $res, $active) {
     $list = '';
     foreach($params as $key => $value) {
         $i == 0;
@@ -372,15 +376,14 @@ function frontMenuBuild($params, $res, $active, $langUser) {
             $i++;
             if($key == 'id') $tempId = $index;
             if ($res[$value['id']]['id'] == $value['id']) {
-                // echo S_URLs.$langUser.$res[$value['id']]['path']; exit();
-                $url = trim(S_URLs.$langUser.$res[$value['id']]['path'], "/").'/';
+                $url = menuLinkBuilder('menu', $res[$value['id']]['id']);
                 if(is_array($index)) {
                     $list .= '
                     <li class="btn-group'.(($active == $res[$value['id']]['alias'])?' active':'').'">
                         <a href="'.$url.'" class="btn">'.$res[$value['id']]['title'].'</a>
                         <a href="#" class="dropdown-toggle btn" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></a>
                     <ul class="dropdown-menu">';
-                    $list .= frontMenuBuild($index, $res, $active, $langUser);
+                    $list .= frontMenuBuild($index, $res, $active);
                     $list .= '</ul></li>';
                 } else {
                     if ($i !== 1) $list .= '</li>';

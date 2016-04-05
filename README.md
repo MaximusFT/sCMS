@@ -1,11 +1,11 @@
 # sCMS
 Very simple CMS for light site requirements
-Version 0.4 (05.04.2016)
+Version 0.5 (06.04.2016)
 
 ## Features
 
 * Best to simple content resource
-* 2 or more Language
+* 2 Language
 
 ## Getting started
 

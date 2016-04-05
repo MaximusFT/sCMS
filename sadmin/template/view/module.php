@@ -45,6 +45,20 @@
     </div>
 </div>
 
+<div class="modal fade" id="xModalModuleParams" tabindex="-1" role="dialog" aria-labelledby="ModuleParams" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Module Params</h4>
+                </div>
+                <div class="modal-body" id="ModuleParams"></div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 <script>
 'use strict';
@@ -110,11 +124,28 @@ $(function() {
         })
         .done(function(result) {
             $('#ModuleVisible').html(result);
-            // sCMSAletr(result, 'success');
         });
     }).on('hidden.bs.modal', function (e) {
         $('#ModuleVisible').empty();
-        // $('#appReload').appGo('reload');
+    });
+
+    /**
+    *   <ModuleParams
+    */
+    $('#xModalModuleParams').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget),
+            itemId = button.data('id'),
+            modal = $(this);
+        $.ajax({
+            type: 'POST',
+            url: '/sadmin/get/module/params/',
+            data: {id: itemId}
+        })
+        .done(function(result) {
+            $('#ModuleParams').html(result);
+        });
+    }).on('hidden.bs.modal', function (e) {
+        $('#ModuleParams').empty();
     });
 
 });

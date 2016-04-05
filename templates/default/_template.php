@@ -24,7 +24,7 @@ require_once P_TEMP.'_head.php';
                     // Временное решение ))))
                     if (IS_LANG === true) {
                     ?>
-                    <li><a href="<?php echo linkBuilder(null, true);?>"><?php echo USER_LANG_INV;?></a></li>
+                    <li><a href="<?php echo menuLinkBuilder('inverse');?>"><?php echo USER_LANG_INV;?></a></li>
                     <?
                     }
                     ?>
