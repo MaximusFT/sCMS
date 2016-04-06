@@ -42,46 +42,43 @@ function funPos($type='', $pos=''){
         $modRes = $qRes[$key];
         $modRes['visible'] = json_decode($modRes['visible'], true);
         $modRes['params'] = json_decode(stripslashes($modRes['params']), true);
-        if ($modRes['extension_id'] == 16) {
-            echo frontMenuBuild(json_decode($res->menuItems->$modRes['params']['menutype']->params, true), json_decode(json_encode($res->menuItems->$modRes['params']['menutype']->items), true), $res->menuItemCurrent->alias);
-        } else {
-            if ($modRes['view'] == 'default') {
-                $view = '';
-            } else {
-                $view = '-'.$modRes['view'];
-            }
-            $modPath = P_MODL.'mod-'.$modRes['extension_fileName'].'/'.$modRes['extension_fileName'].$view.'.php';
-            $modPathView = P_MODL.'mod-'.$modRes['extension_fileName'].'/view-'.$modRes['extension_fileName'].$view.'.php';
 
-            if ($modRes['visible']['typeVis'] == 1) {
-                include $modPath;
-            } elseif ($modRes['visible']['typeVis'] == 3) {
-                if ($modRes['visible']['primary'] == 'menu') {
-                    if (in_array($res->menuItemCurrent->id, $modRes['visible']['visMenu']) || in_array($res->menuItemCurrent->id, $modRes['visible']['visCat'])) {
-                        include $modPath;
-                    } else {
-                        continue;
-                    }
-                } elseif ($modRes['visible']['primary'] == 'article') {
-                    if (in_array($res->contentCurrent->id, $modRes['visible']['visArticle'])) {
-                        include $modPath;
-                    }
-                }
-            } elseif ($modRes['visible']['typeVis'] == 4) {
-                if ($modRes['visible']['primary'] == 'menu') {
-                    if (!in_array($res->menuItemCurrent->id, $modRes['visible']['visMenu']) || !in_array($res->menuItemCurrent->id, $modRes['visible']['visCat'])) {
-                        include $modPath;
-                    } else {
-                        continue;
-                    }
-                } elseif ($modRes['visible']['primary'] == 'article') {
-                    if (!in_array($res->contentCurrent->id, $modRes['visible']['visArticle'])) {
-                        include $modPath;
-                    }
-                }
-            } elseif ($modRes['visible']['typeVis'] == 2) {
+        if ($modRes['view'] == 'default') {
+            $view = '';
+        } else {
+            $view = '-'.$modRes['view'];
+        }
+        $modPath = P_MODL.'mod-'.$modRes['extension_fileName'].'/'.$modRes['extension_fileName'].$view.'.php';
+        $modPathView = P_MODL.'mod-'.$modRes['extension_fileName'].'/view-'.$modRes['extension_fileName'].$view.'.php';
+
+        if ($modRes['visible']['typeVis'] == 1) {
+            include $modPath;
+        } elseif ($modRes['visible']['typeVis'] == 3) {
+            if ($modRes['visible']['primary'] == 'menu') {
+                if (in_array($res->menuItemCurrent->id, $modRes['visible']['visMenu']) || in_array($res->menuItemCurrent->id, $modRes['visible']['visCat'])) {
+                    include $modPath;
+                } else {
                     continue;
+                }
+            } elseif ($modRes['visible']['primary'] == 'article') {
+                if (in_array($res->contentCurrent->id, $modRes['visible']['visArticle'])) {
+                    include $modPath;
+                }
             }
+        } elseif ($modRes['visible']['typeVis'] == 4) {
+            if ($modRes['visible']['primary'] == 'menu') {
+                if (!in_array($res->menuItemCurrent->id, $modRes['visible']['visMenu']) || !in_array($res->menuItemCurrent->id, $modRes['visible']['visCat'])) {
+                    include $modPath;
+                } else {
+                    continue;
+                }
+            } elseif ($modRes['visible']['primary'] == 'article') {
+                if (!in_array($res->contentCurrent->id, $modRes['visible']['visArticle'])) {
+                    include $modPath;
+                }
+            }
+        } elseif ($modRes['visible']['typeVis'] == 2) {
+                continue;
         }
     }
 }
@@ -368,36 +365,6 @@ function menuLinkBuilder($type, $id = null){
     }
 }
 
-function frontMenuBuild($params, $res, $active) {
-    $list = '';
-    foreach($params as $key => $value) {
-        $i == 0;
-        foreach($value as $key => $index) {
-            $i++;
-            if($key == 'id') $tempId = $index;
-            if ($res[$value['id']]['id'] == $value['id']) {
-                $url = menuLinkBuilder('menu', $res[$value['id']]['id']);
-                if(is_array($index)) {
-                    $list .= '
-                    <li class="btn-group'.(($active == $res[$value['id']]['alias'])?' active':'').'">
-                        <a href="'.$url.'" class="btn">'.$res[$value['id']]['title'].'</a>
-                        <a href="#" class="dropdown-toggle btn" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></a>
-                    <ul class="dropdown-menu">';
-                    $list .= frontMenuBuild($index, $res, $active);
-                    $list .= '</ul></li>';
-                } else {
-                    if ($i !== 1) $list .= '</li>';
-                    if (is_array($value['children'])) {
-                    } else {
-                        $list .= '<li'.(($active == $res[$index]['alias'])?' class="active"':'').'><a href="'.$url.'">'.$res[$index]['title'].'</a>';
-                    }
-                }
-            }
-        }
-    }
-    $list .= '</li>';
-    return $list;
-}
 function adminModuleVisibleBuild($array, $res, $visType, $moduleRes) {
     $html = '<ol class="dd-list">';
     foreach($array as $key => $value) {

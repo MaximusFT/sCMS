@@ -26,6 +26,7 @@ class AltoRouter {
 		$this->addRoutes($routes);
 		$this->setBasePath($basePath);
 		$this->addMatchTypes($matchTypes);
+		$this->breadcrumb = [];
 		$this->lang = USER_LANG;
 		$this->db = new medoo();
 	}
@@ -46,6 +47,7 @@ class AltoRouter {
 			$this->routesNamed[$key]['menuId'] = $value[6];
 			$this->routesNamed[$key]['categoryId'] = $value[7];
 			$this->routesNamed[$key]['articleId'] = $value[8];
+			$this->routesNamed[$key]['title'] = $value[9];
 		}
 		return $this->routesNamed;
 	}
@@ -97,7 +99,7 @@ class AltoRouter {
 	 */
 	public function map($method, $route, $target, $name = null, $id = null, $type = 'view', $menuId = null, $catId = null, $artId = null) {
 
-		$this->routes[] = array($method, $route, $target, $name, $id, $type, $menuId, $catId, $artId);
+		$this->routes[] = array($method, $route, $target, $name, $id, $type, $menuId, $catId, $artId, $itemTitle);
 
 		if($name) {
 			if(isset($this->namedRoutes[$name])) {
@@ -130,7 +132,8 @@ class AltoRouter {
 							'view',
 							$menu['id'],
 							$res[$index]['id'],
-							''
+							'',
+							$res[$index]['title']
 						];
 						$catResParams = json_decode($res[$index]['params'], true);
 					    foreach ($articleList as $articleVal) {
@@ -149,7 +152,8 @@ class AltoRouter {
 									'view',
 									$menu['id'],
 									$res[$index]['id'],
-									$articleVal['id']
+									$articleVal['id'],
+									$articleVal['h1']
 								];
 					    	}
 						}
@@ -190,6 +194,7 @@ class AltoRouter {
 		        "menu.category_id",
 		        "menu.link_id",
 		        "menu.method",
+		        "menu.title",
 		        "menu.path",
 		        "menu.params",
 		        "extension.function(extension_function)",
@@ -217,7 +222,8 @@ class AltoRouter {
 					'view',
 					$menuValue['id'],
 					'',
-					$menuValue['link_id']
+					$menuValue['link_id'],
+					$menuValue['title']
 				];
 			} elseif ($menuValue['extension_id'] == 4) {
 				$this->routes[] = [
@@ -228,8 +234,9 @@ class AltoRouter {
 					$menuValue['id'],
 					'view',
 					$menuValue['id'],
+					$menuValue['category_id'],
 					'',
-					''
+					$menuValue['title']
 				];
 
 				$menuCatParams = json_decode($menuValue['category_params'], true);
@@ -249,7 +256,8 @@ class AltoRouter {
 							'view',
 							$menuValue['id'],
 							'',
-							$articleVal['id']
+							$articleVal['id'],
+							$articleVal['h1']
 						];
 			    	}
 				}
@@ -275,8 +283,9 @@ class AltoRouter {
 					$menuValue['id'],
 					'view',
 					$menuValue['id'],
+					$catResFirstId,
 					'',
-					''
+					$catResFirst['title']
 				];
 
 		    	$catResFirstParams = json_decode($catResFirst['params'], true);
@@ -296,7 +305,8 @@ class AltoRouter {
 							'view',
 							$menuValue['id'],
 							'',
-							$articleVal['id']
+							$articleVal['id'],
+							$articleVal['h1']
 						];
 			    	}
 				}
@@ -325,7 +335,8 @@ class AltoRouter {
 					'view',
 					$menuValue['id'],
 					'',
-					''
+					'',
+					$menuValue['title']
 				];
 			}
 	    }
@@ -418,7 +429,7 @@ class AltoRouter {
 		$_REQUEST = array_merge($_GET, $_POST);
 
 		foreach($this->routes as $handler) {
-			list($method, $_route, $target, $name, $id, $fileType, $menuId, $catId, $artId) = $handler;
+			list($method, $_route, $target, $name, $id, $fileType, $menuId, $catId, $artId, $itemTitle) = $handler;
 
 			$methods = explode('|', $method);
 			$method_match = false;
@@ -483,6 +494,12 @@ class AltoRouter {
 					}
 				}
 
+				$resMenuSimple = $this->db->select("menu", '*', [
+					"AND" => [
+						"lang" => $this->lang,
+						"published" => 1
+						]
+				]);
 				$resMenus = $this->db->select("menutype", '*', [
 						"lang" => $this->lang,
 					]);
@@ -496,8 +513,30 @@ class AltoRouter {
 					$Menus[$value['name']]['params'] = $value['params'];
 					foreach ($qTmp as $key => $val) {
 						$Menus[$value['name']]['items'][$val['id']] = $val;
+						if ($val['home'] == 1) {
+							$menuItemHome = $val;
+						}
 					}
 				}
+
+				$resCategory = $this->db->select("categorytype", '*', [
+						"lang" => $this->lang,
+					]);
+				foreach ($resCategory as $key => $value) {
+					$qTmp = $this->db->select("category", '*', [
+						"AND" => [
+							"categorytype_id" => $value['id'],
+							"published" => 1
+							]
+					]);
+					$Categoryes[$value['id']]['id'] = $value['id'];
+					$Categoryes[$value['id']]['name'] = $value['name'];
+					$Categoryes[$value['id']]['params'] = $value['params'];
+					foreach ($qTmp as $key => $val) {
+						$Categoryes[$value['id']]['items'][$val['id']] = $val;
+					}
+				}
+
 				$resMenu = $this->db->get("menu", '*', [
 					"AND" => [
 						"id" => $menuId,
@@ -512,10 +551,11 @@ class AltoRouter {
 				if ($resMenu['extension_id'] == 5) {
 					$resMenu['categorytype'] = $this->db->get("categorytype", '*', ["id" => $resMenu['category_id']]);
 					$tempParams = json_decode($resMenu['categorytype']['params'], true);
-					$resMenu['category'] = $this->db->get("category", '*', ["id" => $tempParams[0]['id']]);
+					$resMenu['category'] = $this->db->get("category", '*', ["id" => $catId]);
+					// $resMenu['category'] = $this->db->get("category", '*', ["id" => $tempParams[0]['id']]);
 					$resMenu['category']['params'] = json_decode($resMenu['category']['params']);
 				} else {
-					$resMenu['category'] = $this->db->get("category", '*', ["id" => $resMenu['category_id']]);
+					$resMenu['category'] = $this->db->get("category", '*', ["id" => $catId]);
 					$resMenu['category']['params'] = json_decode($resMenu['category']['params']);
 				}
 
@@ -538,6 +578,35 @@ class AltoRouter {
 					$resContent['full_text'] = str_replace("{{".$snippet['position']."}}", $snippet['params'], $resContent['full_text']);
 				}
 
+				$routers = $this->getRoutesNamed();
+				$resBreadcrumbs = explode('/', trim($requestUrl, '/'));
+				$this->breadcrumb['home']['title'] = $menuItemHome['title'];
+				$this->breadcrumb['home']['path'] = S_URLs.$this->basePath;
+				$this->breadcrumb['home']['menuId'] = $menuItemHome['id'];
+				$this->breadcrumb['home']['categoryId'] = $menuItemHome['category_id'];
+				$this->breadcrumb['home']['articleId'] = $menuItemHome['link_id'];
+				foreach ($resBreadcrumbs as $valueBC) {
+					if (!$valueBC) {
+						continue;
+					}
+					$curr = str_replace('//', '/', $prev.'/'.$valueBC.'/');
+					$prev = $curr;
+					foreach ($routers as $key => $valueRoute) {
+						if (array_search($curr, $valueRoute, true)) {
+							$this->breadcrumb[$valueBC]['title'] = $valueRoute['title'];
+							$this->breadcrumb[$valueBC]['path'] = S_URLs.$this->basePath.$curr;
+							$this->breadcrumb[$valueBC]['menuId'] = $valueRoute['menuId'];
+							$this->breadcrumb[$valueBC]['categoryId'] = $valueRoute['categoryId'];
+							$this->breadcrumb[$valueBC]['articleId'] = $valueRoute['articleId'];
+					 	}
+					}
+				}
+				/**
+				 * $url
+				 * $path
+				 * $title
+				 */
+
 				return [
 					'routerCurrent' => [
 						'basePath' => $this->basePath,
@@ -550,7 +619,7 @@ class AltoRouter {
 						'fileType' => $fileType,
 						'menuId' => $menuId,
 						'catId' => $catId,
-						'artI' => $artId,
+						'artId' => $artId,
 						'params' => $params,
 					],
 					'extensionCurrent' => $resMenu['extension'],
@@ -559,12 +628,15 @@ class AltoRouter {
 					'menuItemCurrent' => $resMenu,
 					'contentCurrent' => $resContent,
 					'menuItems' => $Menus,
+					'menuItemHome' => $menuItemHome,
+					'categoryItems' => $Categoryes,
 					/* NOT DELETE NEED FOR SADMIN */
 					'target' => $target,
 					'method' => $method,
 					'name' => $name,
 					'params' => $params,
-					'routers' => $this->getRoutesNamed(),
+					'routers' => $routers,
+					'breadcrumb' => $this->breadcrumb,
 				];
 			}
 		}
@@ -598,7 +670,7 @@ class AltoRouter {
 				'fileType' => $fileType,
 				'menuId' => $menuId,
 				'catId' => $catId,
-				'artI' => $artId,
+				'artId' => $artId,
 				'params' => $params,
 			],
 			'extensionCurrent' => [
