@@ -114,6 +114,24 @@ class AltoRouter {
 	}
 
 
+	private function categoryChildren($params, $res, $someID, $rez, $check) {
+	    foreach($params as $key => $value) {
+	        foreach($value as $key => $index) {
+	            if($key == 'id' && $check == 1) $rez[] = $res[$value['id']]['id'];
+                if(is_array($index)) {
+            		if($value['id'] == $someID) {
+            			$check = 1;
+            			// $rez['aaa'] = $res[$value['id']]['id'];
+                		$rez = $this->categoryChildren($index, $res, $someID, $rez, $check);
+	    				return $rez;
+            		}
+                	$rez = $this->categoryChildren($index, $res, $someID, $rez, $check);
+                }
+	        }
+	    }
+	    return $rez;
+	}
+
 	private function recursCategory($array, $res, $articleList, $firstId, $menu) {
 	    foreach($array as $key => $value) {
 	        $i = 0;
@@ -255,7 +273,7 @@ class AltoRouter {
 							$menuValue['id'],
 							'view',
 							$menuValue['id'],
-							'',
+							$articleVal['category_id'],
 							$articleVal['id'],
 							$articleVal['h1']
 						];
@@ -304,7 +322,7 @@ class AltoRouter {
 							$menuValue['id'],
 							'view',
 							$menuValue['id'],
-							'',
+							$catResFirstId,
 							$articleVal['id'],
 							$articleVal['h1']
 						];
@@ -334,12 +352,26 @@ class AltoRouter {
 					$menuValue['id'],
 					'view',
 					$menuValue['id'],
-					'',
+					$menuValue['category_id'],
 					'',
 					$menuValue['title']
 				];
 			}
 	    }
+
+		$this->routes[] = [
+			'GET',
+			'/sitemap.xml',
+			'comSitemapXLMPageCtrl',
+			'',
+			'',
+			'view',
+			'',
+			'',
+			'',
+			''
+		];
+
 		return;
 	}
 
@@ -548,11 +580,27 @@ class AltoRouter {
 
 				$resMenu['extension'] = $this->db->get("extension", '*', ["id" => $resMenu['extension_id']]);
 				$resMenu['extension']['params'] = json_decode($resMenu['extension']['params']);
+
 				if ($resMenu['extension_id'] == 5) {
 					$resMenu['categorytype'] = $this->db->get("categorytype", '*', ["id" => $resMenu['category_id']]);
 					$tempParams = json_decode($resMenu['categorytype']['params'], true);
 					$resMenu['category'] = $this->db->get("category", '*', ["id" => $catId]);
-					// $resMenu['category'] = $this->db->get("category", '*', ["id" => $tempParams[0]['id']]);
+
+					$resMenu['category']['children_id'] = $this->categoryChildren($tempParams, $Categoryes[$resMenu['categorytype']['id']]['items'], $catId);
+					/*
+					echo '<pre>';
+					print_r($resMenu['category']['children_id']);
+					echo '<br>';
+					print_r($tempParams);
+					echo '<br>';
+					print_r($resMenu['categorytype']);
+					echo '<br>';
+					echo '</pre>';
+					exit();
+					*/
+					$resMenu['category']['params'] = json_decode($resMenu['category']['params']);
+				} elseif ($resMenu['extension_id'] == 4) {
+					$resMenu['category'] = $this->db->get("category", '*', ["id" => $catId]);
 					$resMenu['category']['params'] = json_decode($resMenu['category']['params']);
 				} else {
 					$resMenu['category'] = $this->db->get("category", '*', ["id" => $catId]);
@@ -580,6 +628,7 @@ class AltoRouter {
 
 				$routers = $this->getRoutesNamed();
 				$resBreadcrumbs = explode('/', trim($requestUrl, '/'));
+				// $this->breadcrumb['home']['curr2'] = $resBreadcrumbs;
 				$this->breadcrumb['home']['title'] = $menuItemHome['title'];
 				$this->breadcrumb['home']['path'] = S_URLs.$this->basePath;
 				$this->breadcrumb['home']['menuId'] = $menuItemHome['id'];
@@ -593,12 +642,47 @@ class AltoRouter {
 					$prev = $curr;
 					foreach ($routers as $key => $valueRoute) {
 						if (array_search($curr, $valueRoute, true)) {
-							$this->breadcrumb[$valueBC]['title'] = $valueRoute['title'];
-							$this->breadcrumb[$valueBC]['path'] = S_URLs.$this->basePath.$curr;
-							$this->breadcrumb[$valueBC]['menuId'] = $valueRoute['menuId'];
-							$this->breadcrumb[$valueBC]['categoryId'] = $valueRoute['categoryId'];
-							$this->breadcrumb[$valueBC]['articleId'] = $valueRoute['articleId'];
-					 	}
+							if (!empty($valueRoute['articleId']) && $resMenu['category']['params']->noPath === true) {
+					    		$resBreadcrumbs = explode('/', trim($resMenu['category']['path'].(trim($valueRoute['url'], '/')), '/'));
+					    		$tempBread['home'] = $this->breadcrumb['home'];
+								foreach ($resBreadcrumbs as $valueBCs) {
+									if (!$valueBCs) {
+										continue;
+									}
+									$currS = str_replace('//', '/', $prevS.'/'.$valueBCs.'/');
+									$prevS = $currS;
+									foreach ($routers as $keys => $valueRoutes) {
+										if ($valueBC === $valueBCs) {
+											$tempBread[$valueBCs]['2'] = 2;
+											$tempBread[$valueBCs]['title'] = $valueRoute['title'];
+											$tempBread[$valueBCs]['path'] = S_URLs.$this->basePath.$valueRoute['url'];
+											$tempBread[$valueBCs]['menuId'] = $valueRoute['menuId'];
+											$tempBread[$valueBCs]['categoryId'] = $valueRoute['categoryId'];
+											$tempBread[$valueBCs]['articleId'] = $valueRoute['articleId'];
+										} else {
+											if (array_search($currS, $valueRoutes, true)) {
+												$tempBread[$valueBCs]['3'] = 3;
+												$tempBread[$valueBCs]['title'] = $valueRoutes['title'];
+												$tempBread[$valueBCs]['path'] = S_URLs.$this->basePath.$currS;
+												$tempBread[$valueBCs]['menuId'] = $valueRoutes['menuId'];
+												$tempBread[$valueBCs]['categoryId'] = $valueRoutes['categoryId'];
+												$tempBread[$valueBCs]['articleId'] = $valueRoutes['articleId'];
+											}
+									 	}
+						    		}
+					    		}
+					    		unset($this->breadcrumb);
+					    		$this->breadcrumb = $tempBread;
+					    		break;
+							} else {
+								$this->breadcrumb[$valueBC]['1'] = 1;
+								$this->breadcrumb[$valueBC]['title'] = $valueRoute['title'];
+								$this->breadcrumb[$valueBC]['path'] = S_URLs.$this->basePath.$curr;
+								$this->breadcrumb[$valueBC]['menuId'] = $valueRoute['menuId'];
+								$this->breadcrumb[$valueBC]['categoryId'] = $valueRoute['categoryId'];
+								$this->breadcrumb[$valueBC]['articleId'] = $valueRoute['articleId'];
+						 	}
+						}
 					}
 				}
 				/**

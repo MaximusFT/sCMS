@@ -44,14 +44,14 @@ function comCategoryOnePageCtrl() {
     global $res;
     global $db;
 
+    $tId = ($res->extensionCurrent->id == 5)?$res->categoryCurrent->children_id:$res->categoryCurrent->id;
     $qListContent = $db->select("content", '*', [
         "AND" => [
-            "content.lang" => USER_LANG,
-            "content.published" => 1,
-            "content.category_id" => $res->categoryCurrent->id,
+            "lang" => USER_LANG,
+            "published" => 1,
+            "category_id" => $tId,
         ],
-        "ORDER" => "content.publish_up DESC",
-        "LIMIT" => 10
+        "ORDER" => "publish_up DESC"
     ]);
 
     $res->extensionCurrent->fileName = P_HTML.$res->extensionCurrent->fileName.'.php';
@@ -61,7 +61,6 @@ function comCategoryOnePageCtrl() {
 function comCategoryListPageCtrl() {
     global $res;
     global $db;
-
     return;
 }
 function comOnlyFilePageCtrl() {
@@ -99,9 +98,8 @@ function comSitemapXLMPageCtrl() {
         "content.publish_up(content_publish_up)"
     ], [
         "AND" => [
-            "menu.id[!]" => array(2,3,9,19),
             "menu.published" => 1,
-            "menu.extension_id" => array(1, 2)
+            "menu.lang" => USER_LANG
         ],
         "ORDER" => "content.publish_up DESC"
     ]);
@@ -109,7 +107,32 @@ function comSitemapXLMPageCtrl() {
 
     $res->qListContent = json_decode(json_encode($qListContent), FALSE);
 
-    return;
+    $siteMap = '<?xml version="1.0" encoding="UTF-8"?>
+    <urlset
+          xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+
+    http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">'."\r\n";
+    $siteMap .= '
+    <url>
+        <loc>'.S_URLh.'</loc>
+        <lastmod>'.date("Y-m-d\TH:i:s+02:00").'</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.00</priority>
+    </url>'."\r\n";
+
+    foreach(json_decode(json_encode($res->qListContent), true) as $r) {
+        $siteMap .= '<url>'."\r\n";
+        $siteMap .= '<loc>'.S_URLs.$r["path"].'</loc>'."\r\n";
+        $siteMap .= '<changefreq>weekly</changefreq>'."\r\n";
+        $siteMap .= '<priority>0.50</priority>'."\r\n";
+        $siteMap .= '</url>'."\r\n";
+    }
+    $siteMap .= '</urlset>';
+    echo $siteMap;
+
+    exit();
 }
 
 function mainPageMoreCtrl() {

@@ -28,16 +28,18 @@ function funPos($type='', $pos=''){
         "extension.type(extension_type)",
         "extension.fileName(extension_fileName)",
         "extension.function(extension_function)",
-        "extension.enabled(extension_enabled)",
+        "extension.published(extension_published)",
         "extension.params(extension_params)",
     ], [
             "AND" => [
                 "lang" => USER_LANG,
                 "position" => $pos,
-                "published" => 1
+                "module.published" => 1
             ]
         ]
     );
+    // var_dump($db->log());
+    // var_dump($db->error());
     foreach ($qRes as $key => $value) {
         $modRes = $qRes[$key];
         $modRes['visible'] = json_decode($modRes['visible'], true);
@@ -67,13 +69,13 @@ function funPos($type='', $pos=''){
             }
         } elseif ($modRes['visible']['typeVis'] == 4) {
             if ($modRes['visible']['primary'] == 'menu') {
-                if (!in_array($res->menuItemCurrent->id, $modRes['visible']['visMenu']) || !in_array($res->menuItemCurrent->id, $modRes['visible']['visCat'])) {
+                if ((!in_array($res->menuItemCurrent->id, $modRes['visible']['visMenu']) && is_array($modRes['visible']['visMenu'])) || (!in_array($res->menuItemCurrent->id, $modRes['visible']['visCat']) && is_array($modRes['visible']['visCat']))) {
                     include $modPath;
                 } else {
                     continue;
                 }
             } elseif ($modRes['visible']['primary'] == 'article') {
-                if (!in_array($res->contentCurrent->id, $modRes['visible']['visArticle'])) {
+                if (!in_array($res->menuItemCurrent->id, $modRes['visible']['visMenu']) && is_array($modRes['visible']['visMenu'])) {
                     include $modPath;
                 }
             }
@@ -384,4 +386,108 @@ function adminModuleVisibleBuild($array, $res, $visType, $moduleRes) {
     }
     $html .= '</li></ol>';
     return $html;
+}
+
+function arrayRecSearch($array, $searchfor) {
+    static $result = array();
+
+    foreach($array as $k => $v) {
+        if ($v == $searchfor) $result[] = $v;
+        if (is_array($array[$k])) arrayRecSearch($v, $searchfor);
+    }
+    return $result;
+}
+
+function frontMenuBuild($params, $res, $active) {
+    $html = '';
+    foreach($params as $key => $value) {
+        $i == 0;
+        foreach($value as $key => $index) {
+            $i++;
+            if($key == 'id') $tempId = $index;
+            if ($res[$value['id']]['id'] == $value['id']) {
+                if ($res[$value['id']]['extension_id'] == 19) {
+                    $url = $res[$value['id']]['alias'];
+                } else {
+                    $url = menuLinkBuilder('menu', $res[$value['id']]['id']);
+                }
+                $title = $res[$value['id']]['title'];
+                $alias = ($active == $res[$value['id']]['id'])?' active':'';
+                if(is_array($index)) {
+                    $findA = arrayRecSearch($index, $active);
+                    $findAClass = ($findA)?' active':'';
+                    $html .= '
+                    <li class="btn-group'.$alias.'">
+                        <a href="'.$url.'" class="btn">'.$title.'</a>
+                        <a href="#" class="dropdown-toggle btn" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></a>
+                    <ul class="dropdown-menu">';
+                    $html .= frontMenuBuild($index, $res, $active);
+                    $html .= '</ul></li>';
+                } else {
+                    if ($i !== 1) $html .= '</li>';
+                    if (is_array($value['children'])) {
+                    } else {
+                        $title = $res[$index]['title'];
+                        $alias = ($active == $res[$index]['id'])?' class="active"':'';
+                        $html .= '<li'.$alias.'><a href="'.$url.'">'.$title.'</a>';
+                    }
+                }
+            }
+        }
+    }
+    $html .= '</li>';
+    return $html;
+}
+
+function frontMenuBuildCategory($params, $res, $active = null) {
+    $html = '';
+    foreach($params as $key => $value) {
+        $i == 0;
+        foreach($value as $key => $index) {
+            $i++;
+            if($key == 'id') $tempId = $index;
+            if ($res[$value['id']]['id'] == $value['id']) {
+                $url = menuLinkBuilder('category', $res[$value['id']]['id']);
+                $id = $res[$value['id']]['id'];
+                $title = $res[$value['id']]['title'];
+                $alias = ($active == $res[$value['id']]['id'])?' active':'';
+                if(is_array($index)) {
+                    $html .= '
+                    <li role="presentation" class="list-group-item">
+                        <a class="" role="button" data-toggle="collapse" href="#coll'.$res[$value['id']]['alias'].$id.'" aria-expanded="false" aria-controls="coll'.$res[$value['id']]['alias'].$id.'"><span class="caret"></span></a>
+                        <a href="'.$url.'" class="'.$alias.'">'.$title.'</a>
+                    <ul id="coll'.$res[$value['id']]['alias'].$id.'" class="list-group collapse in" aria-labelledby="coll'.$res[$value['id']]['alias'].$id.'Heading" aria-expanded="true">';
+                    $html .= frontMenuBuildCategory($index, $res, $active);
+                    $html .= '</ul></li>';
+                } else {
+                    if ($i !== 1) $html .= '</li>';
+                    if (is_array($value['children'])) {
+                    } else {
+                        $title = $res[$index]['title'];
+                        $alias = ($active == $res[$index]['id'])?' active':'';
+                        $html .= '<li class="list-group-item">
+                            <a><span class="glyphicon glyphicon-link" aria-hidden="true"></span></a>
+                            <a href="'.$url.'" class="'.$alias.'">'.$title.'</a>';
+                    }
+                }
+            }
+        }
+    }
+    $html .= '</li>';
+    return $html;
+}
+
+function getShortText($text, $counttext = 10, $sep = ' ') {
+    $text = strip_tags($text);
+    $words = split($sep, $text);
+    if (count($words) > $counttext ) {
+        $text = join($sep, array_slice($words, 0, $counttext));
+    }
+    $text = trim($text);
+    $text = trim($text, "&nbsp;");
+    $text = trim($text);
+    $text = rtrim($text, ".");
+    $text = rtrim($text, "!,.-");
+    $text = $text."…";
+    return $text;
 }
