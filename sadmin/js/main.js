@@ -14,6 +14,10 @@ function xEdit(){
         url: '/sadmin/save/check/',
         success: function(response, newValue) { xjGrowl(response, newValue) }
     })
+    $('.xeditParams').editable({
+        url: '/sadmin/save/params/',
+        success: function(response, newValue) { xjGrowl(response, newValue) }
+    })
     // $('.thMenuLinkIds').editable({
     //     url: '/sadmin/save/',
     //     typeahead: {

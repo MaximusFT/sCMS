@@ -1,18 +1,34 @@
 <?
 session_start();
-$_SESSION['id'] = $res->contentCurrent->ent[0]->id;
+$_SESSION['id'] = $res->qContent->id;
 ?>
 
 <div class="row">
-    <div class="col-md-12">
-        <h2><?php echo $res->contentCurrent->ent[0]->h1;?></h2>
+    <div class="col-md-4">
+        <h2><?php echo $res->qContent->h1;?></h2>
+    </div>
+    <div class="col-md-4">
+        <img id="imageThumbnail" src="<?php echo $res->qContent->imageThumbnail;?>">
+    </div>
+    <div class="col-md-4">
+        <span class="btn btn-success fileinput-button">
+            <i class="glyphicon glyphicon-plus"></i>
+            <span>Select files...</span>
+            <input id="fileupload" type="file" name="files[]" multiple>
+        </span>
+        <br>
+        <br>
+        <div id="progress">
+            <div class="progress-bar progress-bar-success"></div>
+        </div>
+        <div id="files"></div>
     </div>
 </div>
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-info">
             <div class="panel-heading">
-                <button type="button" class="btn btn-success btn-sm sv-cont" data-params="content|full_text" data-cid="<?=$res->contentCurrent->ent[0]->id;?>">Save & stay</button>
+                <button type="button" class="btn btn-success btn-sm sv-cont" data-cid="<?=$res->qContent->id;?>">Save & stay</button>
                 <button type="button" class="btn btn-primary btn-sm sv-exit">Save & close</button>
                 <div class="pull-right">
                     <button type="button" class="btn btn-default btn-sm" href="/sadmin/content/">Назад</button>
@@ -20,7 +36,7 @@ $_SESSION['id'] = $res->contentCurrent->ent[0]->id;
             </div>
             <div class="panel-body">
                 <div id="fullText">
-                    <?php echo $res->contentCurrent->ent[0]->full_text;?>
+                    <?php echo $res->qContent->full_text;?>
                 </div>
             </div>
         </div>
@@ -69,11 +85,12 @@ $(function() {
         };
         $.ajax({
             type: "POST",
-            url: "/sadmin/ajax/save-to-db-full.php",
+            url: "/sadmin/save/",
             data: {
                 value: text,
-                params: params,
-                id: cid
+                table: 'content',
+                name: 'full_text',
+                pk: cid
             }
         })
         .done(function(result) {
@@ -93,16 +110,58 @@ $(function() {
         };
         $.ajax({
             type: "POST",
-            url: "/sadmin/ajax/save-to-db-full.php",
+            url: "/sadmin/save/",
             data: {
                 value: text,
-                params: params,
-                id: cid
+                table: 'content',
+                name: 'full_text',
+                pk: cid
             }
         })
         .done(function(result) {
             window.location = "http://<?=$_SERVER['SERVER_NAME'];?>" + "/sadmin/content/";
         });
     });
+    $('#fileupload').fileupload({
+        url: '<?php echo S_CORE;?>upload/?id=<?php echo $res->qContent->id;?>',
+        dataType: 'json',
+        done: function (e, data) {
+            $.each(data.result.files, function (index, file) {
+                $.ajax({
+                    type: "POST",
+                    url: "/sadmin/save/",
+                    data: {
+                        value: file.url,
+                        table: 'content',
+                        name: 'image',
+                        pk: <?php echo $res->qContent->id;?>
+                    }
+                })
+                .done(function(result) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/sadmin/save/",
+                        data: {
+                            value: file.thumbnailUrl,
+                            table: 'content',
+                            name: 'imageThumbnail',
+                            pk: <?php echo $res->qContent->id;?>
+                        }
+                    }).done(function(result) {
+                        $('#imageThumbnail').attr('src',file.thumbnailUrl);
+                        sCMSAletr(result, 'success');
+                    });
+                });
+            })
+        },
+        progressall: function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            $('#progress .progress-bar').css(
+                'width',
+                progress + '%'
+            );
+        }
+    }).prop('disabled', !$.support.fileInput)
+        .parent().addClass($.support.fileInput ? undefined : 'disabled');
 });
 </script>
