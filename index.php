@@ -1,4 +1,4 @@
-<?php
+<?
 require_once $_SERVER['DOCUMENT_ROOT']."/configuration.php";
 if (IS_LANG === true) {
     if (!in_array($langUrl, $langArrayA)) {
@@ -10,15 +10,15 @@ if (IS_LANG === true) {
 require_once P_CORE."routers.php";
 
 if ($res->menuItemCurrent->method === 'POST') {
-    include $res->fileName;
+    include $res->extensionCurrent->fileName;
     exit();
 } elseif ($res->menuItemCurrent->extension_id === '6') {
     require_once P_TEMP."_head.php";
-    include $res->fileName;
+    include $res->extensionCurrent->fileName;
     require_once P_TEMP."_ender.php";
     exit();
 } elseif ($res->menuItemCurrent->extension_id === '8') {
-    include $res->fileName;
+    include $res->extensionCurrent->fileName;
     exit();
 }
 

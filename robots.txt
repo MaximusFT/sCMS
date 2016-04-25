@@ -1,6 +1,7 @@
 User-agent: * 
 Allow: / 
-Disallow: /tempate/
+Disallow: /sadmin/
+Disallow: /tempates/
 
-Host: your_site.com
-Sitemap: http://your_site.com/sitemap.xml
+Host: scms.io
+Sitemap: http://scms.io/sitemap.xml

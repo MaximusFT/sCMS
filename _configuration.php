@@ -3,18 +3,19 @@ session_start();
 date_default_timezone_set('Europe/Kiev');
 
 define('DEF_LANG',			'ru');
+define('IS_LANG',			false);
 
-$langDefine = true;
 $langArray = ['/ru/', '/en/'];
+$langArrayA = array('/ru/','/en/');
 $langArrayU = ['ru', 'en'];
-
 $langUrl = substr($_SERVER['REQUEST_URI'], 0, 4);
 $langUser = $_SESSION['myLang'];
+
 if (in_array($langUrl, $langArray)) {
 	$_SESSION['myLang'] = trim($langUrl, '/');
 	$langUser = trim($langUrl, '/');
 } else {
-	if (in_array($langUser, $langArrayU)) {
+	if (in_array($langUser, $langArrayA)) {
 		$langUser = $_SESSION['myLang'];
 	} else {
 		$_SESSION['myLang'] = DEF_LANG;
@@ -23,10 +24,21 @@ if (in_array($langUrl, $langArray)) {
 }
 $langUserInv = ($langUser === 'ru')?'en':'ru';
 
+if (IS_LANG === true) {
+	define('USER_LANG',			$langUser);
+	define('USER_LANG_INV',		$langUserInv);
+} else {
+	define('USER_LANG',			DEF_LANG);
+	define('USER_LANG_INV',		DEF_LANG);
+}
+
+define('ISsCMS',			true);
+
 define('S_HTTP',			'http');
 define('S_URLName',			'Your_Site.com');
 define('S_URL',				'your_site.com');
 define('DEF_TEMP',			'default');
+define('A_FOLDER',			'sadmin');
 
 define('P_BASE', 			__DIR__);
 define('P_ROOT',			implode(DIRECTORY_SEPARATOR, explode(DIRECTORY_SEPARATOR, P_BASE)));
@@ -38,7 +50,7 @@ define('P_TEMP',			P_ROOT . '/templates/'.DEF_TEMP.'/');
 define('P_VIEW',			P_ROOT . '/templates/'.DEF_TEMP.'/view/');
 define('P_HTML',			P_ROOT . '/templates/'.DEF_TEMP.'/html/');
 
-define('A_ROOT',			P_ROOT . '/sadmin');
+define('A_ROOT',			P_ROOT . '/' . A_FOLDER);
 define('A_CORE',			A_ROOT . '/core/');
 define('A_AJAX',			A_ROOT . '/ajax/');
 define('A_TEMP',     		A_ROOT . '/template/');
@@ -47,8 +59,9 @@ define('A_VIEW',     		A_ROOT . '/template/view/');
 define('S_URLs',			S_HTTP . '://'.S_URL);
 define('S_URLh',			S_HTTP . '://'.S_URL.'/');
 define('S_TEMP',			S_URLs . '/templates/'.DEF_TEMP.'/');
-define('A_URLh',			S_URLs . '/sadmin/');
-define('S_A_JS',			S_URLs . '/sadmin/js/');
+define('A_URLh',			S_URLs . '/'.A_FOLDER.'/');
+define('S_CORE',			A_URLh . 'core/');
+define('S_A_JS',			A_URLh . 'js/');
 
 define('ADVIS', 			false);
 
@@ -72,7 +85,7 @@ require_once P_CORE.'dateout.php'; $rd = new DateOut();
  * Закоментировать после запуска сайта
  * @var string
  */
-// $metaAdd = '<meta name="robots" content="noindex, nofollow" />';
+$metaAdd = '<meta name="robots" content="noindex, nofollow" />';
 
 $metaOgUrl = S_URLh
 	.((isset($pageLink) && !empty($pageLink))?$pageLink.'/':'')

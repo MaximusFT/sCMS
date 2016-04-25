@@ -1,0 +1,7 @@
+User-agent: * 
+Allow: / 
+Disallow: /sadmin/
+Disallow: /tempate/
+
+Host: your_site.com
+Sitemap: http://your_site.com/sitemap.xml
