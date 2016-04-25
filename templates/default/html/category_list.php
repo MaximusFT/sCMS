@@ -29,10 +29,11 @@
                     ?>
                     <div class="media">
                         <a class="media-left" href="<?php echo menuLinkBuilder('article', $r['id']);?>" title="<?=$r['h1'];?>">
+                        <img class="media-object" src="<?=$r['image'];?>" alt="<?=$r['h1'];?>">
                         <?/*
                         <img class="media-object" src="/images/<?=$r['alias'];?>-1-small.jpg" alt="<?=$r['h1'];?>">
-                        */?>
                         <img class="media-object" src="http://imgholder.ru/180x160/<?php echo $cBackground;?>/<?php echo $cText;?>" alt="<?php echo $r['content_h1'];?>">
+                        */?>
                         </a>
                         <div class="media-body">
                             <h2 class="media-heading"><a href="<?php echo menuLinkBuilder('article', $r['id']);?>" title="<?=$r['h1'];?>"><?=$r['h1'];?></a></h2>

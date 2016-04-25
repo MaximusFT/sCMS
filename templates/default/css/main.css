@@ -49,7 +49,11 @@ legend {
   border-radius: 0; }
 
 .nav-category .list-group .list-group-item {
-  padding-left: 5px; }
+  padding-left: 5px;
+  padding-bottom: 5px; }
+  .nav-category .list-group .list-group-item .active {
+    font-weight: bold;
+    text-decoration: underline; }
 .nav-category .list-group .list-group {
   margin-bottom: 0;
   margin-left: 20px; }
