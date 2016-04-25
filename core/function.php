@@ -417,7 +417,7 @@ function frontMenuBuild($params, $res, $active) {
                     $findA = arrayRecSearch($index, $active);
                     $findAClass = ($findA)?' active':'';
                     $html .= '
-                    <li class="btn-group'.$alias.'">
+                    <li class="btn-group'.$alias.$findAClass.'">
                         <a href="'.$url.'" class="btn">'.$title.'</a>
                         <a href="#" class="dropdown-toggle btn" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></a>
                     <ul class="dropdown-menu">';
