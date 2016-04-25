@@ -17,7 +17,7 @@
                             <th>type</th>
                             <th>fileName</th>
                             <th>function</th>
-                            <th>enabled</th>
+                            <th>published</th>
                             <th>params</th>
                         </tr>
                     </thead>
@@ -49,7 +49,7 @@ $(function() {
             { "data": "type" },
             { "data": "fileName" },
             { "data": "function" },
-            { "data": "enabled" },
+            { "data": "published" },
             { "data": "params" },
         ],
         "order": [[1, 'asc']],

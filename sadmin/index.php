@@ -28,6 +28,7 @@ $router->map('POST|PUT', '/save/menutype/del/', 'saveMenuTypeDel', 'save-menutyp
 
 
 $router->map('POST|GET', '/menu/[i:type]/', 'MenuOneCrtl', 'menuone');
+$router->map('POST|PUT', '/save/menu/homepage/', 'saveMenuHomepage', 'save-menu-homepage', null, 'ajax');
 $router->map('POST|PUT', '/save/menu/add/', 'saveMenuAdd', 'save-menu-add', null, 'ajax');
 $router->map('POST|PUT', '/save/menu/del/', 'saveMenuDel', 'save-menu-del', null, 'ajax');
 $router->map('POST|PUT', '/save/menu/refresh/', 'saveMenuRefresh', 'save-menu-refresh', null, 'ajax');
@@ -82,6 +83,7 @@ $router->map('POST', '/printrem/[i:id]/', 'PrintRemoveCrtl', 'print-remove');
  * SAVE Route
  */
 $router->map('POST|PUT','/save/', 'saveToDB', 'save-to-db', null, 'ajax');
+$router->map('POST|PUT','/save/params/', 'saveToDBParams', 'save-to-db-params', null, 'ajax');
 $router->map('POST|PUT','/saveth/', 'saveToDBTypeHead', 'save-to-db-th', null, 'ajax');
 $router->map('POST|PUT','/savemf/', 'saveToDBMF', 'save-to-db-mf', null, 'ajax');
 $router->map('POST|PUT','/save/check/', 'saveToDBCheck', 'save-to-db-check', null, 'ajax');
@@ -102,6 +104,7 @@ $router->map('GET|POST',    '/get/group/static/[*:title]/', 'getFromDBSelectStat
 $router->map('GET|POST',    '/get/group/simple/[*:table]/[*:table_name]/', 'getFromDBSimpleSelect', 'get-from-db-simple-select', null, 'ajax');
 $router->map('GET|POST',    '/get/group/[*:table]/[*:table_name]/[*:table_cond]/[*:table_param]/', 'getFromDBSelect', 'get-from-db-select', null, 'ajax');
 $router->map('GET|POST',    '/get/typeahead/[*:table]/[*:table_col]/[*:table_cond]/', 'getTypeAHead', 'get-typea-head', null, 'ajax');
+$router->map('GET|POST',    '/get/typeaheadlang/[*:table]/[*:table_col]/[*:table_cond]/[*:lang]/', 'getTypeAHeadLang', 'get-typea-head-lang', null, 'ajax');
 $router->map('GET|POST',    '/get/typeaheadmf/[*:cond]/', 'getTypeAHeadMF', 'get-typea-head-mf', null, 'ajax');
 
 $router->map('GET|POST',    '/get/prints/[*:id]', 'getPrintsCrtl', 'get-prints');
@@ -137,7 +140,7 @@ if($match && is_callable($match['target'])) {
 /* Debuging */
 if (isset($_GET['d'])) {
     echo '<div class="debug"><pre>';
-    print_r($router);
+    // print_r($router);
     print_r($match);
     print_r($res);
     echo '</pre></div>';

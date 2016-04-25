@@ -12,12 +12,21 @@ function build_list($array, $res) {
                 $resHomeClass = ($res->$index->home == true)?'btn-success disabled':'btn-info btn-HomeSet';
                 $resHomeVal = ($res->$index->home == true)?'true':'false';
                 if ($i !== 1) $list .= '</li>';
-                $catStatic = 'hidden';
-                $catCategory = 'hidden';
+                $catStatic = 'style="display: none;"';
+                $catCategory = 'style="display: none;"';
+                $catCategoryType = 'style="display: none;"';
+                $catFileName = 'style="display: none;"';
+
+                $res->$index->params = json_decode($res->$index->params);
+
                 if ($res->$index->extension_id == 1) {
                     $catStatic = '';
                 } elseif ($res->$index->extension_id == 3 || $res->$index->extension_id == 4) {
                     $catCategory = '';
+                } elseif ($res->$index->extension_id == 5) {
+                    $catCategoryType = '';
+                } elseif ($res->$index->extension_id == 6) {
+                    $catFileName = '';
                 }
                 $list .= '<li data-id="'.$index.'" class="dd-item dd3-item"><div class="dd-handle dd3-handle"><span class="fa fa-bars"></span></div>
                 <div class="dd3-content">
@@ -36,9 +45,10 @@ function build_list($array, $res) {
                         <div class="col-md-1 text-center">
                             <small>Главная</small><br>
                             <a href="#" class="btn '.$resHomeClass.' btn-xs"
-                                data-pk="'.$res->$index->id.'"
+                                data-id="'.$res->$index->id.'"
+                                data-mt_id="'.$res->$index->menutype_id.'"
+                                data-lang="'.$res->$index->lang.'"
                                 data-value="'.$res->$index->home.'"
-                                data-params=\'{"name":"home","table":"menu"}\'
                                 data-title="Главная">'.$resHomeVal.'</a>
                         </div>
                         <div class="col-md-5">
@@ -107,7 +117,7 @@ function build_list($array, $res) {
                                                 data-title="Тип расширения">'.$res->$index->extension_title.'</a>
                                         </dd>
 
-                                        <div id="extFun'.$res->$index->id.'" class="'.$catCategory.'">
+                                        <div id="extCat'.$res->$index->id.'" '.$catCategory.'>
                                             <dt><small>Категория</small></dt>
                                             <dd>
                                                 <a href="#" class="xedit"
@@ -119,11 +129,23 @@ function build_list($array, $res) {
                                                     data-title="Категория">'.$res->$index->category_id_title.'</a>
                                             </dd>
                                         </div>
+                                        <div id="extCatType'.$res->$index->id.'" '.$catCategoryType.'>
+                                            <dt><small>Группа категорий</small></dt>
+                                            <dd>
+                                                <a href="#" class="xedit"
+                                                    data-pk="'.$res->$index->id.'"
+                                                    data-type="select"
+                                                    data-value="'.$res->$index->category_id.'"
+                                                    data-source="/sadmin/get/group/simple/categorytype/title/"
+                                                    data-params=\'{"name":"category_id","table":"menu"}\'
+                                                    data-title="Категория">'.$res->$index->category_id_title.'</a>
+                                            </dd>
+                                        </div>
                                     </dl>
                                 </div>
                                 <div class="col-md-7">
                                     <dl>
-                                        <div id="extLink'.$res->$index->id.'" class="'.$catStatic.'">
+                                        <div id="extLink'.$res->$index->id.'" '.$catStatic.'>
                                             <dt><small>Ссылка на материал</small></dt>
                                             <dd>
                                                 <a href="#" class="thMenuLinkId"
@@ -131,6 +153,16 @@ function build_list($array, $res) {
                                                     data-type="typeaheadjs"
                                                     data-params=\'{"name":"link_id","table":"menu"}\'
                                                     data-title="Ссылка на материал">'.$res->$index->link_title.'</a>
+                                            </dd>
+                                        </div>
+                                        <div id="fileName'.$res->$index->id.'" '.$catFileName.'>
+                                            <dt><small>Имя файла</small></dt>
+                                            <dd>
+                                                <a href="#" class="xeditParams"
+                                                    data-pk="'.$res->$index->id.'"
+                                                    data-value="'.$res->$index->params->fileName.'"
+                                                    data-params=\'{"name":"fileName","table":"menu"}\'
+                                                    data-title="Имя файла">'.$res->$index->params->fileName.'</a>
                                             </dd>
                                         </div>
                                     </dl>
@@ -345,27 +377,28 @@ $(function() {
             var q = $(this).data('pk');
             newValue = parseInt(newValue);
             if (newValue === 1) {
-                $('#extFun'+q).hide()
-                    .find('a').editable('setValue', '').editable('submit');
-                $('#extLink'+q).show()
-                    .find('a').editable('setValue', '').editable('submit');
-            } else if (newValue === 3) {
-                $('#extLink'+q).hide()
-                    .find('a').editable('setValue', '').editable('submit');
-                $('#extFun'+q).show()
-                    .find('a').editable('setValue', 17).editable('submit');
+                $('#extCat'+q).hide().find('a').editable('setValue', '').editable('submit');
+                $('#fileName'+q).hide().find('a').editable('setValue', '').editable('submit');
+                $('#extCatType'+q).hide().find('a').editable('setValue', '').editable('submit');
+                $('#extLink'+q).show().find('a').editable('setValue', '').editable('submit');
             } else if (newValue === 4) {
-                $('#extLink'+q).hide()
-                    .find('a').editable('setValue', '').editable('submit');
-                $('#extFun'+q).show()
-                    .find('a').editable('setValue', '').editable('submit');
+                $('#extLink'+q).hide().find('a').editable('setValue', '').editable('submit');
+                $('#fileName'+q).hide().find('a').editable('setValue', '').editable('submit');
+                $('#extCatType'+q).hide().find('a').editable('setValue', '').editable('submit');
+                $('#extCat'+q).show().find('a').editable('setValue', '').editable('submit');
+            } else if (newValue === 5) {
+                $('#extCat'+q).hide().find('a').editable('setValue', '').editable('submit');
+                $('#extLink'+q).hide().find('a').editable('setValue', '').editable('submit');
+                $('#fileName'+q).hide().find('a').editable('setValue', '').editable('submit');
+                $('#extCatType'+q).show().find('a').editable('setValue', '').editable('submit');
+            } else if (newValue === 6) {
+                $('#extCat'+q).hide().find('a').editable('setValue', '').editable('submit');
+                $('#extLink'+q).hide().find('a').editable('setValue', '').editable('submit');
+                $('#extCatType'+q).hide().find('a').editable('setValue', '').editable('submit');
+                $('#fileName'+q).show().find('a').editable('setValue', '').editable('submit');
             }
-            /*
-            sCMSAletr('', 'success');
-            */
         }
     })
-
     $("body").on('click', '.getTranslitAlias', function(event) {
         var $this = $(this);
         event.preventDefault();
@@ -505,11 +538,32 @@ $(function() {
     });
     /* MenuRefresh> */
 
+
+    /**
+    *   <MenuSetHomepage
+    */
+    $('.btn-HomeSet').on('click', function(event) {
+        event.preventDefault();
+        var $this = $(this),
+            lang = $this.data('lang'),
+            mt_id = $this.data('mt_id'),
+            id = $this.data('id');
+        $.ajax({
+            type: 'POST',
+            url: '/sadmin/save/menu/homepage/',
+            data: {id:id,mt_id:mt_id,lang:lang}
+        })
+        .done(function(result) {
+            sCMSAletr(result, 'success');
+            $('#appReload').appGo('reload');
+        });
+    });
+    /* MenuRefresh> */
+
     $('.thMenuLinkId').editable({
         url: '/sadmin/saveth/',
-        typeahead: {name: 'link_id', remote: {url: '/sadmin/get/typeahead/content/h1/h1/?q=%QUERY'}},
+        typeahead: {name: 'link_id', remote: {url: '/sadmin/get/typeaheadlang/content/h1/h1/<?php echo $res->menuArray->lang;?>/?q=%QUERY'}},
         success: function(response, newValue) {
-            // addElemA(this, response, newValue);
             sCMSAletr(response, 'success', newValue);
         }
     });

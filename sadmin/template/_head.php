@@ -41,6 +41,7 @@
 
     <link href="<?php echo A_URLh;?>css/jquery.jgrowl.min.css" rel="stylesheet">
     <link href="<?php echo A_URLh;?>css/editor.css" rel="stylesheet">
+    <link href="<?php echo S_A_JS;?>fileupload/jquery.fileupload.css" rel="stylesheet">
     <link href="<?php echo A_URLh;?>css/app.css" rel="stylesheet">
     <link href="<?php echo A_URLh;?>css/style.css" rel="stylesheet">
 
@@ -91,6 +92,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.3/jquery.flot.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flot.tooltip/0.8.5/jquery.flot.tooltip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-slimScroll/1.3.7/jquery.slimscroll.min.js"></script>
+    <script src="<?php echo S_A_JS;?>fileupload/jquery.ui.widget.js"></script>
+    <script src="<?php echo S_A_JS;?>fileupload/jquery.iframe-transport.js"></script>
+    <script src="<?php echo S_A_JS;?>fileupload/jquery.fileupload.js"></script>
     <script src="<?php echo S_A_JS;?>vendor/jquery.nestable.js"></script>
 
     <script src="<?php echo S_A_JS;?>vendor/typeahead.js"></script>

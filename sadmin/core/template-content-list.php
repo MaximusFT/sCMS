@@ -79,13 +79,13 @@ $columns = array(
                     data-title="Заголовок">'.$d.'</a>';
         }
     ),
-    array('db' => 'images', 'dt' => 'images',
+    array('db' => 'image', 'dt' => 'image',
         'formatter' => function( $d, $row, $table ) {
             return '
                 <a href="#" class="xedit"
                     data-pk="'.$row['id'].'"
                     data-value="'.$d.'"
-                    data-params=\'{"name":"images","table":"'.$table.'"}\'
+                    data-params=\'{"name":"image","table":"'.$table.'"}\'
                     data-title="Заголовок">'.$d.'</a>';
         }
     ),
@@ -188,30 +188,7 @@ $columns = array(
                     data-mode="inline"
                     data-params=\'{"name":"introText","table":"'.$table.'"}\'
                     data-title="Телефон Основной">'.$row['introText'].'</a></dd>
-
-                <dt for="metaTitle">metaTitle</dt>
-                <dd><a href="#" class="xedit"
-                    data-pk="'.$row['id'].'"
-                    data-type="text"
-                    data-placement="right"
-                    data-params=\'{"name":"metaTitle","table":"'.$table.'"}\'
-                    data-title="Телефон Основной">'.$row['metaTitle'].'</a></dd>
-
-                <dt for="metaKeywords">metaKeywords</dt>
-                <dd><a href="#" class="xedit"
-                    data-pk="'.$row['id'].'"
-                    data-type="text"
-                    data-placement="right"
-                    data-params=\'{"name":"metaKeywords","table":"'.$table.'"}\'
-                    data-title="Телефон Основной">'.$row['metaKeywords'].'</a></dd>
-
-                <dt for="metaDescription">metaDescription</dt>
-                <dd><a href="#" class="xedit"
-                    data-pk="'.$row['id'].'"
-                    data-type="text"
-                    data-placement="right"
-                    data-params=\'{"name":"metaDescription","table":"'.$table.'"}\'
-                    data-title="Телефон Основной">'.$row['metaDescription'].'</a></dd>
+            </dl>
         </div>
         <div class="col-sm-2">
             <h4>Date</h4>
@@ -252,9 +229,35 @@ $columns = array(
                     data-params=\'{"name":"publish_down","table":"'.$table.'"}\'
                     data-title="Дата рождения">'.$row['publish_down'].'</a></dd>
             </dl>
+            <h4>Meta tags</h4>
+            <dl>
+                <dt for="metaTitle">metaTitle</dt>
+                <dd><a href="#" class="xedit"
+                    data-pk="'.$row['id'].'"
+                    data-type="text"
+                    data-placement="right"
+                    data-params=\'{"name":"metaTitle","table":"'.$table.'"}\'
+                    data-title="Телефон Основной">'.$row['metaTitle'].'</a></dd>
+
+                <dt for="metaKeywords">metaKeywords</dt>
+                <dd><a href="#" class="xedit"
+                    data-pk="'.$row['id'].'"
+                    data-type="text"
+                    data-placement="right"
+                    data-params=\'{"name":"metaKeywords","table":"'.$table.'"}\'
+                    data-title="Телефон Основной">'.$row['metaKeywords'].'</a></dd>
+
+                <dt for="metaDescription">metaDescription</dt>
+                <dd><a href="#" class="xedit"
+                    data-pk="'.$row['id'].'"
+                    data-type="text"
+                    data-placement="right"
+                    data-params=\'{"name":"metaDescription","table":"'.$table.'"}\'
+                    data-title="Телефон Основной">'.$row['metaDescription'].'</a></dd>
+            </dl>
         </div>
         <div class="col-sm-3">
-            <h4>MetaOg title</h4>
+            <h4>MetaOg tags</h4>
             <dl>
                 <dt for="metaOgTitle">metaOgTitle</dt>
                 <dd><a href="#" class="xedit"

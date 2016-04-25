@@ -50,6 +50,7 @@ function MenuOneCrtl($type) {
         "menu.title",
         "menu.alias",
         "menu.path",
+        "menu.lang",
         "menu.method",
         "menu.published",
         "menu.img",
@@ -159,7 +160,7 @@ function ContentOneCrtl($id) {
     global $match;
     global $db;
 
-    $qContent = $db->select("content", "*", [
+    $qContent = $db->get("content", "*", [
         'id' => $id
         ]);
 
@@ -189,6 +190,8 @@ function ModuleCrtl() {
         "module.params",
         "extension.title(extension_title)"
     ]);
+        // echo $db->last_query();
+        // var_dump($qContent);
 
     return [
         'appGoPost'       => true,

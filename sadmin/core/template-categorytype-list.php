@@ -36,6 +36,19 @@ $columns = array(
                     data-title="Language">'.$d.'</a>';
         }
     ),
+    array('db' => 'published', 'dt' => 'published',
+        'formatter' => function( $d, $row, $table ) {
+            return '
+                <a href="#" class="xeditcheck"
+                    data-pk="'.$row['id'].'"
+                    data-type="checklist"
+                    data-value="'.$d.'"
+                    data-source=\'{"1":"true"}\'
+                    data-emptytext="\'false\'"
+                    data-params=\'{"name":"published","table":"'.$table.'"}\'
+                    data-title="Public"></a>    ';
+        }
+    ),
     array('db' => 'title', 'dt' => 'title',
         'formatter' => function( $d, $row, $table ) {
             return '

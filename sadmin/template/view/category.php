@@ -14,6 +14,7 @@
                     <thead>
                         <tr>
                             <th>Edit items</th>
+                            <th>Published</th>
                             <th>Language</th>
                             <th>Name</th>
                             <th>Title</th>
@@ -98,6 +99,7 @@ $(function() {
         },
         "columns": [
             { "data": "link" },
+            { "data": "published" },
             { "data": "lang" },
             { "data": "name" },
             { "data": "title" },

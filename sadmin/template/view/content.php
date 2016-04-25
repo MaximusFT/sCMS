@@ -58,6 +58,8 @@ function addElemA (argument) {
 }
 
 $(function() {
+    'use strict';
+
     var detailRows = [];
     var myTab = $('#myTable');
     var dt = myTab.DataTable({
@@ -125,7 +127,6 @@ $(function() {
         }).done(function(result) {
             sCMSAletr(result, 'success');
             dt.draw();
-            // $('#appReload').appGo('reload');
         });
     });
     $("body").on('click', '.getTranslitAlias', function(event) {
@@ -140,9 +141,5 @@ $(function() {
             sCMSAletr(result, 'success');
         });
     });
-
-    $('.aExPlace').editable({
-        typeahead: {remote: {url: '/sadmin/get/typeahead/place/name/name_alt/?q=%QUERY'}},
-        success: function(response, newValue) {addElemA(this)}});
 });
 </script>

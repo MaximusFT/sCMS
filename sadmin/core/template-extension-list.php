@@ -7,6 +7,7 @@ $columns = array(
             return 'row_'.$d;
         }
     ),
+/*
     array('db' => 'title', 'dt' => 'title',
         'formatter' => function( $d, $row, $table ) {
             return '
@@ -49,7 +50,7 @@ $columns = array(
                     data-title="Заголовок">'.$d.'</a>';
         }
     ),
-    array('db' => 'enabled', 'dt' => 'enabled',
+    array('db' => 'published', 'dt' => 'published',
         'formatter' => function( $d, $row, $table ) {
             return '
                 <a href="#" class="xeditcheck"
@@ -58,8 +59,39 @@ $columns = array(
                     data-value="'.$d.'"
                     data-source=\'{"1":"true"}\'
                     data-emptytext="\'false\'"
-                    data-params=\'{"name":"enabled","table":"'.$table.'"}\'
+                    data-params=\'{"name":"published","table":"'.$table.'"}\'
                     data-title="Public"></a>    ';
+        }
+    ),
+*/
+    array('db' => 'title', 'dt' => 'title',
+        'formatter' => function( $d, $row, $table ) {
+            return '
+                <span data-title="Заголовок">'.$d.'</span>';
+        }
+    ),
+    array('db' => 'type', 'dt' => 'type',
+        'formatter' => function( $d, $row, $table ) {
+            return '
+                <span data-title="Type">'.$d.'</span>';
+        }
+    ),
+    array('db' => 'fileName', 'dt' => 'fileName',
+        'formatter' => function( $d, $row, $table ) {
+            return '
+                <span data-title="Заголовок">'.$d.'</span>';
+        }
+    ),
+    array('db' => 'function', 'dt' => 'function',
+        'formatter' => function( $d, $row, $table ) {
+            return '
+                <span data-title="Заголовок">'.$d.'</span>';
+        }
+    ),
+    array('db' => 'published', 'dt' => 'published',
+        'formatter' => function( $d, $row, $table ) {
+            return '
+                <span data-title="Public">'.$d.'</span>';
         }
     ),
     array('db' => 'params', 'dt' => 'params',

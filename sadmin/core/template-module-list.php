@@ -17,16 +17,11 @@ $columns = array(
                     data-title="Заголовок">'.$d.'</a>';
         }
     ),
+    array('db' => 'extension_title', 'dt' => 'extension_title'),
     array('db' => 'extension_id', 'dt' => 'extension_id',
         'formatter' => function( $d, $row, $table ) {
             return '
-                <a href="#" class="xedit"
-                    data-pk="'.$row['id'].'"
-                    data-type="select"
-                    data-value="'.$d.'"
-                    data-source="/sadmin/get/group/extension/title/type/module/"
-                    data-params=\'{"name":"extension_id","table":"'.$table.'"}\'
-                    data-title="Language"></a>';
+                <span>'.$row['extension_title'].'</span>';
         }
     ),
     array('db' => 'published', 'dt' => 'published',
@@ -39,7 +34,7 @@ $columns = array(
                     data-source=\'{"1":"true"}\'
                     data-emptytext="\'false\'"
                     data-params=\'{"name":"published","table":"'.$table.'"}\'
-                    data-title="Public"></a>    ';
+                    data-title="Опубликовать"></a>    ';
         }
     ),
     array('db' => 'lang', 'dt' => 'lang',
@@ -54,24 +49,36 @@ $columns = array(
                     data-title="Language">'.$d.'</a>';
         }
     ),
+    array('db' => 'view', 'dt' => 'view',
+        'formatter' => function( $d, $row, $table ) {
+            if ($row['extension_id'] == 16) {
+                return '
+                    <a href="#" class="xedit"
+                        data-pk="'.$row['id'].'"
+                        data-type="select"
+                        data-value="'.$d.'"
+                        data-source="/sadmin/get/group/static/module-view/"
+                        data-params=\'{"name":"view","table":"'.$table.'"}\'
+                        data-title="Шаблон">'.$d.'</a>';
+            } else {
+                return '
+                    <a href="#" class="xedit"
+                        data-pk="'.$row['id'].'"
+                        data-value="'.$d.'"
+                        data-params=\'{"name":"view","table":"'.$table.'"}\'
+                        data-title="Шаблон">'.$d.'</a>';
+            }
+        }
+    ),
     array('db' => 'params', 'dt' => 'params',
         'formatter' => function( $d, $row, $table ) {
             return '
                 <a href="#" class="btn btn-info btn-xs"
                     data-id="'.$row['id'].'"
                     data-toggle="modal"
+                    data-extension_id="'.$row['extension_id'].'"
                     data-target="#xModalModuleParams"
-                    ><i class="fa fa-cog"></i></a>';
-        }
-    ),
-    array('db' => 'view', 'dt' => 'view',
-        'formatter' => function( $d, $row, $table ) {
-            return '
-                <a href="#" class="xedit"
-                    data-pk="'.$row['id'].'"
-                    data-value="'.$d.'"
-                    data-params=\'{"name":"view","table":"'.$table.'"}\'
-                    data-title="Заголовок">'.$d.'</a>';
+                    data-title="Параметры"><i class="fa fa-cog"></i></a>';
         }
     ),
     array('db' => 'visible', 'dt' => 'visible',
@@ -81,7 +88,7 @@ $columns = array(
                     data-id="'.$row['id'].'"
                     data-toggle="modal"
                     data-target="#xModalModuleVisible"
-                    ><i class="fa fa-eye"></i></a>';
+                    data-title="Видимость"><i class="fa fa-eye"></i></a>';
         }
     ),
     array('db' => 'description', 'dt' => 'description',
@@ -91,7 +98,7 @@ $columns = array(
                     data-pk="'.$row['id'].'"
                     data-value="'.$d.'"
                     data-params=\'{"name":"description","table":"'.$table.'"}\'
-                    data-title="Заголовок">'.$d.'</a>';
+                    data-title="Описание">'.$d.'</a>';
         }
     ),
     array('db' => 'ordering', 'dt' => 'ordering',
@@ -101,7 +108,7 @@ $columns = array(
                     data-pk="'.$row['id'].'"
                     data-value="'.$d.'"
                     data-params=\'{"name":"ordering","table":"'.$table.'"}\'
-                    data-title="Заголовок">'.$d.'</a>';
+                    data-title="Сортировка">'.$d.'</a>';
         }
     ),
     array('db' => 'position', 'dt' => 'position',
@@ -113,7 +120,7 @@ $columns = array(
                     data-value="'.$d.'"
                     data-source="/sadmin/get/group/static/position/"
                     data-params=\'{"name":"position","table":"'.$table.'"}\'
-                    data-title="Language">'.$d.'</a>';
+                    data-title="Позиция">'.$d.'</a>';
         }
     ),
 );

@@ -22,6 +22,38 @@ function saveToDB() {
     echo json_encode($response);
     exit();
 }
+function saveToDBParams() {
+    global $match;
+    global $db;
+
+    if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
+    header('Content-Type: application/json;');
+
+    $menuRes = $db->get($_POST['table'], "*", [
+            "AND" => [
+                "id" => $_POST['pk']
+            ]
+        ]
+    );
+
+    $menuRes['params'] = json_decode($menuRes['params'], true);
+    $menuRes['params'][$_POST['name']] = $_POST['value'];
+    $db->update($_POST['table'], [
+            "params" => json_encode($menuRes['params'])
+        ], [
+            "AND" => [
+                "id" => $_POST['pk']
+            ]
+        ]
+    );
+
+    $response = [
+        'msg' => 'Новое значение поля '.$_POST['name'].' = '.$_POST['value']
+    ];
+
+    echo json_encode($response);
+    exit();
+}
 function saveToDBTypeHead() {
     global $match;
     global $db;
@@ -72,8 +104,13 @@ function getFromDBSimpleSelect($table, $table_name) {
     if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
     header('Content-Type: application/json;');
 
-    $res = $db->select($table, [
-        "id", $table_name
+    $res = $db->select($table,
+        [
+            "id", $table_name
+        ],[
+            'AND' => [
+                'published' => 1,
+        ]
     ]);
 
     foreach($res as $r) {
@@ -101,9 +138,20 @@ function getFromDBSelect($table, $table_name, $table_cond = null, $table_param =
         ], [
             'AND' => [
                 $table_cond => $table_param,
-                'enabled' => 1,
+                'published' => 1,
             ]
         ]);
+    } elseif ($table_param == 'module') {
+        $res = $db->select($table, [
+            "id", $table_name
+        ], [
+            'AND' => [
+                $table_cond => $table_param,
+                'published' => 1,
+            ]
+        ]);
+        // echo $db->last_query();
+        // var_dump($db->error());
     } else {
         $res = $db->select($table, [
             "id", $table_name
@@ -138,6 +186,12 @@ function getFromDBSelectStatic($title = '') {
             $array = [
                 ['value' => 0, 'text' => 'Жен'],
                 ['value' => 1, 'text' => 'Муж'],
+            ];
+            break;
+        case 'module-view':
+            $array = [
+                ['value' => 'default', 'text' => 'default'],
+                ['value' => 'category', 'text' => 'category'],
             ];
             break;
         case 'menu-method':
@@ -198,7 +252,7 @@ function getTypeAHead($table, $table_col, $table_cond) {
     global $match;
     global $db;
 
-	if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
+    if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
     header('Content-Type: application/json;');
 
     $res = $db->select($table, [
@@ -206,6 +260,27 @@ function getTypeAHead($table, $table_col, $table_cond) {
             $table_col.'(value)'
         ], [
             $table_cond.'[~]' => $_GET['q'],
+            "LIMIT" => 10
+        ]);
+
+    print json_encode($res);
+    exit();
+}
+function getTypeAHeadLang($table, $table_col, $table_cond, $lang) {
+    global $match;
+    global $db;
+
+	if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
+    header('Content-Type: application/json;');
+
+    $res = $db->select($table, [
+            "id(tokens)",
+            $table_col.'(value)'
+        ], [
+            'AND' => [
+                $table_cond.'[~]' => $_GET['q'],
+                "lang" => $lang,
+            ],
             "LIMIT" => 10
         ]);
 
@@ -438,6 +513,52 @@ function saveMenuRefresh() {
     echo json_encode($response);
     exit();
 }
+function saveMenuHomepage() {
+    global $match;
+    global $db;
+
+    if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
+    header('Content-Type: application/json; charset=utf-8');
+
+    $menuArray = $db->select("menu", "*", [
+        'AND' => [
+            "home" => 1,
+            "lang" => $_POST['lang']
+        ]
+    ]);
+
+    foreach ($menuArray as $key => $value) {
+        $temp[] = $value['id'];
+    }
+    $newArray = json_encode($temp, true);
+
+    $db->update("menu", [
+        'home' => 0
+    ], [
+        'id' => $temp
+    ]);
+    $db->update("menu", [
+        'home' => 1
+    ], [
+        'id' => $_POST['id']
+    ]);
+
+    $response = array(
+        'msg' => 'New HomePage'
+    );
+
+    echo json_encode($response);
+    exit();
+}
+
+
+
+
+
+
+
+
+
 
 
 function saveCategoryAdd() {
@@ -450,6 +571,8 @@ function saveCategoryAdd() {
     $last_id = $db->insert("category", array(
         "title" => $_POST['title'],
         "lang" => $_POST['lang'],
+        "fileName" => 'category_one',
+        "params" => '{"aside":"right","noPath":true}',
         "categorytype_id" => $_POST['categorytype_id'],
         "published" => 0
     ));
@@ -625,6 +748,16 @@ function saveMenuTypeDel() {
     echo json_encode($response);
     exit();
 }
+
+
+
+
+
+
+
+
+
+
 function saveCategoryTypeAdd() {
     global $match;
     global $db;
@@ -686,9 +819,9 @@ function saveContentAdd() {
     header('Content-Type: application/json; charset=utf-8');
 
     $last_id = $db->insert("content", array(
-        "alias" => 'newrecord',
+        "alias" => 'NewRecord',
         "published" => 0,
-        "extension_id" => 20,
+        "category_id" => 2,
         "h1" => 'NewRecord',
         "lang" => 'ru',
     ));
@@ -720,7 +853,7 @@ function saveExtensionAdd() {
 
     $last_id = $db->insert("extension", array(
         "title" => 'new',
-        "enabled" => 0
+        "published" => 0
     ));
 
     $response = array(
@@ -1016,12 +1149,20 @@ function getModuleParams() {
         "extension.type(extension_type)",
         "extension.fileName(extension_fileName)",
         "extension.function(extension_function)",
-        "extension.enabled(extension_enabled)",
+        "extension.published(extension_published)",
         "extension.params(extension_params)",
     ], [
             "module.id" => $_POST['id']
         ]
     );
+
+    $categoryRes = $db->get("category", '*', [
+        "published" => 1
+    ]);
+
+    $categoryTypeRes = $db->get("categorytype", '*', [
+        "published" => 1
+    ]);
 
     $articleRes = $db->select("content", '*', [
         "AND" => [
@@ -1032,6 +1173,16 @@ function getModuleParams() {
     ]);
 
     $modRes['params'] = json_decode($modRes['params'], true);
+    $tempCategoryTypeRes = $db->get("categorytype", '*', [
+        "id" => $modRes['params']['categorytype']
+    ]);
+    $modRes['params']['_categorytype_title'] = $tempCategoryTypeRes['title'];
+
+    $tempMenuTypeRes = $db->get("menutype", '*', [
+        "id" => $modRes['params']['menutype']
+    ]);
+    $modRes['params']['_menutype_title'] = $tempMenuTypeRes['title'];
+
     $modRes['visible'] = json_decode($modRes['visible'], true);
     $modRes['extension_params'] = json_decode($modRes['extension_params'], true);
 
@@ -1078,8 +1229,10 @@ function saveModuleAdd() {
     header('Content-Type: application/json; charset=utf-8');
 
     $last_id = $db->insert("module", array(
-        "title" => 'new',
-        "enabled" => 0
+        "title" => $_POST['title'],
+        "extension_id" => $_POST['extension_id'],
+        "lang" => $_POST['lang'],
+        "published" => 0
     ));
 
     $response = array(
