@@ -9,5 +9,6 @@ $ln = [
 	'TPL_NOACK' => 'Do not have an account yet?',
 	'TPL_FORGPAS' => 'Forgot your password?',
 	'TPL_RESTOR' => 'Recover',
-	'TPL_RESTOR1' => 'Recover a password'
+	'TPL_RESTOR1' => 'Recover a password',
+	'FOOTER_EMAIL' => 'Подпишись на нашу e-mail рассылку и получай самые свежие новости нашего проекта',
 ];

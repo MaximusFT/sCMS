@@ -10,4 +10,5 @@ $ln = [
 	'TPL_FORGPAS' => "Forgot your password?",
 	'TPL_RESTOR' => "Recover",
 	'TPL_RESTOR1' => "Recover a password",
+	'FOOTER_EMAIL' => 'Subscribe to our e-mail newsletter and get the latest news of our project',
 ];
