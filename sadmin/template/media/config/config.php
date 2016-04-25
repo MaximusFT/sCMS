@@ -37,7 +37,7 @@ $thumbs_base_path = 'thumbs/'; // relative path from filemanager folder to thumb
 // in tinymce a new parameter added: filemanager_access_key:"myPrivateKey"
 // example tinymce config:
 // tiny init ...
-// 
+//
 // external_filemanager_path:"../filemanager/",
 // filemanager_title:"Filemanager" ,
 // filemanager_access_key:"myPrivateKey" ,
@@ -104,7 +104,7 @@ $image_resizing_width 		= 0;
 $image_resizing_height 		= 0;
 $image_resizing_mode 		= 'auto'; // same as $image_max_mode
 $image_resizing_override 	= FALSE; 
-// If set to TRUE then you can specify bigger images than $image_max_width & height otherwise if image_resizing is 
+// If set to TRUE then you can specify bigger images than $image_max_width & height otherwise if image_resizing is
 // bigger than $image_max_width or height then it will be converted to those values  
 
 //******************
