@@ -389,11 +389,13 @@ function adminModuleVisibleBuild($array, $res, $visType, $moduleRes) {
 }
 
 function arrayRecSearch($array, $searchfor) {
-    static $result = array();
-
     foreach($array as $k => $v) {
-        if ($v == $searchfor) $result[] = $v;
-        if (is_array($array[$k])) arrayRecSearch($v, $searchfor);
+        if ($v == $searchfor) {
+            $result .= '1';
+        }
+        if (is_array($array[$k])) {
+            $result .= arrayRecSearch($v, $searchfor);
+        }
     }
     return $result;
 }
@@ -417,10 +419,9 @@ function frontMenuBuild($params, $res, $active) {
                     $findA = arrayRecSearch($index, $active);
                     $findAClass = ($findA)?' active':'';
                     $html .= '
-                    <li class="btn-group'.$alias.$findAClass.'">
-                        <a href="'.$url.'" class="btn">'.$title.'</a>
-                        <a href="#" class="dropdown-toggle btn" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></a>
-                    <ul class="dropdown-menu">';
+                    <li class="dropdown'.$alias.' hhhh '.$findAClass.'">
+                        <a href="'.$url.'">'.$title.' <b class="caret"></b></a>
+                        <ul class="dropdown-menu">';
                     $html .= frontMenuBuild($index, $res, $active);
                     $html .= '</ul></li>';
                 } else {

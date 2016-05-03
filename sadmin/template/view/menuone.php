@@ -26,7 +26,8 @@ function build_list($array, $res) {
                 } elseif ($res->$index->extension_id == 5) {
                     $catCategoryType = '';
                 } elseif ($res->$index->extension_id == 6) {
-                    $catFileName = '';
+                    $catStatic = '';
+                    // $catFileName = '';
                 }
                 $list .= '<li data-id="'.$index.'" class="dd-item dd3-item"><div class="dd-handle dd3-handle"><span class="fa fa-bars"></span></div>
                 <div class="dd3-content">
@@ -151,6 +152,7 @@ function build_list($array, $res) {
                                                 <a href="#" class="thMenuLinkId"
                                                     data-pk="'.$res->$index->id.'"
                                                     data-type="typeaheadjs"
+                                                    data-typeparams=\'{"extension_id":'.$res->$index->extension_id.',"category_id":'.$res->$index->category_id.',"_id":'.$res->$index->id.'}\'
                                                     data-params=\'{"name":"link_id","table":"menu"}\'
                                                     data-title="Ссылка на материал">'.$res->$index->link_title.'</a>
                                             </dd>
@@ -378,24 +380,49 @@ $(function() {
             newValue = parseInt(newValue);
             if (newValue === 1) {
                 $('#extCat'+q).hide().find('a').editable('setValue', '').editable('submit');
-                $('#fileName'+q).hide().find('a').editable('setValue', '').editable('submit');
+                // $('#fileName'+q).hide().find('a').editable('setValue', '').editable('submit');
                 $('#extCatType'+q).hide().find('a').editable('setValue', '').editable('submit');
                 $('#extLink'+q).show().find('a').editable('setValue', '').editable('submit');
+                var qwe = $('#extLink'+q).find('a').data('typeparams');
+                qwe.extension_id = newValue;
+                $('#extLink'+q).find('a').data('typeparams', qwe);
+                $('#extLink'+q).find('a').editable('destroy').editable({
+                    url: '/sadmin/saveth/',
+                    typeahead: {name:'link_id',remote:{url: '/sadmin/get/typeaheadlink/content/h1/h1/?q=%QUERY'}},
+                    success: function(response, newValue) {
+                        sCMSAletr(response, 'success', newValue);
+                    }
+                });
             } else if (newValue === 4) {
                 $('#extLink'+q).hide().find('a').editable('setValue', '').editable('submit');
-                $('#fileName'+q).hide().find('a').editable('setValue', '').editable('submit');
+                // $('#fileName'+q).hide().find('a').editable('setValue', '').editable('submit');
                 $('#extCatType'+q).hide().find('a').editable('setValue', '').editable('submit');
                 $('#extCat'+q).show().find('a').editable('setValue', '').editable('submit');
             } else if (newValue === 5) {
                 $('#extCat'+q).hide().find('a').editable('setValue', '').editable('submit');
                 $('#extLink'+q).hide().find('a').editable('setValue', '').editable('submit');
-                $('#fileName'+q).hide().find('a').editable('setValue', '').editable('submit');
+                // $('#fileName'+q).hide().find('a').editable('setValue', '').editable('submit');
                 $('#extCatType'+q).show().find('a').editable('setValue', '').editable('submit');
+            } else if (newValue === 19) {
+                $('#extCat'+q).hide().find('a').editable('setValue', '').editable('submit');
+                $('#extCatType'+q).hide().find('a').editable('setValue', '').editable('submit');
+                $('#extLink'+q).hide().find('a').editable('setValue', '').editable('submit');
+                // $('#fileName'+q).show().find('a').editable('setValue', '').editable('submit');
             } else if (newValue === 6) {
                 $('#extCat'+q).hide().find('a').editable('setValue', '').editable('submit');
-                $('#extLink'+q).hide().find('a').editable('setValue', '').editable('submit');
                 $('#extCatType'+q).hide().find('a').editable('setValue', '').editable('submit');
-                $('#fileName'+q).show().find('a').editable('setValue', '').editable('submit');
+                $('#extLink'+q).show().find('a').editable('setValue', '').editable('submit');
+                var qwe = $('#extLink'+q).find('a').data('typeparams');
+                qwe.extension_id = newValue;
+                $('#extLink'+q).find('a').data('typeparams', qwe);
+                $('#extLink'+q).find('a').editable('destroy').editable({
+                    url: '/sadmin/saveth/',
+                    typeahead: {name:'link_id',remote:{url: '/sadmin/get/typeaheadlink/content/h1/h1/?q=%QUERY'}},
+                    success: function(response, newValue) {
+                        sCMSAletr(response, 'success', newValue);
+                    }
+                });
+                // $('#fileName'+q).show().find('a').editable('setValue', '').editable('submit');
             }
         }
     })
@@ -562,7 +589,7 @@ $(function() {
 
     $('.thMenuLinkId').editable({
         url: '/sadmin/saveth/',
-        typeahead: {name: 'link_id', remote: {url: '/sadmin/get/typeaheadlang/content/h1/h1/<?php echo $res->menuArray->lang;?>/?q=%QUERY'}},
+        typeahead: {name: 'link_id',remote: {url: '/sadmin/get/typeaheadlink/content/h1/h1/?q=%QUERY'}},
         success: function(response, newValue) {
             sCMSAletr(response, 'success', newValue);
         }

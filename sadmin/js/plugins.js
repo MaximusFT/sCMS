@@ -18,6 +18,71 @@ function sCMSAletr(response, theme, newValue){
     $.jGrowl(response + newValue, {themeState: theme, header: "Состояние запроса:", life: 1500});
 }
 
+
+
+/**
+Typeahead.js input, based on [Twitter Typeahead](http://twitter.github.io/typeahead.js).
+It is mainly replacement of typeahead in Bootstrap 3.
+**/
+(function ($) {
+    "use strict";
+    var Constructor = function (options) {
+        this.init('typeaheadjs', options, Constructor.defaults);
+    };
+
+    $.fn.editableutils.inherit(Constructor, $.fn.editabletypes.text);
+
+    $.extend(Constructor.prototype, {
+        render: function() {
+            this.options.typeahead.remote.dataParams = $.fn.editableutils.tryParseJson(this.options.scope.dataset.typeparams, true);
+            console.log(this.options.typeahead.remote.dataParams.extension_id);
+            this.renderClear();
+            this.setClass();
+            this.setAttr('placeholder');
+            this.$input.typeahead(this.options.typeahead);
+            // copy `input-sm | input-lg` classes to placeholder input
+            if($.fn.editableform.engine === 'bs3') {
+                if(this.$input.hasClass('input-sm')) {
+                    this.$input.siblings('input.tt-hint').addClass('input-sm');
+                }
+                if(this.$input.hasClass('input-lg')) {
+                    this.$input.siblings('input.tt-hint').addClass('input-lg');
+                }
+            }
+        }
+    });
+
+    Constructor.defaults = $.extend({}, $.fn.editabletypes.list.defaults, {
+        /**
+        @property tpl
+        @default <input type="text">
+        **/
+        tpl:'<input type="text">',
+        /**
+        Configuration of typeahead itself.
+        [Full list of options](https://github.com/twitter/typeahead.js#dataset).
+
+        @property typeahead
+        @type object
+        @default null
+        **/
+        typeahead: null,
+        /**
+        Whether to show `clear` button
+
+        @property clear
+        @type boolean
+        @default true
+        **/
+        clear: true
+    });
+    $.fn.editabletypes.typeaheadjs = Constructor;
+}(window.jQuery));
+
+
+
+
+
 ;(function($, window, document){
     'use strict';
 
@@ -80,404 +145,3 @@ function sCMSAletr(response, theme, newValue){
         return that;
     };
 })(window.jQuery, window, document);
-
-/**=========================================================
- * Module: Core Constants
- =========================================================*/
-
-(function() {
-  'use strict';
-
-  // Same MQ as defined in the css
-  window.MEDIA_QUERY = {
-      'desktopLG': 1200,
-      'desktop':   992,
-      'tablet':    768,
-      'mobile':    480
-    };
-
-})();
-
-/**=========================================================
- * Init bootstrap
- =========================================================*/
-(function(window, document, $, undefined){
-  'use strict';
-
-  $(function(){
-
-    // POPOVER
-    // ----------------------------------- 
-
-    $('[data-toggle="popover"]').popover();
-
-    // TOOLTIP
-    // ----------------------------------- 
-
-    $('[data-toggle="tooltip"]').tooltip({
-      container: 'body'
-    });
-
-    // DROPDOWN INPUTS
-    // ----------------------------------- 
-    $('.dropdown input').on('click focus', function(event){
-      event.stopPropagation();
-    });
-
-  });
-
-})(window, document, window.jQuery);
-
-/**=========================================================
- * Module: BrowserDetectionService.js
- * Browser detection service
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    window.browser = new Browser();
-
-    // add a classname to target different platforms form css
-    var root = document.querySelector('html');
-    root.className += ' ' + browser.platform;
-
-    function Browser() {
-      /*jshint validthis:true*/
-      var matched, browser = this;
-
-      var uaMatch = function( ua ) {
-        ua = ua.toLowerCase();
-
-        var match = /(opr)[\/]([\w.]+)/.exec( ua ) ||
-          /(chrome)[ \/]([\w.]+)/.exec( ua ) ||
-          /(version)[ \/]([\w.]+).*(safari)[ \/]([\w.]+)/.exec( ua ) ||
-          /(webkit)[ \/]([\w.]+)/.exec( ua ) ||
-          /(opera)(?:.*version|)[ \/]([\w.]+)/.exec( ua ) ||
-          /(msie) ([\w.]+)/.exec( ua ) ||
-          ua.indexOf('trident') >= 0 && /(rv)(?::| )([\w.]+)/.exec( ua ) ||
-          ua.indexOf('compatible') < 0 && /(mozilla)(?:.*? rv:([\w.]+)|)/.exec( ua ) ||
-          [];
-
-        var platformMatch = /(ipad)/.exec( ua ) ||
-          /(iphone)/.exec( ua ) ||
-          /(android)/.exec( ua ) ||
-          /(windows phone)/.exec( ua ) ||
-          /(win)/.exec( ua ) ||
-          /(mac)/.exec( ua ) ||
-          /(linux)/.exec( ua ) ||
-          /(cros)/i.exec( ua ) ||
-          [];
-
-        return {
-          browser: match[ 3 ] || match[ 1 ] || '',
-          version: match[ 2 ] || '0',
-          platform: platformMatch[ 0 ] || ''
-        };
-      };
-
-      matched = uaMatch( window.navigator.userAgent );
-
-      if ( matched.browser ) {
-        browser[ matched.browser ] = true;
-        browser.version = matched.version;
-        browser.versionNumber = parseInt(matched.version);
-      }
-
-      if ( matched.platform ) {
-        browser[ matched.platform ] = true;
-      }
-
-      // These are all considered mobile platforms, meaning they run a mobile browser
-      if ( browser.android || browser.ipad || browser.iphone || browser[ 'windows phone' ] ) {
-        browser.mobile = true;
-      }
-
-      // These are all considered desktop platforms, meaning they run a desktop browser
-      if ( browser.cros || browser.mac || browser.linux || browser.win ) {
-        browser.desktop = true;
-      }
-
-      // Chrome, Opera 15+ and Safari are webkit based browsers
-      if ( browser.chrome || browser.opr || browser.safari ) {
-        browser.webkit = true;
-      }
-
-      // IE11 has a new token so we will assign it msie to avoid breaking changes
-      if ( browser.rv )
-      {
-        var ie = 'msie';
-
-        matched.browser = ie;
-        browser[ie] = true;
-      }
-
-      // Opera 15+ are identified as opr
-      if ( browser.opr )
-      {
-        var opera = 'opera';
-
-        matched.browser = opera;
-        browser[opera] = true;
-      }
-
-      // Stock Android browsers are marked as Safari on Android.
-      if ( browser.safari && browser.android )
-      {
-        var android = 'android';
-
-        matched.browser = android;
-        browser[android] = true;
-      }
-
-      // Assign the name and platform variable
-      browser.name = matched.browser;
-      browser.platform = matched.platform;
-
-
-      return browser;
-    }
-
-})();
-
-/**=========================================================
- * Module: checkAllTable
- * Allows to use a checkbox to check all the rest in the same
- * columns in a Bootstrap table
- =========================================================*/
-(function() {
-    'use strict';
-
-    $(function(){
-      checkAll( $('[data-checkall]') );
-    });
-
-    function checkAll(element) {
-
-      element.on('change', function() {
-
-        var th = $(this);
-        var index = indexInParent(this);
-        var checkbox = th.find('input'); // assumes checkbox
-        var table = th.parent().parent().parent(); // table > thead > tr > th
-
-        $.each( table.find('tbody').find('tr'),
-          function(key, tr) {
-            var tds = $(tr).find('td');
-            var chk = tds.eq(index).find('input'); // assumes checkbox
-            if(chk && chk.length)
-              chk[0].checked = checkbox[0].checked;
-          });
-
-      });
-
-
-      function indexInParent(node) {
-        var children = node.parentNode.childNodes;
-        var num = 0;
-        for (var i=0; i<children.length; i++) {
-           if (children[i]===node) return num;
-           if (children[i].nodeType===1) num++;
-        }
-        return -1;
-      }
-
-    }
-
-})();
-
-/**=========================================================
- * Module: Support
- * Checks for features supports on browser
- =========================================================*/
-/*jshint -W069*/
-(function() {
-    'use strict';
-
-    window.Support = new DeviceSupport();
-
-    function DeviceSupport() {
-      /*jshint validthis:true*/
-      var support = this;
-      var doc = document;
-
-      // Check for transition support
-      // ----------------------------------- 
-      support.transition = (function() {
-
-        function transitionEnd() {
-            var el = document.createElement('bootstrap');
-
-            var transEndEventNames = {
-              WebkitTransition : 'webkitTransitionEnd',
-              MozTransition    : 'transitionend',
-              OTransition      : 'oTransitionEnd otransitionend',
-              transition       : 'transitionend'
-            };
-
-            for (var name in transEndEventNames) {
-              if (el.style[name] !== undefined) {
-                return { end: transEndEventNames[name] };
-              }
-            }
-            return false;
-          }
-
-          return transitionEnd();
-      })();
-
-      // Check for animation support
-      // ----------------------------------- 
-      support.animation = (function() {
-
-          var animationEnd = (function() {
-
-              var element = doc.body || doc.documentElement,
-                  animEndEventNames = {
-                      WebkitAnimation: 'webkitAnimationEnd',
-                      MozAnimation: 'animationend',
-                      OAnimation: 'oAnimationEnd oanimationend',
-                      animation: 'animationend'
-                  }, name;
-
-              for (name in animEndEventNames) {
-                  if (element.style[name] !== undefined) return animEndEventNames[name];
-              }
-          }());
-
-          return animationEnd && { end: animationEnd };
-      })();
-
-      // Check touch device
-      // ----------------------------------- 
-      support.touch = (
-          ('ontouchstart' in window && navigator.userAgent.toLowerCase().match(/mobile|tablet/)) ||
-          (window.DocumentTouch && document instanceof window.DocumentTouch)  ||
-          (window.navigator['msPointerEnabled'] && window.navigator['msMaxTouchPoints'] > 0) || //IE 10
-          (window.navigator['pointerEnabled'] && window.navigator['maxTouchPoints'] > 0) || //IE >=11
-          false
-      );
-
-      return support;
-
-    }
-})();
-
-/**=========================================================
- * Module: Sidebar
- * Wraps the sidebar. Handles collapsed state and slide
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    $(function(){
-
-      uiSidebar( $('[data-ui-sidebar]') );
-
-      $('.sidebar-nav > .nav a[href^="' + location.pathname.split('/').slice(-1)[0] + '"]').parents('li').addClass('active');
-
-    });
-
-    function uiSidebar (element) {
-        var $body = $('body');
-
-        element.find('a').on('click', function (event) {
-          var ele = $(this),
-              par = ele.parent()[0];
-
-          // remove active class (ul > li > a)
-          var lis = ele.parent().parent().children();
-          $.each(lis, function(li){
-            if(li !== par)
-              $(li).removeClass('active');
-          });
-
-          var next = ele.next();
-          if ( next.length && next[0].tagName === 'UL' ) {
-            ele.parent().toggleClass('active');
-            event.preventDefault();
-          }
-        });
-
-        $('.sidebar-toggle, .sidebar-toggle-off').on('click', function(e){
-          e.preventDefault();
-          $body.toggleClass('aside-offscreen');
-        });
-
-        // on mobiles, sidebar starts off-screen
-        if ( onMobile() )
-          $body.addClass('aside-offscreen');
-
-        var lastWidth = window.innerWidth;
-        $(window).resize(function(){
-            // resize from desktop to mobile, hide sidebar
-            if ( window.innerWidth < lastWidth && onMobile() ) {
-              $body.addClass('aside-offscreen');
-            }
-            // resize from mobile to desktop, show again sidebar
-            if ( window.innerWidth > lastWidth && !onMobile() ) {
-              $body.removeClass('aside-offscreen');
-            }
-            lastWidth = window.innerWidth;
-        });
-
-        function onMobile() {
-          return window.innerWidth < MEDIA_QUERY.tablet;
-        }
-
-    }
-})();
-
-/**=========================================================
- * Module: Core Constants
- =========================================================*/
-
-(function() {
-  'use strict';
-
-  $(function(){
-
-    var panelInner = $('.mb-panel-inner');
-
-    $('.mb-mails-responsive table > tbody > tr').on('click', function(e){
-      e.preventDefault();
-      panelInner.addClass('mb-content-open');
-    });
-
-    $('.mb-panel-back').on('click', function(e){
-      e.preventDefault();
-      panelInner.removeClass('mb-content-open');
-    });
-
-  });
-
-})();
-
-
-
-/**=========================================================
- * Module: Scrollable
- * Make a content box scrollable
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    var defaultHeight = 285;
-    
-    $(function(){
-
-        $('[data-scrollable]').each(function(){
-          var elem = $(this);
-          var opts = elem.data();
-
-          opts.height = opts.height || defaultHeight;
-
-          elem.slimScroll(opts);
-
-        });
-
-    });
-
-})();

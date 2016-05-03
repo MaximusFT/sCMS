@@ -104,6 +104,7 @@ $router->map('GET|POST',    '/get/group/static/[*:title]/', 'getFromDBSelectStat
 $router->map('GET|POST',    '/get/group/simple/[*:table]/[*:table_name]/', 'getFromDBSimpleSelect', 'get-from-db-simple-select', null, 'ajax');
 $router->map('GET|POST',    '/get/group/[*:table]/[*:table_name]/[*:table_cond]/[*:table_param]/', 'getFromDBSelect', 'get-from-db-select', null, 'ajax');
 $router->map('GET|POST',    '/get/typeahead/[*:table]/[*:table_col]/[*:table_cond]/', 'getTypeAHead', 'get-typea-head', null, 'ajax');
+$router->map('GET|POST',    '/get/typeaheadlink/[*:table]/[*:table_col]/[*:table_cond]/', 'getTypeAHeadLink', 'get-typea-head-link', null, 'ajax');
 $router->map('GET|POST',    '/get/typeaheadlang/[*:table]/[*:table_col]/[*:table_cond]/[*:lang]/', 'getTypeAHeadLang', 'get-typea-head-lang', null, 'ajax');
 $router->map('GET|POST',    '/get/typeaheadmf/[*:cond]/', 'getTypeAHeadMF', 'get-typea-head-mf', null, 'ajax');
 

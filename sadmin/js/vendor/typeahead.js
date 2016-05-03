@@ -305,6 +305,7 @@
             this.ajaxSettings = {
                 type: "get",
                 cache: o.cache,
+                data: o.dataParams,
                 timeout: o.timeout,
                 dataType: o.dataType || "json",
                 beforeSend: o.beforeSend
@@ -391,6 +392,7 @@
             this.local = o.local;
             this.prefetch = o.prefetch;
             this.remote = o.remote;
+            this.dataParams = {};
             this.itemHash = {};
             this.adjacencyList = {};
             this.storage = o.name ? new PersistentStorage(o.name) : null;
@@ -826,8 +828,12 @@
                     utils.each(suggestions, function(i, suggestion) {
                         suggestion.dataset = dataset.name;
                         compiledHtml = dataset.template(suggestion.datum);
+                        /**
+                         * My CODE change
+                         */
                         elBuilder.innerHTML = wrapper.replace("%body", compiledHtml).replace("%tokid", suggestion.datum.tokens);
                         // elBuilder.innerHTML = wrapper.replace("%body", suggestion.datum.tokens).replace("%tokid", suggestion.datum.value);
+                        /**/
                         $el = $(elBuilder.firstChild).css(css.suggestion).data("suggestion", suggestion);
                         $el.children().each(function() {
                             $(this).css(css.suggestionChild);

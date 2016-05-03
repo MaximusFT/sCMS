@@ -270,7 +270,7 @@ function getTypeAHeadLang($table, $table_col, $table_cond, $lang) {
     global $match;
     global $db;
 
-	if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
+    if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
     header('Content-Type: application/json;');
 
     $res = $db->select($table, [
@@ -284,6 +284,32 @@ function getTypeAHeadLang($table, $table_col, $table_cond, $lang) {
             "LIMIT" => 10
         ]);
 
+    print json_encode($res);
+    exit();
+}
+function getTypeAHeadLink($table, $table_col, $table_cond) {
+    global $match;
+    global $db;
+
+	if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
+    header('Content-Type: application/json;');
+
+    if ($_GET['extension_id'] == 6) {
+        $_GET['category_id'] = 1;
+    } elseif ($_GET['extension_id'] == 1) {
+        $_GET['category_id'] = 2;
+    }
+
+    $res = $db->select($table, [
+            "id(tokens)",
+            $table_col.'(value)'
+        ], [
+            'AND' => [
+                $table_cond.'[~]' => $_GET['q'],
+                "category_id" => $_GET['category_id'],
+            ],
+            "LIMIT" => 10
+        ]);
     print json_encode($res);
     exit();
 }

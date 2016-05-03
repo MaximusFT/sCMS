@@ -19,7 +19,7 @@
                             <th>Favorite</th>
                             <th>Title (h1)</th>
                             <th>Alias</th>
-                            <th>subTitle (h1Small)</th>
+                            <th>FileName</th>
                             <th>Language</th>
                             <th>editFull</th>
                         </tr>
@@ -85,7 +85,7 @@ $(function() {
             { "data": "favorite" },
             { "data": "h1" },
             { "data": "alias" },
-            { "data": "h1Small" },
+            { "data": "fileName" },
             { "data": "lang" },
             { "data": "editFull" },
         ],

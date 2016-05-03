@@ -98,7 +98,6 @@
     <script src="<?php echo S_A_JS;?>vendor/jquery.nestable.js"></script>
 
     <script src="<?php echo S_A_JS;?>vendor/typeahead.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.1/inputs-ext/typeaheadjs/typeaheadjs.js"></script>
     <script src="<?php echo S_A_JS;?>vendor/bloodhound.js"></script>
     <script src="<?php echo S_A_JS;?>vendor/bootstrap-datetimepicker.min.js"></script>
     <script src="<?php echo S_A_JS;?>vendor/bootstrap-datetimepicker.ru.js"></script>

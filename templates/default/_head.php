@@ -8,6 +8,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title><?php echo $res->contentCurrent->metaTitle;?></title>
+    <link href="/images/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon">
+
     <meta name="description" content="<?php echo $res->contentCurrent->metaDescription;?>">
     <meta name="keywords" content="<?php echo $res->contentCurrent->metaKeywords;?>">
     <meta name="apple-mobile-web-app-capable" content="yes" />

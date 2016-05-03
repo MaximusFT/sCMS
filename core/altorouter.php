@@ -343,6 +343,19 @@ class AltoRouter {
 			    }
 
 				$recursCatRoute = $this->recursCategory($catTypeResParams, $catRes, $articleRes, $catResFirstId, $menuValue);
+			} elseif ($menuValue['extension_id'] == 6) {
+				$this->routes[] = [
+					$menuValue['method'],
+					$menuValue['path'],
+					$menuValue['extension_function'],
+					'',
+					$menuValue['id'],
+					'view',
+					$menuValue['id'],
+					$menuValue['category_id'],
+					$menuValue['link_id'],
+					$menuValue['title']
+				];
 			} else {
 				$this->routes[] = [
 					$menuValue['method'],
@@ -587,17 +600,6 @@ class AltoRouter {
 					$resMenu['category'] = $this->db->get("category", '*', ["id" => $catId]);
 
 					$resMenu['category']['children_id'] = $this->categoryChildren($tempParams, $Categoryes[$resMenu['categorytype']['id']]['items'], $catId);
-					/*
-					echo '<pre>';
-					print_r($resMenu['category']['children_id']);
-					echo '<br>';
-					print_r($tempParams);
-					echo '<br>';
-					print_r($resMenu['categorytype']);
-					echo '<br>';
-					echo '</pre>';
-					exit();
-					*/
 					$resMenu['category']['params'] = json_decode($resMenu['category']['params']);
 				} elseif ($resMenu['extension_id'] == 4) {
 					$resMenu['category'] = $this->db->get("category", '*', ["id" => $catId]);
@@ -628,7 +630,6 @@ class AltoRouter {
 
 				$routers = $this->getRoutesNamed();
 				$resBreadcrumbs = explode('/', trim($requestUrl, '/'));
-				// $this->breadcrumb['home']['curr2'] = $resBreadcrumbs;
 				$this->breadcrumb['home']['title'] = $menuItemHome['title'];
 				$this->breadcrumb['home']['path'] = S_URLs.$this->basePath;
 				$this->breadcrumb['home']['menuId'] = $menuItemHome['id'];

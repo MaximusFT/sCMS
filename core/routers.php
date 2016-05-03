@@ -67,7 +67,7 @@ function comOnlyFilePageCtrl() {
     global $res;
     global $db;
 
-    $res->extensionCurrent->fileName = P_VIEW.$res->menuItemCurrent->params->fileName;
+    $res->extensionCurrent->fileName = P_VIEW.$res->contentCurrent->fileName;
 
     return;
 }
