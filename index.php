@@ -25,13 +25,13 @@ if ($res->menuItemCurrent->method === 'POST') {
 require_once P_TEMP."_template.php";
 
 /* Debuging */
+if (isset($_GET['d'])) {
     echo '<div class="debug"><pre>';
     // print_r($router->getRoutesNamed());
     // print_r($router);
     echo '<hr>';
     print_r($res);
     echo '</pre></div>';
-if (isset($_GET['d'])) {
 }
 /*
 */

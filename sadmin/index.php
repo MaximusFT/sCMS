@@ -66,19 +66,6 @@ $router->map('POST|PUT', '/save/category/add/', 'saveCategoryAdd', 'save-categor
 $router->map('POST|PUT', '/save/category/del/', 'saveCategoryDel', 'save-category-del', null, 'ajax');
 $router->map('POST|PUT', '/save/category/refresh/', 'saveCategoryRefresh', 'save-category-refresh', null, 'ajax');
 
-
-$router->map(' GET', '/people/', 'PeoplesCrtl', 'peoples');
-$router->map(' GET', '/people/[i:id]/', 'PeopleCrtl', 'people');
-$router->map('POST|PUT', '/people/add/', 'PeopleAddCrtl', 'people-add');
-$router->map(' GET', '/people/edit/[i:id]/', 'PeopleEditCrtl', 'people-edit');
-
-$router->map(' GET', '/family/', 'FamiliesCrtl', 'families');
-
-$router->map( 'GET', '/print/', 'PrintsCrtl', 'prints');
-$router->map( 'GET', '/print/[i:id]/', 'PrintCrtl', 'print');
-
-$router->map('POST', '/printrem/[i:id]/', 'PrintRemoveCrtl', 'print-remove');
-
 /**
  * SAVE Route
  */
@@ -89,11 +76,6 @@ $router->map('POST|PUT','/savemf/', 'saveToDBMF', 'save-to-db-mf', null, 'ajax')
 $router->map('POST|PUT','/save/check/', 'saveToDBCheck', 'save-to-db-check', null, 'ajax');
 
 $router->map('POST|PUT','/save/list/[*:col]/', 'saveListItem', 'save-list-item', null, 'ajax');
-
-$router->map('POST|PUT','/save/copyar/', 'saveCopyAR', 'save-copy-ar', null, 'ajax');
-$router->map('POST|PUT','/save/people/add/', 'savePeopleAdd', 'save-people-add', null, 'ajax');
-$router->map('POST|PUT','/save/family/add/', 'saveFamilyAdd', 'save-family-add', null, 'ajax');
-$router->map('POST|PUT','/save/family/people/add/', 'saveFamilyPeopleAdd', 'save-family-people-add', null, 'ajax');
 
 /**
  * AJAX Route
