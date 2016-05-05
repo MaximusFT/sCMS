@@ -25,8 +25,14 @@ $tempMenuTypeRes = $db->get("menutype", '*', [
     "id" => $modRes['params']['menutype']
 ]);
 $modRes['params']['_menutype_name'] = $tempMenuTypeRes['name'];
+$modRes['params']['_oneLevel'] = $modRes['params']['oneLevel'] || false;
 
-echo frontMenuBuild(json_decode($res->menuItems->$modRes['params']['_menutype_name']->params, true), json_decode(json_encode($res->menuItems->$modRes['params']['_menutype_name']->items), true), $res->menuItemCurrent->id);
+echo frontMenuBuild(
+		json_decode($res->menuItems->$modRes['params']['_menutype_name']->params, true),
+		json_decode(json_encode($res->menuItems->$modRes['params']['_menutype_name']->items), true),
+		$res->menuItemCurrent->id,
+		$modRes['params']['_oneLevel']
+	);
 
 // include $modPathView;
 ?>

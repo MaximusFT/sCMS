@@ -28,6 +28,17 @@ if ($modRes['view'] == 'default') {
                 data-params=\'{"name":"menutype","table":"module"}\'
                 data-title="Список категорий">'.$modRes['params']['_menutype_title'].'</a>
         </dd>
+        <dt><small>Выводить только первый уровень</small></dt>
+        <dd>
+            <a href="#" class="xeditParams"
+                data-pk="'.$modRes['id'].'"
+                data-type="checklist"
+                data-value="'.$modRes['params']['oneLevel'].'"
+                data-source=\'{"1":"true"}\'
+                data-emptytext="\'false\'"
+                data-params=\'{"name":"oneLevel","table":"module"}\'
+                data-title="Первый уровень"></a>
+        </dd>
     </dl>
     ';
 } elseif ($modRes['view'] == 'category') {

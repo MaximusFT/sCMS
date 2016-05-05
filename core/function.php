@@ -400,7 +400,7 @@ function arrayRecSearch($array, $searchfor) {
     return $result;
 }
 
-function frontMenuBuild($params, $res, $active) {
+function frontMenuBuild($params, $res, $active, $oneLevel) {
     $html = '';
     foreach($params as $key => $value) {
         $i == 0;
@@ -416,14 +416,18 @@ function frontMenuBuild($params, $res, $active) {
                 $title = $res[$value['id']]['title'];
                 $alias = ($active == $res[$value['id']]['id'])?' active':'';
                 if(is_array($index)) {
-                    $findA = arrayRecSearch($index, $active);
-                    $findAClass = ($findA)?' active':'';
-                    $html .= '
-                    <li class="dropdown'.$alias.' hhhh '.$findAClass.'">
-                        <a href="'.$url.'">'.$title.' <b class="caret"></b></a>
-                        <ul class="dropdown-menu">';
-                    $html .= frontMenuBuild($index, $res, $active);
-                    $html .= '</ul></li>';
+                    if($oneLevel == false) {
+                        $findA = arrayRecSearch($index, $active);
+                        $findAClass = ($findA)?' active':'';
+                        $html .= '
+                        <li class="dropdown'.$alias.' hhhh '.$findAClass.'">
+                            <a href="'.$url.'">'.$title.' <b class="caret"></b></a>
+                            <ul class="dropdown-menu">';
+                        $html .= frontMenuBuild($index, $res, $active);
+                        $html .= '</ul></li>';
+                    } else {
+                        $html .= '<li class="'.$alias.'"><a href="'.$url.'">'.$title.'</a>';
+                    }
                 } else {
                     if ($i !== 1) $html .= '</li>';
                     if (is_array($value['children'])) {
