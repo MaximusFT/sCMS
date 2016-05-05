@@ -43,6 +43,7 @@ if (count($_GET) > 0) {
 ?>
 
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.smartmenus/1.0.0/addons/bootstrap/jquery.smartmenus.bootstrap.min.css" rel="stylesheet">
     <link href="<?php echo S_TEMP;?>css/main.css" rel="stylesheet">
 
     <?php /* Google Analytics

@@ -2,9 +2,9 @@
 require_once P_TEMP.'_head.php';
 ?>
 
-    <div class="hidden"><?php echo funPos('module', 'tech');?></div>
+    <div id="top" class="hidden"><?php echo funPos('module', 'tech');?></div>
     <nav class="navbar navbar-default" role="navigation">
-        <div class="container">
+        <div id="top-for" class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
@@ -14,7 +14,7 @@ require_once P_TEMP.'_head.php';
                 </button>
                 <a class="navbar-brand" href="<?php echo S_URLh;?>"><?php echo S_URLName;?></a>
             </div>
-            <div class="collapse navbar-collapse" id="navbar-collapse">
+            <div class="navbar-collapse collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav">
                     <?php echo funPos('module', 'nav-top');?>
                 </ul>
@@ -47,6 +47,7 @@ require_once P_TEMP.'_head.php';
             <div id="copyright" class="row">
                 <div class="col-md-4">
                     <?php echo funPos('module', 'footer-pos-left');?>
+                    <p class="text-center text-muted">Powered by <a href="https://github.com/MaximusFT/sCMS">sCMS</a></p>
                 </div>
                 <div class="col-md-4">
                     <?php echo funPos('module', 'footer-pos-center');?>
@@ -61,6 +62,10 @@ require_once P_TEMP.'_head.php';
     </footer>
 
     <?php echo funPos('module', 'after-footer');?>
+
+<div id="top-link">
+    <a href="#top" id="top-link-a"><span id="topicon"></span><span id="text">наверх</span></a>
+</div>
 
 <?php
 require_once P_TEMP.'_ender.php';

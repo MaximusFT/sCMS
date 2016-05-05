@@ -10,59 +10,28 @@ $(function(){
 		}
 	});
 
-	$('#subscribeForm').on('submit', function(event){
-		event.preventDefault();
-		var $this = $(this),
-	    	promises = $.map([$this.attr('action')], function(urls) {
-	        return $.ajax({
-				url : urls,
-				data : $this.serialize(),
-				type : "post"
-			}).then(function(result) {
-		        ga('send', 'FORM', 'button', 'click', 'Subscribe');
-				$('#subscribeForm').replaceWith('<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button><strong>Успех!</strong> Вы добавлены на подписку новостей</div>');
-	        });
-	    });
-	})
-	$('#questionForm').on('submit', function(event){
-		event.preventDefault();
-		var $this = $(this),
-	    	promises = $.map([$this.attr('action')], function(urls) {
-	        return $.ajax({
-				url : urls,
-				data : $this.serialize(),
-				type : "post"
-			}).then(function(result) {
-		        ga('send', 'FORM', 'button', 'click', 'Question');
-				$(result).replaceAll('#questionForm');
-	        });
-	    });
-	})
-	$('#commentForm').on('submit', function(event){
-		event.preventDefault();
-		var $this = $(this),
-	    	promises = $.map([$this.attr('action')], function(urls) {
-	        return $.ajax({
-				url : urls,
-				data : $this.serialize(),
-				type : "post"
-			}).then(function(result) {
-		        ga('send', 'FORM', 'button', 'click', 'Comment');
-		        // yaCounter24224152.reachGoal('FORM');
-				$(result).replaceAll('#commentForm');
-	        });
-	    });
-	})
-	$('#articleMore').on('click', 'a', function(event){
-		event.preventDefault();
-		var $this = $(this),
-	    	promises = $.map(['/articles/more/'], function(urls) {
-	        return $.ajax({
-				url : urls,
-				type : "post"
-			}).then(function(result) {
-				$(result).replaceAll('#articleMore');
-	        });
-	    });
-	})
+	var topLink = $('#top-link');
+	topLink.css({'padding-bottom': $(window).height()});
+	topLink.toplinkwidth();
+	$(window).resize(function(){
+		topLink.toplinkwidth();
+	});
+	$(window).scroll(function() {
+		if( topLink.toplinkwidth() ) {
+			if($(window).scrollTop() >= 1) {
+				topLink.fadeIn(300).children('a').html('<span id="topicon"></span>1111').parent().removeClass('bottom_button').addClass('top_button');
+			} else {
+				topLink.children('a').html('<span id="backicon"></span>2222').parent().removeClass('top_button').addClass('bottom_button');
+			}
+		}
+	});
+	topLink.on('click', function(e) {
+		if($(this).hasClass('bottom_button')){
+			$("body").scrollTo(topLink.data('pos') + 'px', 500 );
+		} else {
+			topLink.data('pos', ((window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop) );
+			$("body, html").animate({scrollTop: 0},500);
+		}
+		return false;
+	});
 });
