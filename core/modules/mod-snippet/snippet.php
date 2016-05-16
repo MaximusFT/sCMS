@@ -1,7 +1,7 @@
 <?php
 /**
  * @package     sCMS.Module
- * @subpackage  mod_readmore
+ * @subpackage  mod_snippet
  *
  * @copyright   Copyright (C) 2005-2016 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
@@ -14,19 +14,7 @@
 
 defined('ISsCMS') or die;
 
-$res->contentCurrent->params = json_decode($res->contentCurrent->params, true);
+$resCont['full_text'] = str_replace("{{".$modRes['position']."}}", htmlspecialchars_decode($modRes['params']['snipetContent']), $resCont['full_text']);
 
-$modReadMore = $db->select("content", [
-        "id",
-        "alias",
-        "h1",
-        "image",
-        "hits"
-    ], [
-        "id" => $res->contentCurrent->params['readmore']
-    ]);
-
-if ($modReadMore) {
-    include $modPathView;
-}
+// include $modPathView;
 ?>

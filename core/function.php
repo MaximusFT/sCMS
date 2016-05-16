@@ -5,7 +5,7 @@
  * @param  string $pos  [description]
  * @return [type]       [description]
  */
-function funPos($type='', $pos=''){
+function funPos($type = '', $pos = ''){
     global $db;
     global $rd;
     global $res;
@@ -34,8 +34,9 @@ function funPos($type='', $pos=''){
             "AND" => [
                 "lang" => USER_LANG,
                 "position" => $pos,
-                "module.published" => 1
-            ]
+                "module.published" => 1,
+            ],
+            "ORDER" => "ordering ASC",
         ]
     );
     // var_dump($db->log());
@@ -86,12 +87,77 @@ function funPos($type='', $pos=''){
 }
 
 /**
+ * Function for call snipet in Content
+ * @param  string $type [description]
+ * @param  string $pos  [description]
+ * @return [type]       [description]
+ */
+function snippetPos($resCont){
+    global $db;
+    global $rd;
+    global $res;
+
+    $qRes = $db->select("module", [
+        "[>]extension" => ["extension_id" => "id"]
+    ], [
+        "module.id",
+        "module.title",
+        "module.description",
+        "module.published",
+        "module.ordering",
+        "module.position",
+        "module.view",
+        "module.visible",
+        "module.params",
+        "extension.id(extension_id)",
+        "extension.title(extension_title)",
+        "extension.type(extension_type)",
+        "extension.fileName(extension_fileName)",
+        "extension.function(extension_function)",
+        "extension.published(extension_published)",
+        "extension.params(extension_params)",
+    ], [
+            "AND" => [
+                "lang" => USER_LANG,
+                "module.extension_id" => 20,
+                "module.published" => 1
+            ]
+        ]
+    );
+
+    foreach ($qRes as $key => $value) {
+        $modRes = $qRes[$key];
+        $modRes['visible'] = json_decode($modRes['visible'], true);
+        $modRes['params'] = json_decode(stripslashes($modRes['params']), true);
+
+        if ($modRes['view'] == 'default') {
+            $view = '';
+        } else {
+            $view = '-'.$modRes['view'];
+        }
+        $modPath = P_MODL.'mod-'.$modRes['extension_fileName'].'/'.$modRes['extension_fileName'].$view.'.php';
+        $modPathView = P_MODL.'mod-'.$modRes['extension_fileName'].'/view-'.$modRes['extension_fileName'].$view.'.php';
+
+        include $modPath;
+    }
+    return $resCont;
+}
+
+function textToDB($txt){
+    $txt = trim($txt);
+    $txt = htmlspecialchars($txt, ENT_QUOTES, 'KOI8-R');
+    $txt = preg_replace("~ +~", " ", $txt);
+    $txt = preg_replace("/(\r\n){3,}/", "\r\n\r\n", $txt);
+    return $txt;
+}
+
+/**
  * Function for Logging
  * @param  string $varName  [description]
  * @param  string $varValue [description]
  * @return [type]           [description]
  */
-function logos($varName="", $varValue=""){
+function logos($varName = "", $varValue = ""){
     $f = fopen($_SERVER["DOCUMENT_ROOT"]."/sadmin/logos.log", "a+");
     if ($varName == TRUE && $varValue == FALSE) {
         // Simple message

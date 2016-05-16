@@ -36,6 +36,8 @@ $router->map('POST|PUT', '/save/menu/refresh/', 'saveMenuRefresh', 'save-menu-re
 
 $router->map('POST|GET', '/content/', 'ContentCrtl', 'content');
 $router->map('POST|GET', '/content/[i:id]/', 'ContentOneCrtl', 'contentone');
+$router->map('POST|GET', '/get/content/params/', 'getContentParams', 'get-content-params', null, 'ajax');
+$router->map('POST|GET', '/save/content/params/', 'saveContentParams', 'save-content-params', null, 'ajax');
 $router->map('POST|PUT', '/save/content/add/', 'saveContentAdd', 'save-content-add', null, 'ajax');
 $router->map('POST|PUT', '/save/content/del/', 'saveContentDel', 'save-content-del', null, 'ajax');
 $router->map('POST', '/content/csv-to-mysql/', 'appCSVtoMysql', 'content-csv-to-mysql');
@@ -71,6 +73,7 @@ $router->map('POST|PUT', '/save/category/refresh/', 'saveCategoryRefresh', 'save
  */
 $router->map('POST|PUT','/save/', 'saveToDB', 'save-to-db', null, 'ajax');
 $router->map('POST|PUT','/save/params/', 'saveToDBParams', 'save-to-db-params', null, 'ajax');
+$router->map('POST|PUT','/save/params/snippet/', 'saveToDBParamsSnippet', 'save-to-db-params-snippet', null, 'ajax');
 $router->map('POST|PUT','/saveth/', 'saveToDBTypeHead', 'save-to-db-th', null, 'ajax');
 $router->map('POST|PUT','/savemf/', 'saveToDBMF', 'save-to-db-mf', null, 'ajax');
 $router->map('POST|PUT','/save/check/', 'saveToDBCheck', 'save-to-db-check', null, 'ajax');

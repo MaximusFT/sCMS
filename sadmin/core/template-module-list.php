@@ -113,14 +113,23 @@ $columns = array(
     ),
     array('db' => 'position', 'dt' => 'position',
         'formatter' => function( $d, $row, $table ) {
-            return '
-            <a href="#" class="xedit"
-                    data-pk="'.$row['id'].'"
-                    data-type="select"
-                    data-value="'.$d.'"
-                    data-source="/sadmin/get/group/static/position/"
-                    data-params=\'{"name":"position","table":"'.$table.'"}\'
-                    data-title="Позиция">'.$d.'</a>';
+            if ($row['extension_id'] == 20) {
+                return '
+                    <a href="#" class="xedit"
+                        data-pk="'.$row['id'].'"
+                        data-value="'.$d.'"
+                        data-params=\'{"name":"position","table":"'.$table.'"}\'
+                        data-title="Позиция снипета">'.$d.'</a>';
+            } else {
+                return '
+                <a href="#" class="xedit"
+                        data-pk="'.$row['id'].'"
+                        data-type="select"
+                        data-value="'.$d.'"
+                        data-source="/sadmin/get/group/static/position/"
+                        data-params=\'{"name":"position","table":"'.$table.'"}\'
+                        data-title="Позиция модуля">'.$d.'</a>';
+            }
         }
     ),
 );

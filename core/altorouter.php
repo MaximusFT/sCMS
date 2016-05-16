@@ -612,21 +612,7 @@ class AltoRouter {
 				$resContent = $this->db->get("content", '*', [
 					"id" => $artId
 				]);
-				/*
-				Надо переделать !!!!!!!!!!!!!!!!
-				*/
-				$resSnippet = $this->db->select("module", '*',
-					[
-						"AND" =>[
-							"extension_id" => 22,
-							"published" => 1
-						]
-					]
-				);
-
-				foreach ($resSnippet as $snippet) {
-					$resContent['full_text'] = str_replace("{{".$snippet['position']."}}", $snippet['params'], $resContent['full_text']);
-				}
+				$resContent = snippetPos($resContent);
 
 				$routers = $this->getRoutesNamed();
 				$resBreadcrumbs = explode('/', trim($requestUrl, '/'));

@@ -49,11 +49,15 @@ function comCategoryOnePageCtrl() {
         "AND" => [
             "lang" => USER_LANG,
             "published" => 1,
+            "publish_up[<]" => date('Y-m-d H:i:s'),
+            "OR" => [
+                "publish_down" => '0000-00-00 00:00:00',
+                "publish_down[>]" => date('Y-m-d H:i:s'),
+            ],
             "category_id" => $tId,
         ],
         "ORDER" => "publish_up DESC"
     ]);
-
     $res->extensionCurrent->fileName = P_HTML.$res->extensionCurrent->fileName.'.php';
     $res->articleList = json_decode(json_encode($qListContent), FALSE);
     return;

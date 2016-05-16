@@ -69,16 +69,6 @@ $columns = array(
                     data-title="Заголовок">'.$d.'</a>';
         }
     ),
-    array('db' => 'readmore', 'dt' => 'readmore',
-        'formatter' => function( $d, $row, $table ) {
-            return '
-                <a href="#" class="xedit"
-                    data-pk="'.$row['id'].'"
-                    data-value="'.$d.'"
-                    data-params=\'{"name":"readmore","table":"'.$table.'"}\'
-                    data-title="Заголовок">'.$d.'</a>';
-        }
-    ),
     array('db' => 'image', 'dt' => 'image',
         'formatter' => function( $d, $row, $table ) {
             return '
@@ -328,6 +318,11 @@ $columns = array(
                 <a class="btn btn-xs btn-primary articleEdit" href="/sadmin/content/'.$d.'/">
                     <span class="fa fa-edit"></span>
                 </a>
+                <a href="#" class="btn btn-info btn-xs"
+                    data-id="'.$row['id'].'"
+                    data-toggle="modal"
+                    data-target="#xModalContentParams"
+                    data-title="Параметры"><i class="fa fa-list-ul"></i></a>
             ';
             return $res;
         }

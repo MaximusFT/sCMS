@@ -1,15 +1,7 @@
 'use strict';
 
 $(function(){
-	var tocPos = $('#toc').offset();
 	$('.toc').toc({'smoothScrolling': true});
-	$('#toc').affix({
-		offset: {
-			top: function(){return (tocPos.top)},
-			bottom: function(){return (this.bottom=$('footer').outerHeight(true))}
-		}
-	});
-
 	var topLink = $('#top-link');
 	topLink.css({'padding-bottom': $(window).height()});
 	topLink.toplinkwidth();

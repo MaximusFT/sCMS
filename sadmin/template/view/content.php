@@ -21,7 +21,7 @@
                             <th>Alias</th>
                             <th>FileName</th>
                             <th>Language</th>
-                            <th>editFull</th>
+                            <th>Settings</th>
                         </tr>
                     </thead>
                 </table>
@@ -45,6 +45,20 @@
             </div>
             <button class="btn btn-primary btn-sm" type="submit">Загрузить</button>
         </form>
+    </div>
+</div>
+
+<div class="modal fade" id="xModalContentParams" tabindex="-1" role="dialog" aria-labelledby="ContentParams" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Content Params</h4>
+                </div>
+                <div class="modal-body" id="ContentParams"></div>
+            </form>
+        </div>
     </div>
 </div>
 
@@ -140,6 +154,25 @@ $(function() {
             $('#' + $this.data('target')).editable('setValue', result).editable('submit');
             sCMSAletr(result, 'success');
         });
+    });
+
+    /**
+    *   <ContentParams
+    */
+    $('#xModalContentParams').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget),
+            itemId = button.data('id'),
+            modal = $(this);
+        $.ajax({
+            type: 'POST',
+            url: '/sadmin/get/content/params/',
+            data: {id: itemId}
+        })
+        .done(function(result) {
+            $('#ContentParams').html(result);
+        });
+    }).on('hidden.bs.modal', function (e) {
+        $('#ContentParams').empty();
     });
 });
 </script>

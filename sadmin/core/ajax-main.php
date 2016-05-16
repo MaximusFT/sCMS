@@ -54,6 +54,41 @@ function saveToDBParams() {
     echo json_encode($response);
     exit();
 }
+function saveToDBParamsSnippet() {
+    global $match;
+    global $db;
+
+    if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
+    header('Content-Type: application/json;');
+
+    $menuRes = $db->get($_POST['table'], "*", [
+            "AND" => [
+                "id" => $_POST['pk']
+            ]
+        ]
+    );
+
+    $_POST['value'] = textToDB($_POST['value']);
+
+    $menuRes['params'] = json_decode($menuRes['params'], true);
+    $menuRes['params'][$_POST['name']] = $_POST['value'];
+
+    $db->update($_POST['table'], [
+            "params" => json_encode($menuRes['params'])
+        ], [
+            "AND" => [
+                "id" => $_POST['pk']
+            ]
+        ]
+    );
+
+    $response = [
+        'msg' => 'Новое значение поля '.$_POST['name'].' = '.$_POST['value']
+    ];
+
+    echo json_encode($response);
+    exit();
+}
 function saveToDBTypeHead() {
     global $match;
     global $db;
@@ -836,7 +871,74 @@ function saveCategoryTypeDel() {
 
 
 
+function getContentParams() {
+    global $rd;
+    global $db;
 
+    if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
+    header('Content-Type: text/html; charset=utf-8');
+
+    $articleRes = $db->get("content", '*', ["id" => $_POST['id']]);
+    $articleRes['params'] = json_decode($articleRes['params'], true);
+    $articleResList = $db->select("content", '*', [
+        "AND" => [
+            "published" => 1,
+            "lang" => $articleRes['lang']
+        ],
+        "ORDER" => "publish_up DESC"
+    ]);
+    echo '<ul class="list-group">';
+    foreach ($articleResList as $articleVal) {
+        $retVal = (array_search($articleVal['id'], $articleRes['params']['readmore']) === false || $articleRes['params']['readmore'] === null)?'':' checked="checked"';
+        echo '<li class="list-group-item"><label><input class="selectTypeVis" type="checkbox" data-name="readmore" data-id="'.$articleRes['id'].'" name="article'.$articleVal['id'].'" value="'.$articleVal['id'].'" '.$retVal.'> '.$articleVal['h1'].' - '.$articleVal['id'].'</label></li>';
+    }
+    echo '</ul>
+    <script>
+        $(function() {
+            $(".selectTypeVis").on("click", function () {
+                var sfind = $(this),
+                    iID = parseInt(sfind.data("id")),
+                    iVal = parseInt(sfind.attr("value")),
+                    iName = sfind.data("name");
+                $.ajax({
+                    type: "POST",
+                    url: "/sadmin/save/content/params/",
+                    data: {id: iID, value: iVal, name: iName}
+                })
+                .done(function(result) {
+                    sCMSAletr(result, "success");
+                });
+            })
+            $("#visibleByLang a:first").tab("show");
+        });
+    </script>';
+    exit();
+}
+function saveContentParams() {
+    global $match;
+    global $db;
+
+    if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
+    // header('Content-Type: text/html; charset=utf-8');
+    header('Content-Type: application/json; charset=utf-8');
+
+    $conRes = $db->get("content", "*", ["id" => $_POST['id']]);
+
+    $conRes['params'] = json_decode($conRes['params'], true);
+
+    if ($_POST['name'] == 'readmore') {
+        $conRes['params'][$_POST['name']][$_POST['value']] = intval($_POST['value']);
+    }
+
+    $db->update("content", [
+            "params" => json_encode($conRes['params'])
+        ], [
+            "id" => $_POST['id']
+        ]
+    );
+
+    exit();
+}
 function saveContentAdd() {
     global $match;
     global $db;
