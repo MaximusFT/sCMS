@@ -1,6 +1,6 @@
-[submodule "sadmin/template/scms-mediaview"]
-	path = sadmin/template/scms-mediaview
-	url = ../scms-mediaview.git
 [submodule "sadmin/js/tinymce"]
 	path = sadmin/js/tinymce
 	url = ../scms-editor
+[submodule "sadmin/template/media"]
+	path = sadmin/template/media
+	url = ../scms-mediaview.git
