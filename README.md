@@ -1,6 +1,9 @@
 # sCMS
 Very simple CMS for light site requirements
-Version 0.5 (06.04.2016)
+Version 0.6.1 (01.06.2016)
+
+## Documentation
+[Wiki](http://wiki.scms.io/)
 
 ## Features
 
@@ -13,6 +16,8 @@ You need PHP >= 5.3.
 
 ## Contributors
 - [MaximusFT](https://github.com/MaximusFT)
+- [KateMas](https://github.com/KateMas)
+
 
 ## License
 
