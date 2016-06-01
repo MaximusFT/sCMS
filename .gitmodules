@@ -1,0 +1,3 @@
+[submodule "sadmin/template/scms-mediaview"]
+	path = sadmin/template/scms-mediaview
+	url = ../scms-mediaview.git
