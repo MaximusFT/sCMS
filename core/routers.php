@@ -128,7 +128,11 @@ function comSitemapXLMPageCtrl() {
 
     foreach(json_decode(json_encode($res->qListContent), true) as $r) {
         $siteMap .= '<url>'."\r\n";
-        $siteMap .= '<loc>'.S_URLs.$r["path"].'</loc>'."\r\n";
+        if ($res->menuItems->mainmenu->items->$r['id']->extension_id == 19) {
+            $siteMap .= '<loc>'.$r["path"].'</loc>'."\r\n";
+        } else {
+            $siteMap .= '<loc>'.S_URLs.$r["path"].'</loc>'."\r\n";
+        }
         $siteMap .= '<changefreq>weekly</changefreq>'."\r\n";
         $siteMap .= '<priority>0.50</priority>'."\r\n";
         $siteMap .= '</url>'."\r\n";
