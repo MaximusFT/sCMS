@@ -486,7 +486,7 @@ function frontMenuBuild($params, $res, $active, $oneLevel) {
                         $findA = arrayRecSearch($index, $active);
                         $findAClass = ($findA)?' active':'';
                         $html .= '
-                        <li class="dropdown'.$alias.' hhhh '.$findAClass.'">
+                        <li class="dropdown'.$alias.' '.$findAClass.'">
                             <a href="'.$url.'">'.$title.' <b class="caret"></b></a>
                             <ul class="dropdown-menu">';
                         $html .= frontMenuBuild($index, $res, $active);
@@ -510,7 +510,7 @@ function frontMenuBuild($params, $res, $active, $oneLevel) {
     return $html;
 }
 
-function frontMenuBuildCategory($params, $res, $active = null) {
+function frontMenuBuildCategory($params, $res, $active = null, $oneLevel) {
     $html = '';
     foreach($params as $key => $value) {
         $i == 0;
@@ -523,13 +523,17 @@ function frontMenuBuildCategory($params, $res, $active = null) {
                 $title = $res[$value['id']]['title'];
                 $alias = ($active == $res[$value['id']]['id'])?' active':'';
                 if(is_array($index)) {
-                    $html .= '
-                    <li role="presentation" class="list-group-item">
-                        <a class="" role="button" data-toggle="collapse" href="#coll'.$res[$value['id']]['alias'].$id.'" aria-expanded="false" aria-controls="coll'.$res[$value['id']]['alias'].$id.'"><span class="caret"></span></a>
-                        <a href="'.$url.'" class="'.$alias.'">'.$title.'</a>
-                    <ul id="coll'.$res[$value['id']]['alias'].$id.'" class="list-group collapse in" aria-labelledby="coll'.$res[$value['id']]['alias'].$id.'Heading" aria-expanded="true">';
-                    $html .= frontMenuBuildCategory($index, $res, $active);
-                    $html .= '</ul></li>';
+                    if($oneLevel == false) {
+                        $html .= '
+                        <li role="presentation" class="">
+                            <a class="" role="button" data-toggle="collapse" href="#coll'.$res[$value['id']]['alias'].$id.'" aria-expanded="false" aria-controls="coll'.$res[$value['id']]['alias'].$id.'"><span class="caret"></span></a>
+                            <a href="'.$url.'" class="'.$alias.'">'.$title.'</a>
+                        <ul id="coll'.$res[$value['id']]['alias'].$id.'" class="list-group collapse" aria-labelledby="coll'.$res[$value['id']]['alias'].$id.'Heading" aria-expanded="true">';
+                        $html .= frontMenuBuildCategory($index, $res, $active);
+                        $html .= '</ul></li>';
+                    } else {
+                        $html .= '<li><a class="'.$alias.'" href="'.$url.'">'.$title.'</a>';
+                    }
                 } else {
                     if ($i !== 1) $html .= '</li>';
                     if (is_array($value['children'])) {

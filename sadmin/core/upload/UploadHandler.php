@@ -161,8 +161,8 @@ class UploadHandler
                     // Uncomment the following to force the max
                     // dimensions and e.g. create square thumbnails:
                     //'crop' => true,
-                    'max_width' => 80,
-                    'max_height' => 80
+                    'max_width' => sCMS_imgThumbWidth,
+                    'max_height' => sCMS_imgThumbHeight
                 )
             ),
             'print_response' => true
@@ -456,7 +456,7 @@ class UploadHandler
     protected function upcount_name_callback($matches) {
         $index = isset($matches[1]) ? ((int)$matches[1]) + 1 : 1;
         $ext = isset($matches[2]) ? $matches[2] : '';
-        return ' ('.$index.')'.$ext;
+        return '('.$index.')'.$ext;
     }
 
     protected function upcount_name($name) {

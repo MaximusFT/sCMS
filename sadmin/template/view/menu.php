@@ -17,7 +17,6 @@
                             <th>Language</th>
                             <th>Name</th>
                             <th>Title</th>
-                            <th>Position</th>
                         </tr>
                     </thead>
                 </table>
@@ -57,13 +56,6 @@
                                             data-source="/sadmin/get/group/static/lang/"
                                             data-title="Пол"
                                             data-original-title="lang"></a></td></tr>
-                                   <tr><td>position</td>
-                                        <td><a href="#" class="myeditable"
-                                            data-name="position"
-                                            data-type="select"
-                                            data-source="/sadmin/get/group/static/position/"
-                                            data-title="position"
-                                            data-original-title="position"></a></td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -101,7 +93,6 @@ $(function() {
             { "data": "lang" },
             { "data": "name" },
             { "data": "title" },
-            { "data": "position" },
         ],
         "drawCallback": function(settings){
             xEdit();

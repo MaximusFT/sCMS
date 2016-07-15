@@ -128,6 +128,9 @@ if (isset($_GET['d'])) {
     echo '<div class="debug"><pre>';
     // print_r($router);
     print_r($match);
+    echo '<hr>';
+    // print_r(get_defined_constants(true));
+    echo '<hr>';
     print_r($res);
     echo '</pre></div>';
 }

@@ -576,6 +576,7 @@ class AltoRouter {
 					]);
 					$Categoryes[$value['id']]['id'] = $value['id'];
 					$Categoryes[$value['id']]['name'] = $value['name'];
+					$Categoryes[$value['id']]['published'] = $value['published'];
 					$Categoryes[$value['id']]['params'] = $value['params'];
 					foreach ($qTmp as $key => $val) {
 						$Categoryes[$value['id']]['items'][$val['id']] = $val;

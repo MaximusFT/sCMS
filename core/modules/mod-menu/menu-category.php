@@ -24,6 +24,7 @@ defined('ISsCMS') or die;
 $currCat = ($res->categoryCurrent->id) ? $res->categoryCurrent->id : null ;
 $CatType = json_decode($res->categoryItems->$modRes['params']['categorytype']->params, true);
 $CatItems = json_decode(json_encode($res->categoryItems->$modRes['params']['categorytype']->items), true);
+$CatOneLevel = $res->categoryItems->$modRes['params']['oneLevel'] || false;
 echo '
 <div class="panel panel-warning nav-category">
     <div class="panel-heading">
@@ -31,7 +32,7 @@ echo '
     </div>
     <ul class="list-group">
 ';
-echo frontMenuBuildCategory($CatType[0]['children'], $CatItems, $currCat);
+echo frontMenuBuildCategory($CatType[0]['children'], $CatItems, $currCat, $CatOneLevel);
 echo '
     </ul>
 </div>

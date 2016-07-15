@@ -37,7 +37,11 @@ function saveToDBParams() {
     );
 
     $menuRes['params'] = json_decode($menuRes['params'], true);
-    $menuRes['params'][$_POST['name']] = $_POST['value'];
+    if ($_POST['type'] == 'checklist') {
+        $menuRes['params'][$_POST['name']] = $_POST['value'][0];
+    } else {
+        $menuRes['params'][$_POST['name']] = $_POST['value'];
+    }
     $db->update($_POST['table'], [
             "params" => json_encode($menuRes['params'])
         ], [

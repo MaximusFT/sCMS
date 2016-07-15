@@ -36,7 +36,7 @@ if ($modRes['view'] == 'default') {
                 data-value="'.$modRes['params']['oneLevel'].'"
                 data-source=\'{"1":"true"}\'
                 data-emptytext="\'false\'"
-                data-params=\'{"name":"oneLevel","table":"module"}\'
+                data-params=\'{"name":"oneLevel","table":"module","type":"checklist"}\'
                 data-title="Первый уровень"></a>
         </dd>
     </dl>
@@ -53,6 +53,17 @@ if ($modRes['view'] == 'default') {
                 data-source="/sadmin/get/group/simple/categorytype/title/"
                 data-params=\'{"name":"categorytype","table":"module"}\'
                 data-title="Список категорий">'.$modRes['params']['_categorytype_title'].'</a>
+        </dd>
+        <dt><small>Выводить только первый уровень</small></dt>
+        <dd>
+            <a href="#" class="xeditParams"
+                data-pk="'.$modRes['id'].'"
+                data-type="checklist"
+                data-value="'.$modRes['params']['oneLevel'].'"
+                data-source=\'{"1":"true"}\'
+                data-emptytext="\'false\'"
+                data-params=\'{"name":"oneLevel","table":"module","type":"checklist"}\'
+                data-title="Первый уровень"></a>
         </dd>
     </dl>
     ';
