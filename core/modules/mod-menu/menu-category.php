@@ -24,19 +24,44 @@ defined('ISsCMS') or die;
 $currCat = ($res->categoryCurrent->id) ? $res->categoryCurrent->id : null ;
 $CatType = json_decode($res->categoryItems->$modRes['params']['categorytype']->params, true);
 $CatItems = json_decode(json_encode($res->categoryItems->$modRes['params']['categorytype']->items), true);
-$CatOneLevel = $res->categoryItems->$modRes['params']['oneLevel'] || false;
+if ($modRes['params']['onlyDeep'] == true) {
+	/*
+	echo '<pre>';
+	echo $currCat;
+	print_r($CatType);
+	echo '<hr>';
+	$qwe = arrayRecSearchArr($CatType[0]['children'], $currCat);
+	echo gettype($qwe);
+	echo '<hr>';
+	print_r($qwe);
+	echo '</pre>';
+	*/
 echo '
-<div class="panel panel-warning nav-category">
+<div class="panel">
     <div class="panel-heading">
-    	<a href="'.menuLinkBuilder('category', $CatType[0]['id']).'">'.$CatItems[$CatType[0]['id']]['title'].'</a>
+    	<h3 class="panel-title"><a href="'.menuLinkBuilder('category', $currCat).'">'.$CatItems[$currCat]['title'].'</a></h3>
     </div>
     <ul class="list-group">
 ';
-echo frontMenuBuildCategory($CatType[0]['children'], $CatItems, $currCat, $CatOneLevel);
+	echo frontMenuBuildCategory(arrayRecSearchArr($CatType, $currCat), $CatItems, $currCat, $modRes['params']);
 echo '
     </ul>
 </div>
 ';
+} else {
+echo '
+<div class="panel">
+    <div class="panel-heading">
+    	<h3 class="panel-title"><a href="'.menuLinkBuilder('category', $CatType[0]['id']).'">'.$CatItems[$CatType[0]['id']]['title'].'</a></h3>
+    </div>
+    <ul class="list-group">
+';
+	echo frontMenuBuildCategory($CatType[0]['children'], $CatItems, $currCat, $modRes['params']);
+echo '
+    </ul>
+</div>
+';
+}
 
 // include $modPathView;
 ?>

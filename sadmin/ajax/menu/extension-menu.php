@@ -65,6 +65,17 @@ if ($modRes['view'] == 'default') {
                 data-params=\'{"name":"oneLevel","table":"module","type":"checklist"}\'
                 data-title="Первый уровень"></a>
         </dd>
+        <dt><small>Выводить только внутренние пункты категории</small></dt>
+        <dd>
+            <a href="#" class="xeditParams"
+                data-pk="'.$modRes['id'].'"
+                data-type="checklist"
+                data-value="'.$modRes['params']['onlyDeep'].'"
+                data-source=\'{"1":"true"}\'
+                data-emptytext="\'false\'"
+                data-params=\'{"name":"onlyDeep","table":"module","type":"checklist"}\'
+                data-title="Внутренние категории"></a>
+        </dd>
     </dl>
     ';
 }

@@ -466,7 +466,7 @@ function arrayRecSearch($array, $searchfor) {
     return $result;
 }
 
-function frontMenuBuild($params, $res, $active, $oneLevel) {
+function frontMenuBuild($params, $res, $active, $addPar) {
     $html = '';
     foreach($params as $key => $value) {
         $i == 0;
@@ -482,7 +482,7 @@ function frontMenuBuild($params, $res, $active, $oneLevel) {
                 $title = $res[$value['id']]['title'];
                 $alias = ($active == $res[$value['id']]['id'])?' active':'';
                 if(is_array($index)) {
-                    if($oneLevel == false) {
+                    if($addPar['oneLevel'] === false) {
                         $findA = arrayRecSearch($index, $active);
                         $findAClass = ($findA)?' active':'';
                         $html .= '
@@ -510,29 +510,39 @@ function frontMenuBuild($params, $res, $active, $oneLevel) {
     return $html;
 }
 
-function frontMenuBuildCategory($params, $res, $active = null, $oneLevel) {
+function arrayRecSearchArr($array, $searchfor) {
+    static $res;
+    foreach($array as $k => $v) {
+        if ($v == $searchfor) {
+            if (is_array($array['children'])) $res = $array['children'];
+        }
+        if (is_array($array[$k])) arrayRecSearchArr($v, $searchfor);
+    }
+    return $res;
+}
+
+function frontMenuBuildCategory($params, $res, $active = null, $addPar) {
     $html = '';
     foreach($params as $key => $value) {
         $i == 0;
         foreach($value as $key => $index) {
             $i++;
-            if($key == 'id') $tempId = $index;
             if ($res[$value['id']]['id'] == $value['id']) {
                 $url = menuLinkBuilder('category', $res[$value['id']]['id']);
                 $id = $res[$value['id']]['id'];
                 $title = $res[$value['id']]['title'];
                 $alias = ($active == $res[$value['id']]['id'])?' active':'';
                 if(is_array($index)) {
-                    if($oneLevel == false) {
+                    if($addPar['oneLevel'] === false) {
                         $html .= '
                         <li role="presentation" class="">
                             <a class="" role="button" data-toggle="collapse" href="#coll'.$res[$value['id']]['alias'].$id.'" aria-expanded="false" aria-controls="coll'.$res[$value['id']]['alias'].$id.'"><span class="caret"></span></a>
                             <a href="'.$url.'" class="'.$alias.'">'.$title.'</a>
-                        <ul id="coll'.$res[$value['id']]['alias'].$id.'" class="list-group collapse" aria-labelledby="coll'.$res[$value['id']]['alias'].$id.'Heading" aria-expanded="true">';
+                            <ul id="coll'.$res[$value['id']]['alias'].$id.'" class="list-group collapse" aria-labelledby="coll'.$res[$value['id']]['alias'].$id.'Heading" aria-expanded="true">';
                         $html .= frontMenuBuildCategory($index, $res, $active);
                         $html .= '</ul></li>';
                     } else {
-                        $html .= '<li><a class="'.$alias.'" href="'.$url.'">'.$title.'</a>';
+                        $html .= '<li class="list-group-item"><a class="'.$alias.'" href="'.$url.'">'.$title.'</a>';
                     }
                 } else {
                     if ($i !== 1) $html .= '</li>';

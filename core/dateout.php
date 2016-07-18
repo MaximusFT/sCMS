@@ -74,7 +74,7 @@ class DateOut{
 		$this->hours = date($hf);
 		$this->minits = date($if);
 		$this->seconds = date($sf);
-		
+
 		$day = $this->addate[$this->ddate];
 		$mon = $this->amdate[$this->mdate];
 		$year = $this->ydate;
@@ -123,12 +123,12 @@ class DateOut{
 			return $rusdate;
 		}
 	}
-	
+
 	/**
 	 *
 	 * @param String $start - Y-m-d
 	 * @param String $end  - Y-m-d
-	 * @return String   date-date 
+	 * @return String   date-date
 	 */
 	function diapazon($start,$end){
 	    $st=trim($this->qdate($start),':, ');
@@ -137,9 +137,9 @@ class DateOut{
 	    list($b[0],$b[1],$b[2])=  explode(" ", $en);
 	    if($a[2]!=$b[2])
 	        return $a[0]." ".$a[1]." ".$a[2]."-".$b[0]." ".$b[1]." ".$b[2];
-	    if($a[1]!=$b[1])    
+	    if($a[1]!=$b[1])
 	        return $a[0]." ".$a[1]."-".$b[0]." ".$b[1]." ".$b[2];
-	    if($a[0]!=$b[0])    
+	    if($a[0]!=$b[0])
 	        return $a[0]."-".$b[0]." ".$b[1]." ".$b[2];
 	        return $a[0]." ".$b[1]." ".$b[2];
 	}

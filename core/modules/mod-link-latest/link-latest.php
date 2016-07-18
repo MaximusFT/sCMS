@@ -20,7 +20,11 @@ $modPopularArticle = $db->select("content", [
         "h1",
         "hits"
     ], [
-        "lang" => USER_LANG,
+        "AND" => [
+            "category_id[!]" => [1, 2],
+            "published" => 1,
+        	"lang" => USER_LANG,
+        ],
         "ORDER" => array('publish_up DESC'),
         "LIMIT" => 5
     ]);

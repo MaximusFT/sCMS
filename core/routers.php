@@ -45,6 +45,7 @@ function comCategoryOnePageCtrl() {
     global $db;
 
     $tId = ($res->extensionCurrent->id == 5)?$res->categoryCurrent->children_id:$res->categoryCurrent->id;
+    $tId[] = $res->categoryCurrent->id;
     $qListContent = $db->select("content", '*', [
         "AND" => [
             "lang" => USER_LANG,
