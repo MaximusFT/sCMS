@@ -31,13 +31,6 @@ function xEdit(){
 }
 
 $(function() {
-
-    $('#appGo').appGo();
-
-    $('#appReload').on('click', function(){
-        $(this).appGo('reload');
-    })
-
     $('#mainMenu').find('a[data-match-name='+$('#mainMenu').data('match-now')+']').parent().addClass('active');
 
     /*

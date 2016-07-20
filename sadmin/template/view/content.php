@@ -1,50 +1,50 @@
-<div class="app-view-header">Content list</div>
-<div class="row">
-    <div class="col-md-12">
-        <div class="panel panel-info">
-            <div class="panel-heading">
-                <div class="clearfix">
-                    <div id="nestable-menu" class="pull-left">
-                        <button id="addArticle" type="button" class="btn btn-success btn-xs"><i class="fa fa-plus"></i> Add Article</button>
+<div class="padding">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="nav-active-border b-warn top box">
+                        <div class="nav nav-md">
+                            <a href="/sadmin/content/mysql-to-csv/" class="nav-link">Мета в CSV</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="nav-active-border b-warn top box">
+                        <form role="form" class="form-inline" enctype="multipart/form-data" action="/sadmin/content/csv-to-mysql/" method="post">
+                            <div class="form-group">
+                                <input type="file" class="form-control no-b-a" name="csvfile">
+                            </div>
+                            <button class="nav-link" type="submit">Загрузить Мета в базу</button>
+                        </form>
                     </div>
                 </div>
             </div>
-            <div class="panel-body">
-                <table id="myTable" class="table table-condensed table-striped table-bordered" cellspacing="0" width="100%">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>published</th>
-                            <th>Category</th>
-                            <th>Favorite</th>
-                            <th>Title (h1)</th>
-                            <th>Alias</th>
-                            <th>FileName</th>
-                            <th>Language</th>
-                            <th>Settings</th>
-                        </tr>
-                    </thead>
-                </table>
+
+
+            <div class="box">
+                <div class="box-header"><h2 class="ng-binding">Список материалов</h2></div>
+                <div class="box-divider m-a-0"></div>
+                <div class="box-body">
+                    <table id="myTable" class="table table-condensed table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>published</th>
+                                <th>Category</th>
+                                <th>Favorite</th>
+                                <th>Title (h1)</th>
+                                <th>Alias</th>
+                                <th>FileName</th>
+                                <th>Language</th>
+                                <th>Settings</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
             </div>
+
         </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-4">
-    </div>
-    <div class="col-md-4">
-        <h4>Получить переменные сайта в CSV</h4>
-        <a href="/sadmin/content/mysql-to-csv/" class="btn btn-success btn-sm">mysql-to-csv</a>
-    </div>
-    <div class="col-md-4">
-        <h4>Загрузить переменные сайта базу</h4>
-        <form role="form" class="form-inline" enctype="multipart/form-data" action="/sadmin/content/csv-to-mysql/" method="post">
-            <div class="form-group">
-                <label for="csvfile">Выберите файл</label>
-                <input type="file" name="csvfile">
-            </div>
-            <button class="btn btn-primary btn-sm" type="submit">Загрузить</button>
-        </form>
     </div>
 </div>
 

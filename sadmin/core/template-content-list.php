@@ -159,7 +159,7 @@ $columns = array(
         'dt' => 'addInfoRowDT',
         'formatter' => function( $d, $row, $table, $tmpl ) {
             $res = '
-    <div class="row">
+    <div class="row p-r p-l">
         <div class="col-sm-7">
             <h4>Additional information</h4>
             <dl>

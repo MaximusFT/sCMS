@@ -15,6 +15,18 @@ function AdminCrtl() {
     ];
 }
 
+function DashboardCrtl() {
+    global $match;
+    global $db;
+
+    return [
+        'appGoPost'       => true,
+        'params'          => qToDB($match),
+        'pageContent'     => $pathTo.$match['name'].'.php'
+        // 'pageContent'     => $pathTo.'main.php'
+    ];
+}
+
 function MenuCrtl() {
     global $match;
     global $db;

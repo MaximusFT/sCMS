@@ -17,6 +17,7 @@ $router->setBasePath('/sadmin');
  * PAGES Route
  */
 $router->map( 'GET', '/', 'AdminCrtl', 'sadmin');
+$router->map('POST', '/', 'DashboardCrtl', 'main');
 $router->map( 'GET', '/comments/', 'CommentsCrtl', 'comments');
 $router->map( 'GET', '/subscribers/', 'SubscribersCrtl', 'subscribers');
 $router->map( 'GET', '/askings/', 'AskingsCrtl', 'askings');

@@ -1,28 +1,26 @@
-<div class="app-view-header">Extension list</div>
-<div class="row">
-    <div class="col-md-12">
-        <div class="panel panel-info">
-            <div class="panel-heading">
-                <div class="clearfix">
-                    <div id="nestable-menu" class="pull-left">
-                        <button id="addExtension" type="button" class="btn btn-success btn-xs"><i class="fa fa-plus"></i> Add Extension</button>
-                    </div>
+<div class="padding">
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="box">
+                <div class="box-header"><h2 class="ng-binding">Расширения</h2></div>
+                <div class="box-divider m-a-0"></div>
+                <div class="box-body">
+                    <table id="myTable" class="table table-condensed table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>title</th>
+                                <th>type</th>
+                                <th>fileName</th>
+                                <th>function</th>
+                                <th>published</th>
+                                <th>params</th>
+                            </tr>
+                        </thead>
+                    </table>
                 </div>
             </div>
-            <div class="panel-body">
-                <table id="myTable" class="table table-condensed table-striped table-bordered" cellspacing="0" width="100%">
-                    <thead>
-                        <tr>
-                            <th>title</th>
-                            <th>type</th>
-                            <th>fileName</th>
-                            <th>function</th>
-                            <th>published</th>
-                            <th>params</th>
-                        </tr>
-                    </thead>
-                </table>
-            </div>
+
         </div>
     </div>
 </div>
@@ -66,7 +64,6 @@ $(function() {
         }).done(function(result) {
             sCMSAletr(result, 'success');
             dt.draw();
-            // $('#appReload').appGo('reload');
         });
     });
 });
