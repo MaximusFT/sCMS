@@ -799,6 +799,16 @@ function saveMenuTypeDel() {
     if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
     header('Content-Type: application/json; charset=utf-8');
 
+    $count = $db->count("menu", [
+        "menutype_id" => intval($_POST['id'])
+    ]);
+
+    if ($count > 0) {
+        $db->delete("menu", [
+            "menutype_id" => intval($_POST['id'])
+        ]);
+    }
+
     $db->delete("menutype", [
         "id" => intval($_POST['id'])
     ]);
@@ -809,6 +819,32 @@ function saveMenuTypeDel() {
 
     // var_dump($db->log());
     // var_dump($db->error());
+
+    echo json_encode($response);
+    exit();
+}
+
+function saveMenuTypeDelCheck() {
+    global $match;
+    global $db;
+
+    if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
+    header('Content-Type: application/json; charset=utf-8');
+
+    $count = $db->count("menu", [
+        "menutype_id" => intval($_POST['id'])
+    ]);
+
+    if ($count > 0) {
+        $html = '<div class="alert alert-warning" role="alert"><strong>Внимание!</strong> Это Меню содержит вложенные пункты. Хотите ли вы удалить Меню со всеми вложенными пунктами?</div>';
+    } else {
+        $html = '<div class="alert alert-info" role="alert">Это Меню не содержит вложенные пункты.</div>';
+    }
+
+    $response = array(
+        'count' => $count,
+        'html' => $html
+    );
 
     echo json_encode($response);
     exit();
@@ -834,7 +870,7 @@ function saveCategoryTypeAdd() {
         "title" => $_POST['title'],
         "name" => $_POST['name'],
         "lang" => $_POST['lang'],
-        "position" => $_POST['position']
+        "params" => '[]'
     ));
 
     $response = array(
@@ -852,6 +888,16 @@ function saveCategoryTypeDel() {
     if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
     header('Content-Type: application/json; charset=utf-8');
 
+    $count = $db->count("category", [
+        "category_id" => intval($_POST['id'])
+    ]);
+
+    if ($count > 0) {
+        $db->delete("category", [
+            "category_id" => intval($_POST['id'])
+        ]);
+    }
+
     $db->delete("categorytype", [
         "id" => intval($_POST['id'])
     ]);
@@ -866,6 +912,35 @@ function saveCategoryTypeDel() {
     echo json_encode($response);
     exit();
 }
+
+function saveCategoryTypeDelCheck() {
+    global $match;
+    global $db;
+
+    if(strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') exit();
+    header('Content-Type: application/json; charset=utf-8');
+
+    $count = $db->count("category", [
+        "category_id" => intval($_POST['id'])
+    ]);
+
+    if ($count > 0) {
+        $html = '<div class="alert alert-warning" role="alert"><strong>Внимание!</strong> Эта Категория содержит вложенные пункты. Хотите ли вы удалить Категорию со всеми вложенными пунктами?</div>';
+    } else {
+        $html = '<div class="alert alert-info" role="alert">Эта Категория не содержит вложенные пункты.</div>';
+    }
+
+    $response = array(
+        'count' => $count,
+        'html' => $html
+    );
+
+    echo json_encode($response);
+    exit();
+}
+
+
+
 
 
 

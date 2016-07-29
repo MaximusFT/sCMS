@@ -72,29 +72,29 @@ function build_list($array, $res) {
 
 $categoryArray = json_decode($res->categoryArray->params, true);
 ?>
-<div class="app-view-header">Category: <?php echo $res->categoryArray->title;?> - <span class="label label-info"><?php echo $res->categoryArray->lang;?></span></div>
-<div class="row">
-    <div class="col-md-12 fw-boxed">
-        <div class="panel panel-info">
-            <div class="panel-heading">
-                <div class="clearfix">
-                    <div id="nestable-category" class="pull-left">
-                        <button type="button" data-action="expand-all" class="btn btn-default btn-xs">Expand All</button>
-                        <button type="button" data-action="collapse-all" class="btn btn-default btn-xs">Collapse All</button>
-                        <button type="button" data-toggle="modal" data-target="#modalCategoryAdd" class="btn btn-success btn-xs"><i class="fa fa-plus"></i> Add Category item</button>
-                    </div>
-                    <div class="pull-right">
-                        <button type="button" data-toggle="modal" data-target="#modalCategoryRefresh" data-id="<?php echo $res->categoryTypeId;?>" class="btn btn-warning btn-xs"><i class="fa fa-refresh"></i> Category Refresh</button>
-                    </div>
+<div class="padding">
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="nav-active-border b-warn top box">
+                <div class="nav nav-md">
+                    <a data-toggle="modal" data-target="#modalCategoryAdd" class="nav-link success"><i class="fa fa-plus"></i> Add Category item</a>
+                    <a data-toggle="modal" data-target="#modalCategoryRefresh" data-id="<?php echo $res->categoryTypeId;?>" class="nav-link"><i class="fa fa-refresh"></i> Category Refresh</a>
                 </div>
             </div>
-            <div class="panel-body">
-                <?
-                echo '<div id="nestable" data-id="'.$res->categoryTypeId.'" class="dd">';
-                echo build_list($categoryArray, $res->categoryItems);
-                echo '</div>';
-                ?>
+
+            <div class="box light">
+                <div class="box-header"><h2>Category: <?php echo $res->categoryArray->title;?> - <span class="label label-info"><?php echo $res->categoryArray->lang;?></span></h2></div>
+                <div class="box-divider m-a-0"></div>
+                <div class="box-body">
+                    <?
+                    echo '<div id="nestable" data-id="'.$res->categoryTypeId.'" class="dd">';
+                    echo build_list($categoryArray, $res->categoryItems);
+                    echo '</div>';
+                    ?>
+                </div>
             </div>
+
         </div>
     </div>
 </div>
@@ -307,7 +307,7 @@ $(function() {
             .editable('option', 'pk', null)
             .removeClass('editable-unsaved');
         $('.myeditable').editable();
-        $('#appReload').appGo('reload');
+        $(document).trigger("pjaxReload");
     })
     $('.myeditable').on('save.newuser', function(){
         var that = this;
@@ -359,7 +359,7 @@ $(function() {
             .data('delCategoryType', categoryTypeId)
             .attr('data-delCategoryType', categoryTypeId);
     }).on('hidden.bs.modal', function (e) {
-        $('#appReload').appGo('reload');
+        $(document).trigger("pjaxReload");
     })
     $('#delCategoryItem').on('click', function(event) {
         event.preventDefault();
@@ -391,7 +391,7 @@ $(function() {
             modal = $(this);
         modal.find('#refreshCategoryItem').data('refreshCategoryItem', itemId).attr('data-refreshCategoryItem', itemId);
     }).on('hidden.bs.modal', function (e) {
-        $('#appReload').appGo('reload');
+        $(document).trigger("pjaxReload");
     })
     $('#refreshCategoryItem').on('click', function(event) {
         event.preventDefault();

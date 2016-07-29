@@ -12,6 +12,16 @@ $columns = array(
             return '<a href="'.$d.'/" data-title="К редактированию меню">Edit</a>';
         }
     ),
+    array('db' => 'id', 'dt' => 'tools',
+        'formatter' => function( $d, $row, $table ) {
+            return '
+            <div class="btn-group">
+                <a href="'.$d.'/" class="btn btn-sm primary">Edit</a>
+                <button type="button" class="btn btn-sm danger delMenuType" data-id="'.$row['id'].'" data-toggle="modal" data-target="#modalMenuTypeDel"><i class="fa fa-trash"></i> Delete</button>
+            </div>
+            ';
+        }
+    ),
     array('db' => 'lang', 'dt' => 'lang',
         'formatter' => function( $d, $row, $table ) {
             return '

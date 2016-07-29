@@ -9,11 +9,11 @@
                     <table id="myTable" class="table table-condensed table-striped table-bordered">
                         <thead>
                             <tr>
-                                <th>Edit items</th>
                                 <th>Published</th>
                                 <th>Language</th>
                                 <th>Name</th>
                                 <th>Title</th>
+                                <th>Tools</th>
                             </tr>
                         </thead>
                     </table>
@@ -24,7 +24,9 @@
     </div>
 </div>
 
-<div id="modalСategoryAdd" class="modal fade" data-backdrop="true"><div class="row-col h-v"><div class="row-cell v-m">
+<div id="modalСategoryAdd" class="modal fade" data-backdrop="true">
+<div class="row-col h-v">
+<div class="row-cell v-m">
     <div class="modal-dialog modal-md">
         <form>
             <div class="modal-content">
@@ -63,7 +65,31 @@
         </form>
         <!-- /.modal-content -->
     </div>
-</div></div></div>
+</div>
+</div>
+</div>
+
+<div class="modal fade" id="modalCategoryTypeDel" tabindex="-1" role="dialog" aria-labelledby="contentEdit" aria-hidden="true">
+<div class="row-col h-v">
+<div class="row-cell v-m">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Delete categorytype item</h4>
+                </div>
+                <div class="modal-body text-center"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                    <button id="delCategoryTypeItem" data-delCategoryTypeItem="" type="button" class="btn btn-primary">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+</div>
 
 <script>
 'use strict';
@@ -83,11 +109,11 @@ $(function() {
             "type": "POST"
         },
         "columns": [
-            { "data": "link" },
             { "data": "published" },
             { "data": "lang" },
             { "data": "name" },
             { "data": "title" },
+            { "data": "tools" },
         ],
         "drawCallback": function(settings){
             xEdit();
@@ -106,12 +132,14 @@ $(function() {
     *   <СategoryTypeAdd
     */
     $('#modalСategoryAdd').on('hidden.bs.modal', function (e) {
-        $('#categoryAdd .meClear')
+        var modal = $(this),
+            mBody = modal.find('.modal-body');
+        mBody.find('.myeditable')
             .editable('setValue', null)
             .editable('option', 'pk', null)
             .removeClass('editable-unsaved');
         $('.myeditable').editable();
-        $('#appReload').appGo('reload');
+        $(document).trigger("pjaxReload");
     })
     $('.myeditable').on('save.newuser', function(){
         var that = this;
@@ -120,7 +148,7 @@ $(function() {
         }, 200);
     });
     $('#save-btn').on('click', function() {
-        $('#categoryAdd a.myeditable').editable('submit', {
+        $('#modalСategoryAdd .myeditable').editable('submit', {
             url: '/sadmin/save/categorytype/add/',
             ajaxOptions: {
                 dataType: 'json'
@@ -139,13 +167,60 @@ $(function() {
         if(!v) return 'Должно быть заполнено!';
     });
     $('#reset-btn').on('click', function() {
-        $('#categoryAdd .meClear')
+        $('#modalСategoryAdd .myeditable')
             .editable('setValue', null)
             .editable('option', 'pk', null)
             .removeClass('editable-unsaved');
         $('.myeditable').editable();
     });
     /* СategoryTypeAdd> */
+
+
+    /**
+    *   <CategoryTypeDel
+    */
+    $('#modalCategoryTypeDel').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget),
+            itemId = button.data('id'),
+            categoryTypeId = button.data('categorytypeid'),
+            modal = $(this);
+        console.log(itemId);
+        $.ajax({
+            type: 'POST',
+            url: '/sadmin/save/categorytype/del-check/',
+            data: {
+                id: itemId
+            }
+        })
+        .then(function(result) {
+            modal.find('.modal-body').html(result.html);
+        }, function(result) {
+            sCMSAletr(result.html, 'warning');
+            console.log(result.html);
+        });
+        modal.find('#delCategoryTypeItem')
+            .data('delCategoryTypeItem', itemId)
+            .attr('data-delCategoryTypeItem', itemId);
+    }).on('hidden.bs.modal', function (e) {
+        $(document).trigger("pjaxReload");
+    })
+    $('#delCategoryTypeItem').on('click', function(event) {
+        event.preventDefault();
+        var $this = $(this),
+            id = $this.data('delCategoryTypeItem');
+        $.ajax({
+            type: 'POST',
+            url: '/sadmin/save/categorytype/del/',
+            data: {
+                id: id
+            }
+        })
+        .done(function(result) {
+            $('#modalCategoryTypeDel').modal('hide');
+            sCMSAletr(result, 'success');
+        });
+    });
+    /* CategoryTypeDel> */
 
 });
 </script>

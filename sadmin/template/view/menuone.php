@@ -186,29 +186,29 @@ function build_list($array, $res) {
 $menuArray = json_decode($res->menuArray->params, true);
 
 ?>
-<div class="app-view-header">Menu: <?php echo $res->menuArray->title;?> - <span class="label label-info"><?php echo $res->menuArray->lang;?></span></div>
-<div class="row">
-    <div class="col-md-12 fw-boxed">
-        <div class="panel panel-info">
-            <div class="panel-heading">
-                <div class="clearfix">
-                    <div id="nestable-menu" class="pull-left">
-                        <button type="button" data-action="expand-all" class="btn btn-default btn-xs">Expand All</button>
-                        <button type="button" data-action="collapse-all" class="btn btn-default btn-xs">Collapse All</button>
-                        <button type="button" data-toggle="modal" data-target="#modalMenuAdd" class="btn btn-success btn-xs"><i class="fa fa-plus"></i> Add Menu item</button>
-                    </div>
-                    <div class="pull-right">
-                        <button type="button" data-toggle="modal" data-target="#modalMenuRefresh" data-id="<?php echo $res->menuTypeId;?>" class="btn btn-warning btn-xs"><i class="fa fa-refresh"></i> Menu Refresh</button>
-                    </div>
+<div class="padding">
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="nav-active-border b-warn top box">
+                <div class="nav nav-md">
+                    <a data-toggle="modal" data-target="#modalMenuAdd" class="nav-link success"><i class="fa fa-plus"></i> Add Menu item</a>
+                    <a data-toggle="modal" data-target="#modalMenuRefresh" data-id="<?php echo $res->menuTypeId;?>" class="nav-link"><i class="fa fa-refresh"></i> Menu Refresh</a>
                 </div>
             </div>
-            <div class="panel-body">
-                <?
-                echo '<div id="nestable" data-id="'.$res->menuTypeId.'" class="dd">';
-                echo build_list($menuArray, $res->menuItems);
-                echo '</div>';
-                ?>
+
+            <div class="box light">
+                <div class="box-header"><h2>Menu: <?php echo $res->menuArray->title;?> - <span class="label label-info"><?php echo $res->menuArray->lang;?></span></h2></div>
+                <div class="box-divider m-a-0"></div>
+                <div class="box-body">
+                    <?
+                    echo '<div id="nestable" data-id="'.$res->menuTypeId.'" class="dd">';
+                    echo build_list($menuArray, $res->menuItems);
+                    echo '</div>';
+                    ?>
+                </div>
             </div>
+
         </div>
     </div>
 </div>
@@ -463,7 +463,7 @@ $(function() {
             .editable('option', 'pk', null)
             .removeClass('editable-unsaved');
         $('.myeditable').editable();
-        $('#appReload').appGo('reload');
+        $(document).trigger("pjaxReload");
     })
     $('.myeditable').on('save.newuser', function(){
         var that = this;
@@ -479,7 +479,7 @@ $(function() {
             },
             success: function(data, config) {
                 $('#modalMenuAdd').modal('hide');
-                sCMSAletr(result, 'success', data);
+                sCMSAletr('', 'success', data);
             },
             error: function(errors) {
                 sCMSAletr(errors, 'warning');
@@ -515,7 +515,7 @@ $(function() {
             .data('delMenuType', menuTypeId)
             .attr('data-delMenuType', menuTypeId);
     }).on('hidden.bs.modal', function (e) {
-        $('#appReload').appGo('reload');
+        $(document).trigger("pjaxReload");
     })
     $('#delMenuItem').on('click', function(event) {
         event.preventDefault();
@@ -547,7 +547,7 @@ $(function() {
             modal = $(this);
         modal.find('#refreshMenuItem').data('refreshMenuItem', itemId).attr('data-refreshMenuItem', itemId);
     }).on('hidden.bs.modal', function (e) {
-        $('#appReload').appGo('reload');
+        $(document).trigger("pjaxReload");
     })
     $('#refreshMenuItem').on('click', function(event) {
         event.preventDefault();
@@ -582,7 +582,7 @@ $(function() {
         })
         .done(function(result) {
             sCMSAletr(result, 'success');
-            $('#appReload').appGo('reload');
+            $(document).trigger("pjaxReload");
         });
     });
     /* MenuRefresh> */

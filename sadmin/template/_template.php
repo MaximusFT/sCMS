@@ -19,6 +19,11 @@ require_once A_TEMP."_head.php";
                         <li class="nav-header hidden-folded">
                             <small class="text-muted">Main</small>
                         </li>
+                        <li><a data-pjax-reload>
+                                <span class="nav-icon"><i class="fa fa-refresh"></i></span>
+                                <span class="nav-text">Reload</span>
+                            </a>
+                        </li>
                         <li><a href="<?=A_URLh;?>" data-match-name="sadmin" title="Главная">
                                 <span class="nav-icon"><i class="fa fa-dashboard"></i></span>
                                 <span class="nav-text">Главная</span>

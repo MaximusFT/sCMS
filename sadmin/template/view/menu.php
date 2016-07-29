@@ -9,10 +9,10 @@
                     <table id="myTable" class="table table-condensed table-striped table-bordered">
                         <thead>
                             <tr>
-                                <th>Edit items</th>
                                 <th>Language</th>
                                 <th>Name</th>
                                 <th>Title</th>
+                                <th>Tools</th>
                             </tr>
                         </thead>
                     </table>
@@ -56,11 +56,34 @@
                             <button id="save-btn" type="button" class="btn primary">Добавить</button>
                         </div>
                     </div>
+                    <!-- /.modal-content -->
                 </form>
-                <!-- /.modal-content -->
             </div>
         </div>
     </div>
+</div>
+
+
+<div class="modal fade" id="modalMenuTypeDel" tabindex="-1" role="dialog" aria-labelledby="contentEdit" aria-hidden="true">
+<div class="row-col h-v">
+<div class="row-cell v-m">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Delete menutype item</h4>
+                </div>
+                <div class="modal-body text-center"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                    <button id="delMenuTypeItem" data-delMenuTypeItem="" type="button" class="btn btn-primary">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
 </div>
 
 <script>
@@ -86,13 +109,15 @@ $(function() {
             "type": "POST"
         },
         "columns": [{
-            "data": "link"
-        }, {
+        //     "data": "link"
+        // }, {
             "data": "lang"
         }, {
             "data": "name"
         }, {
             "data": "title"
+        }, {
+            "data": "tools"
         }, ],
         "drawCallback": function(settings) {
             xEdit();
@@ -116,7 +141,7 @@ $(function() {
             .editable('option', 'pk', null)
             .removeClass('editable-unsaved');
         $('.myeditable').editable();
-        $('#appReload').appGo('reload');
+        $(document).trigger("pjaxReload");
     })
     $('.myeditable').on('save.newuser', function() {
         var that = this;
@@ -132,7 +157,7 @@ $(function() {
             },
             success: function(data, config) {
                 $('#modalMenuAdd').modal('hide');
-                sCMSAletr(result, 'success', data);
+                sCMSAletr(null, 'success', data);
             },
             error: function(errors) {
                 sCMSAletr(errors, 'warning');
@@ -151,6 +176,52 @@ $(function() {
         $('.myeditable').editable();
     });
     /* MenuTypeAdd> */
+
+    /**
+    *   <MenuTypeDel
+    */
+    $('#modalMenuTypeDel').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget),
+            itemId = button.data('id'),
+            menuTypeId = button.data('menutypeid'),
+            modal = $(this);
+        // console.log(itemId);
+        $.ajax({
+            type: 'POST',
+            url: '/sadmin/save/menutype/del-check/',
+            data: {
+                id: itemId
+            }
+        })
+        .then(function(result) {
+            modal.find('.modal-body').html(result.html);
+        }, function(result) {
+            sCMSAletr(result.html, 'warning');
+            console.log(result.html);
+        });
+        modal.find('#delMenuTypeItem')
+            .data('delMenuTypeItem', itemId)
+            .attr('data-delMenuTypeItem', itemId);
+    }).on('hidden.bs.modal', function (e) {
+        $(document).trigger("pjaxReload");
+    })
+    $('#delMenuTypeItem').on('click', function(event) {
+        event.preventDefault();
+        var $this = $(this),
+            id = $this.data('delMenuTypeItem');
+        $.ajax({
+            type: 'POST',
+            url: '/sadmin/save/menutype/del/',
+            data: {
+                id: id
+            }
+        })
+        .done(function(result) {
+            $('#modalMenuTypeDel').modal('hide');
+            sCMSAletr(result, 'success');
+        });
+    });
+    /* MenuTypeDel> */
 
 });
 </script>

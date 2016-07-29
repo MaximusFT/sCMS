@@ -26,6 +26,7 @@ $router->map( 'GET', '/askings/', 'AskingsCrtl', 'askings');
 $router->map('POST|GET', '/menu/', 'MenuCrtl', 'menu');
 $router->map('POST|PUT', '/save/menutype/add/', 'saveMenuTypeAdd', 'save-menutype-add', null, 'ajax');
 $router->map('POST|PUT', '/save/menutype/del/', 'saveMenuTypeDel', 'save-menutype-del', null, 'ajax');
+$router->map('POST|PUT', '/save/menutype/del-check/', 'saveMenuTypeDelCheck', 'save-menutype-del-check', null, 'ajax');
 
 
 $router->map('POST|GET', '/menu/[i:type]/', 'MenuOneCrtl', 'menuone');
@@ -62,6 +63,7 @@ $router->map('POST|PUT', '/save/module/del/', 'saveModuleDel', 'save-module-del'
 $router->map('POST|GET', '/category/', 'CategoryCrtl', 'category');
 $router->map('POST|PUT', '/save/categorytype/add/', 'saveCategoryTypeAdd', 'save-categorytype-add', null, 'ajax');
 $router->map('POST|PUT', '/save/categorytype/del/', 'saveCategoryTypeDel', 'save-categorytype-del', null, 'ajax');
+$router->map('POST|PUT', '/save/categorytype/del-check/', 'saveCategoryTypeDelCheck', 'save-categorytype-del-check', null, 'ajax');
 
 
 $router->map('POST|GET', '/category/[i:type]/', 'CategoryOneCrtl', 'categoryone');

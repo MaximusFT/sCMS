@@ -10,6 +10,14 @@
             $.pjax.click(event, { type: "POST", container: container, timeout: 6000});
         });
 
+        $(document).on('click', 'a[data-pjax-reload]', function(event) {
+            $(document).trigger("pjaxReload");
+        });
+
+        $(document).on('pjaxReload', function() {
+            $.pjax.reload(container, { type: "POST", timeout: 6000})
+        });
+
         $(document).on('pjax:start', function() {
             $(document).trigger("pjaxStart");
         });
