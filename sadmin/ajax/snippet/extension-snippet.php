@@ -42,7 +42,7 @@ echo '
 <script>
     $(function() {
         $('.xeditParamsSnippet').editable({
-            url: '/sadmin/save/params/snippet/',
+            url: '<?php echo A_URLh;?>save/params/snippet/',
             success: function(response, newValue) { xjGrowl(response, newValue) }
         })
     });

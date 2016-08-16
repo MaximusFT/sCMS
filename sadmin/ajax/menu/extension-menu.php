@@ -24,7 +24,7 @@ if ($modRes['view'] == 'default') {
                 data-pk="'.$modRes['id'].'"
                 data-type="select"
                 data-value="'.$modRes['params']['menutype'].'"
-                data-source="/sadmin/get/group/simple/menutype/title/"
+                data-source="'.A_URLh.'get/group/simple/menutype/title/"
                 data-params=\'{"name":"menutype","table":"module"}\'
                 data-title="Список категорий">'.$modRes['params']['_menutype_title'].'</a>
         </dd>
@@ -50,7 +50,7 @@ if ($modRes['view'] == 'default') {
                 data-pk="'.$modRes['id'].'"
                 data-type="select"
                 data-value="'.$modRes['params']['categorytype'].'"
-                data-source="/sadmin/get/group/simple/categorytype/title/"
+                data-source="'.A_URLh.'get/group/simple/categorytype/title/"
                 data-params=\'{"name":"categorytype","table":"module"}\'
                 data-title="Список категорий">'.$modRes['params']['_categorytype_title'].'</a>
         </dd>
@@ -83,7 +83,7 @@ if ($modRes['view'] == 'default') {
 <script>
     $(function() {
         $('.xeditParams').editable({
-            url: '/sadmin/save/params/',
+            url: '<?php echo A_URLh;?>save/params/',
             success: function(response, newValue) { xjGrowl(response, newValue) }
         })
     });

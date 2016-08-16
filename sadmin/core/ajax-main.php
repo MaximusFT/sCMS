@@ -981,7 +981,7 @@ function getContentParams() {
                     iName = sfind.data("name");
                 $.ajax({
                     type: "POST",
-                    url: "/sadmin/save/content/params/",
+                    url: "".A_URLh."save/content/params/",
                     data: {id: iID, value: iVal, name: iName}
                 })
                 .done(function(result) {
@@ -1249,7 +1249,7 @@ function getModuleVisible() {
                     iName = sfind.data('name');
                 $.ajax({
                     type: 'POST',
-                    url: '/sadmin/save/module/visible/',
+                    url: '".A_URLh."save/module/visible/',
                     data: {id: iID, value: iVal, name: iName}
                 })
                 .done(function(result) {
@@ -1266,7 +1266,7 @@ function getModuleVisible() {
                     iName = sfind.data('name');
                 $.ajax({
                     type: 'POST',
-                    url: '/sadmin/save/module/visible/',
+                    url: '".A_URLh."save/module/visible/',
                     data: {id: iID, value: iVal, name: iName}
                 })
                 .done(function(result) {

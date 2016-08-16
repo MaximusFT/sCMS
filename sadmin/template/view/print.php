@@ -63,7 +63,7 @@ $(function() {
         ],
         stateSave: true,
         "ajax": {
-            "url": "/sadmin/get/data/people/print-people/",
+            "url": "<?php echo A_URLh;?>get/data/people/print-people/",
             "type": "POST",
             "data": function ( d ) {
                 return $.extend( {}, d, {
@@ -85,7 +85,7 @@ $(function() {
         }
     });
     $("body").on('click', '.jedCheckListRemove', function() {
-        $.post('/sadmin/printrem/<?=$res->printId;?>/', {
+        $.post('<?php echo A_URLh;?>printrem/<?=$res->printId;?>/', {
             pid: $(this).data('params')
         }, function(sValue) {
             dt.draw();
@@ -100,7 +100,7 @@ $(function() {
         var table = myTab.tableToJSON(); // Convert the table into a javascript object
         console.log(table);
         $.ajax({
-            url: '/sadmin/get/prints/<?=$res->printId;?>/',
+            url: '<?php echo A_URLh;?>get/prints/<?=$res->printId;?>/',
             type:'POST',
             data: {
                 jtable: table

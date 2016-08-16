@@ -31,7 +31,7 @@ defined('ISsCMS') or die;
                 iName = sfind.data('name');
             $.ajax({
                 type: 'POST',
-                url: '/sadmin/save/module/params/',
+                url: '<?php echo A_URLh;?>save/module/params/',
                 data: {id: iID, value: iVal, name: iName}
             })
             .done(function(result) {

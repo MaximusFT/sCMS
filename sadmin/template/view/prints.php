@@ -51,7 +51,7 @@ $(function() {
         dom: 'RC<"clear">lfrtip',
         stateSave: true,
         "ajax": {
-            "url": "/sadmin/get/data/print/prints/",
+            "url": "<?php echo A_URLh;?>get/data/print/prints/",
             "type": "POST"
         },
         "columns": [
@@ -104,7 +104,7 @@ $(function() {
         var printId = $(event.relatedTarget).data('id');
         var modal = $(this);
         modal.find('#pItemAdd').data('pid', printId).attr('data-pid', printId);
-        $.post('/sadmin/people/add/', {
+        $.post('<?php echo A_URLh;?>people/add/', {
             printId: printId
         }, function(sValue) {
             modal.find('#pItemAdd').html(sValue);

@@ -29,7 +29,7 @@
                         <input type="checkbox" value="Del">
                     </span>
                     <span class="input-group-btn">
-                        <a href="/sadmin/ajax/_row-del.php" class="btn btn-danger RowDel" data-params="id=<?=$r['id'];?>"><span class="glyphicon glyphicon-trash"></span></a>
+                        <a href="<?php echo A_URLh;?>ajax/_row-del.php" class="btn btn-danger RowDel" data-params="id=<?=$r['id'];?>"><span class="glyphicon glyphicon-trash"></span></a>
                     </span>
                 </div>
             </td>

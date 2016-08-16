@@ -39,7 +39,7 @@ $(function() {
         "pageLength": 25,
         "stateSave": true,
         "ajax": {
-            "url": "/sadmin/get/data/extension/extension-list/",
+            "url": "<?php echo A_URLh;?>get/data/extension/extension-list/",
             "type": "POST"
         },
         "columns": [
@@ -60,7 +60,7 @@ $(function() {
     $('#addExtension').on('click', function() {
         $.ajax({
             type: "POST",
-            url: '/sadmin/save/extension/add/',
+            url: '<?php echo A_URLh;?>save/extension/add/',
         }).done(function(result) {
             sCMSAletr(result, 'success');
             dt.draw();

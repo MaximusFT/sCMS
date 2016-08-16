@@ -53,7 +53,7 @@ require_once A_TEMP."_head.php";
                         <li class="nav-header hidden-folded">
                             <small class="text-muted">Addons</small>
                         </li>
-                        <li><a href="/sadmin/template/media/dialog.php?type=0&lang=ru_RU&popup=0&crossdomain=0&field_id=&relative_url=0&akey=key&fldr=" target="_blank">
+                        <li><a href="<?php echo A_URLh;?>template/media/dialog.php?type=0&lang=ru_RU&popup=0&crossdomain=0&field_id=&relative_url=0&akey=key&fldr=" target="_blank">
                             <span class="nav-icon"><i class="fa fa-picture-o"></i></span>
                             <span class="nav-text">Media</span>
                         	</a></li>

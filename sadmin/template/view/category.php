@@ -51,7 +51,7 @@
                                 <td><a href="#" class="myeditable"
                                     data-name="lang"
                                     data-type="select"
-                                    data-source="/sadmin/get/group/static/lang/"
+                                    data-source="<?php echo A_URLh;?>get/group/static/lang/"
                                     data-title="Пол"
                                     data-original-title="lang"></a></td></tr>
                         </tbody>
@@ -105,7 +105,7 @@ $(function() {
         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
         stateSave: true,
         "ajax": {
-            "url": "/sadmin/get/data/categorytype/categorytype-list/",
+            "url": "<?php echo A_URLh;?>get/data/categorytype/categorytype-list/",
             "type": "POST"
         },
         "columns": [
@@ -149,7 +149,7 @@ $(function() {
     });
     $('#save-btn').on('click', function() {
         $('#modalСategoryAdd .myeditable').editable('submit', {
-            url: '/sadmin/save/categorytype/add/',
+            url: '<?php echo A_URLh;?>save/categorytype/add/',
             ajaxOptions: {
                 dataType: 'json'
             },
@@ -187,7 +187,7 @@ $(function() {
         console.log(itemId);
         $.ajax({
             type: 'POST',
-            url: '/sadmin/save/categorytype/del-check/',
+            url: '<?php echo A_URLh;?>save/categorytype/del-check/',
             data: {
                 id: itemId
             }
@@ -210,7 +210,7 @@ $(function() {
             id = $this.data('delCategoryTypeItem');
         $.ajax({
             type: 'POST',
-            url: '/sadmin/save/categorytype/del/',
+            url: '<?php echo A_URLh;?>save/categorytype/del/',
             data: {
                 id: id
             }

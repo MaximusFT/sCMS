@@ -14,7 +14,7 @@ $columns = array(
                     data-pk="'.$row['id'].'"
                     data-type="select"
                     data-value="'.$d.'"
-                    data-source="/sadmin/get/group/static/lang/"
+                    data-source="'.A_URLh.'get/group/static/lang/"
                     data-params=\'{"name":"lang","table":"'.$table.'"}\'
                     data-title="Language">'.$d.'</a>';
         }
@@ -106,7 +106,7 @@ $columns = array(
                     data-pk="'.$row['id'].'"
                     data-type="select"
                     data-value="'.$d.'"
-                    data-source="/sadmin/get/group/simple/category/title/"
+                    data-source="'.A_URLh.'get/group/simple/category/title/"
                     data-params=\'{"name":"category_id","table":"'.$table.'"}\'
                     data-title="Language"></a>';
         }
@@ -315,7 +315,7 @@ $columns = array(
         'dt' => 'editFull',
         'formatter' => function( $d, $row, $table, $tmpl ) {
             $res = '
-                <a class="btn btn-xs btn-primary articleEdit" href="/sadmin/content/'.$d.'/">
+                <a class="btn btn-xs btn-primary articleEdit" href="'.A_URLh.'content/'.$d.'/">
                     <span class="fa fa-edit"></span>
                 </a>
                 <a href="#" class="btn btn-info btn-xs"

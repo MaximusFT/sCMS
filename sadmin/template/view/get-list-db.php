@@ -36,7 +36,7 @@ $(function() {
         ],
         stateSave: true,
         "ajax": {
-            "url": "/sadmin/get/data/people/peoples/",
+            "url": "<?php echo A_URLh;?>get/data/people/peoples/",
             "type": "POST"
         },
         "columns": [

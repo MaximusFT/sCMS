@@ -34,7 +34,7 @@ $columns = array(
                     data-pk="'.$row['id'].'"
                     data-type="select"
                     data-value="'.$d.'"
-                    data-source="/sadmin/get/group/static/print-type/"
+                    data-source="'.A_URLh.'get/group/static/print-type/"
                     data-params=\'{"name":"type","table":"'.$table.'"}\'
                     data-title="Пол">'.$dval.'</a>';
         }
@@ -95,7 +95,7 @@ $columns = array(
             <div class="btn-group" role="group">
                 <a class="btn btn-xs btn-success addItem" data-id="'.$row['id'].'"
                     data-toggle="modal" data-keyboard="false" data-target="#modItemAdd">Add</a>
-                <a href="/sadmin/print/'.$row['id'].'/" class="btn btn-xs btn-primary editItem" data-id="'.$row['id'].'">Edit</a>
+                <a href="'.A_URLh.'print/'.$row['id'].'/" class="btn btn-xs btn-primary editItem" data-id="'.$row['id'].'">Edit</a>
             </div>
             ';
             return $res;

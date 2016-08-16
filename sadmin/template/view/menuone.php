@@ -104,7 +104,7 @@ function build_list($array, $res) {
                                             <a href="#" class="xedit"
                                                 data-pk="'.$res->$index->id.'"
                                                 data-type="select"
-                                                data-source="/sadmin/get/group/static/menu-method/"
+                                                data-source="'.A_URLh.'get/group/static/menu-method/"
                                                 data-value="'.$res->$index->method.'"
                                                 data-params=\'{"name":"method","table":"menu"}\'
                                                 data-title="Метод вызова">'.$res->$index->method.'</a>
@@ -116,7 +116,7 @@ function build_list($array, $res) {
                                                 data-pk="'.$res->$index->id.'"
                                                 data-type="select"
                                                 data-value="'.$res->$index->extension_id.'"
-                                                data-source="/sadmin/get/group/extension/title/type/component/"
+                                                data-source="'.A_URLh.'get/group/extension/title/type/component/"
                                                 data-params=\'{"name":"extension_id","table":"menu"}\'
                                                 data-title="Тип расширения">'.$res->$index->extension_title.'</a>
                                         </dd>
@@ -128,7 +128,7 @@ function build_list($array, $res) {
                                                     data-pk="'.$res->$index->id.'"
                                                     data-type="select"
                                                     data-value="'.$res->$index->category_id.'"
-                                                    data-source="/sadmin/get/group/module/title/extension_id/21/"
+                                                    data-source="'.A_URLh.'get/group/module/title/extension_id/21/"
                                                     data-params=\'{"name":"category_id","table":"menu"}\'
                                                     data-title="Модуль">'.$res->$index->category_id_title.'</a>
                                             </dd>
@@ -141,7 +141,7 @@ function build_list($array, $res) {
                                                     data-pk="'.$res->$index->id.'"
                                                     data-type="select"
                                                     data-value="'.$res->$index->category_id.'"
-                                                    data-source="/sadmin/get/group/simple/category/title/"
+                                                    data-source="'.A_URLh.'get/group/simple/category/title/"
                                                     data-params=\'{"name":"category_id","table":"menu"}\'
                                                     data-title="Категория">'.$res->$index->category_id_title.'</a>
                                             </dd>
@@ -153,7 +153,7 @@ function build_list($array, $res) {
                                                     data-pk="'.$res->$index->id.'"
                                                     data-type="select"
                                                     data-value="'.$res->$index->category_id.'"
-                                                    data-source="/sadmin/get/group/simple/categorytype/title/"
+                                                    data-source="'.A_URLh.'get/group/simple/categorytype/title/"
                                                     data-params=\'{"name":"category_id","table":"menu"}\'
                                                     data-title="Категория">'.$res->$index->category_id_title.'</a>
                                             </dd>
@@ -270,14 +270,14 @@ $menuArray = json_decode($res->menuArray->params, true);
                                             data-type="select"
                                             data-name="method"
                                             data-value="GET"
-                                            data-source="/sadmin/get/group/static/menu-method/"
+                                            data-source="<?php echo A_URLh;?>get/group/static/menu-method/"
                                             data-original-title="menutype_id"></a></td></tr>
                                    <tr class="hidden"><td>Lang</td>
                                         <td><a href="#" class="myeditable"
                                             data-type="select"
                                             data-name="lang"
                                             data-value="<?php echo $res->menuArray->lang;?>"
-                                            data-source="/sadmin/get/group/static/lang/"
+                                            data-source="<?php echo A_URLh;?>get/group/static/lang/"
                                             data-original-title="lang"></a></td></tr>
                                    <tr><td>Тип расширения</td>
                                         <td>
@@ -285,7 +285,7 @@ $menuArray = json_decode($res->menuArray->params, true);
                                             data-type="select"
                                             data-name="extension_id"
                                             data-value="1"
-                                            data-source="/sadmin/get/group/extension/title/type/component/"
+                                            data-source="<?php echo A_URLh;?>get/group/extension/title/type/component/"
                                             data-title="Тип расширения"></a>
                                         </td></tr>
                                    <tr class="hidden"><td>category_id</td>
@@ -293,7 +293,7 @@ $menuArray = json_decode($res->menuArray->params, true);
                                             data-type="select"
                                             data-name="category_id"
                                             data-value="commonPageCtrl"
-                                            data-source="/sadmin/get/group/simple/category/title/"
+                                            data-source="<?php echo A_URLh;?>get/group/simple/category/title/"
                                             data-original-title="category_id"></a></td></tr>
                                 </tbody>
                             </table>
@@ -357,7 +357,7 @@ $menuArray = json_decode($res->menuArray->params, true);
                 if (list.nestable('serialize').length === 0) return;
                 $.ajax({
                         type: "POST",
-                        url: "/sadmin/save/",
+                        url: "<?php echo A_URLh;?>save/",
                         data: {
                             table: 'menutype',
                             name: 'params',
@@ -390,7 +390,7 @@ $(function() {
     xEdit();
     $('.myeditable').editable();
     $('.xeditExt').editable({
-        url: '/sadmin/save/',
+        url: '<?php echo A_URLh;?>save/',
         success: function(response, newValue) {
             var q = $(this).data('pk');
             newValue = parseInt(newValue);
@@ -403,8 +403,8 @@ $(function() {
                 qwe.extension_id = newValue;
                 $('#extLink'+q).find('a').data('typeparams', qwe);
                 $('#extLink'+q).find('a').editable('destroy').editable({
-                    url: '/sadmin/saveth/',
-                    typeahead: {name:'link_id',remote:{url: '/sadmin/get/typeaheadlink/content/h1/h1/?q=%QUERY'}},
+                    url: '<?php echo A_URLh;?>saveth/',
+                    typeahead: {name:'link_id',remote:{url: '<?php echo A_URLh;?>get/typeaheadlink/content/h1/h1/?q=%QUERY'}},
                     success: function(response, newValue) {
                         sCMSAletr(response, 'success', newValue);
                     }
@@ -438,8 +438,8 @@ $(function() {
                 qwe.extension_id = newValue;
                 $('#extLink'+q).find('a').data('typeparams', qwe);
                 $('#extLink'+q).find('a').editable('destroy').editable({
-                    url: '/sadmin/saveth/',
-                    typeahead: {name:'link_id',remote:{url: '/sadmin/get/typeaheadlink/content/h1/h1/?q=%QUERY'}},
+                    url: '<?php echo A_URLh;?>saveth/',
+                    typeahead: {name:'link_id',remote:{url: '<?php echo A_URLh;?>get/typeaheadlink/content/h1/h1/?q=%QUERY'}},
                     success: function(response, newValue) {
                         sCMSAletr(response, 'success', newValue);
                     }
@@ -453,7 +453,7 @@ $(function() {
         event.preventDefault();
         $.ajax({
             type: "POST",
-            url: "/sadmin/get/translit/",
+            url: "<?php echo A_URLh;?>get/translit/",
             data: {params: $('#' + $this.data('source')).editable('getValue', true)}
         }).done(function(result) {
             $('#' + $this.data('target')).editable('setValue', result).editable('submit');
@@ -495,7 +495,7 @@ $(function() {
     });
     $('#save-btn').on('click', function() {
         $('#menuAdd a.myeditable').editable('submit', {
-            url: '/sadmin/save/menu/add/',
+            url: '<?php echo A_URLh;?>save/menu/add/',
             ajaxOptions: {
                 dataType: 'json'
             },
@@ -546,7 +546,7 @@ $(function() {
             menutype_id = $this.data('delMenuType');
         $.ajax({
             type: 'POST',
-            url: '/sadmin/save/menu/del/',
+            url: '<?php echo A_URLh;?>save/menu/del/',
             data: {
                 id: id,
                 menutype_id: menutype_id
@@ -577,7 +577,7 @@ $(function() {
             id = $this.data('refreshMenuItem');
         $.ajax({
             type: 'POST',
-            url: '/sadmin/save/menu/refresh/',
+            url: '<?php echo A_URLh;?>save/menu/refresh/',
             data: {id:id}
         })
         .done(function(result) {
@@ -599,7 +599,7 @@ $(function() {
             id = $this.data('id');
         $.ajax({
             type: 'POST',
-            url: '/sadmin/save/menu/homepage/',
+            url: '<?php echo A_URLh;?>save/menu/homepage/',
             data: {id:id,mt_id:mt_id,lang:lang}
         })
         .done(function(result) {
@@ -610,8 +610,8 @@ $(function() {
     /* MenuRefresh> */
 
     $('.thMenuLinkId').editable({
-        url: '/sadmin/saveth/',
-        typeahead: {name: 'link_id',remote: {url: '/sadmin/get/typeaheadlink/content/h1/h1/?q=%QUERY'}},
+        url: '<?php echo A_URLh;?>saveth/',
+        typeahead: {name: 'link_id',remote: {url: '<?php echo A_URLh;?>get/typeaheadlink/content/h1/h1/?q=%QUERY'}},
         success: function(response, newValue) {
             sCMSAletr(response, 'success', newValue);
         }

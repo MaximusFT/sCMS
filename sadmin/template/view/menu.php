@@ -46,7 +46,7 @@
                                     </tr>
                                     <tr>
                                         <td>lang</td>
-                                        <td><a href="#" class="myeditable" data-name="lang" data-type="select" data-source="/sadmin/get/group/static/lang/" data-title="Пол" data-original-title="lang"></a></td>
+                                        <td><a href="#" class="myeditable" data-name="lang" data-type="select" data-source="<?php echo A_URLh;?>get/group/static/lang/" data-title="Пол" data-original-title="lang"></a></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -105,7 +105,7 @@ $(function() {
         ],
         stateSave: true,
         "ajax": {
-            "url": "/sadmin/get/data/menutype/menutype-list/",
+            "url": "<?php echo A_URLh;?>get/data/menutype/menutype-list/",
             "type": "POST"
         },
         "columns": [{
@@ -151,7 +151,7 @@ $(function() {
     });
     $('#save-btn').on('click', function() {
         $('#menuAdd a.myeditable').editable('submit', {
-            url: '/sadmin/save/menutype/add/',
+            url: '<?php echo A_URLh;?>save/menutype/add/',
             ajaxOptions: {
                 dataType: 'json'
             },
@@ -188,7 +188,7 @@ $(function() {
         // console.log(itemId);
         $.ajax({
             type: 'POST',
-            url: '/sadmin/save/menutype/del-check/',
+            url: '<?php echo A_URLh;?>save/menutype/del-check/',
             data: {
                 id: itemId
             }
@@ -211,7 +211,7 @@ $(function() {
             id = $this.data('delMenuTypeItem');
         $.ajax({
             type: 'POST',
-            url: '/sadmin/save/menutype/del/',
+            url: '<?php echo A_URLh;?>save/menutype/del/',
             data: {
                 id: id
             }

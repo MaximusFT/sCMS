@@ -51,7 +51,7 @@
                                 <td><a href="#" class="myeditable meClear"
                                     data-type="select"
                                     data-name="extension_id"
-                                    data-source="/sadmin/get/group/extension/title/type/module/"
+                                    data-source="<?php echo A_URLh;?>get/group/extension/title/type/module/"
                                     data-title="Заголовок"></a>
                                 </td></tr>
                            <tr class="hidden"><td>Lang</td>
@@ -59,7 +59,7 @@
                                     data-type="select"
                                     data-name="lang"
                                     data-value="ru"
-                                    data-source="/sadmin/get/group/static/lang/"
+                                    data-source="<?php echo A_URLh;?>get/group/static/lang/"
                                     data-original-title="lang"></a></td></tr>
                         </tbody>
                     </table>
@@ -117,7 +117,7 @@ $(function() {
         "pageLength": 25,
         "stateSave": true,
         "ajax": {
-            "url": "/sadmin/get/data/vAdminModule/module-list/",
+            "url": "<?php echo A_URLh;?>get/data/vAdminModule/module-list/",
             "type": "POST"
         },
         "columns": [
@@ -160,7 +160,7 @@ $(function() {
     });
     $('#save-btn').on('click', function() {
         $('#moduleAdd a.myeditable').editable('submit', {
-            url: '/sadmin/save/module/add/',
+            url: '<?php echo A_URLh;?>save/module/add/',
             ajaxOptions: {
                 dataType: 'json'
             },
@@ -192,7 +192,7 @@ $(function() {
             modal = $(this);
         $.ajax({
             type: 'POST',
-            url: '/sadmin/get/module/visible/',
+            url: '<?php echo A_URLh;?>get/module/visible/',
             data: {id: itemId}
         })
         .done(function(result) {
@@ -212,7 +212,7 @@ $(function() {
             modal = $(this);
         $.ajax({
             type: 'POST',
-            url: '/sadmin/get/module/params/',
+            url: '<?php echo A_URLh;?>get/module/params/',
             data: {id: itemId,extension_id: extension_id}
         })
         .done(function(result) {

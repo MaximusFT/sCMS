@@ -29,7 +29,7 @@ $columns = array(
                     data-pk="'.$row['id'].'"
                     data-type="select"
                     data-value="'.$d.'"
-                    data-source="/sadmin/get/group/static/lang/"
+                    data-source="'.A_URLh.'get/group/static/lang/"
                     data-params=\'{"name":"lang","table":"'.$table.'"}\'
                     data-title="Language">'.$d.'</a>';
         }
@@ -41,7 +41,7 @@ $columns = array(
                     data-pk="'.$row['id'].'"
                     data-type="select"
                     data-value="'.$d.'"
-                    data-source="/sadmin/get/group/static/position/"
+                    data-source="'.A_URLh.'get/group/static/position/"
                     data-params=\'{"name":"position","table":"'.$table.'"}\'
                     data-title="Language">'.$d.'</a>';
         }

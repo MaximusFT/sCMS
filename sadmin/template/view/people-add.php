@@ -38,7 +38,7 @@ $(function() {
         ],
         stateSave: true,
         "ajax": {
-            "url": "/sadmin/get/list/people/list-peoples/",
+            "url": "<?php echo A_URLh;?>get/list/people/list-peoples/",
             "type": "POST",
             "data": function ( d ) {
                 return $.extend( {}, d, {

@@ -140,14 +140,14 @@ $categoryArray = json_decode($res->categoryArray->params, true);
                                             data-type="select"
                                             data-name="lang"
                                             data-value="<?php echo $res->categoryArray->lang;?>"
-                                            data-source="/sadmin/get/group/static/lang/"
+                                            data-source="<?php echo A_URLh;?>get/group/static/lang/"
                                             data-original-title="lang"></a></td></tr>
                                    <tr class="hidden"><td>function</td>
                                         <td><a href="#" class="myeditable"
                                             data-type="select"
                                             data-name="function"
                                             data-value="commonPageCtrl"
-                                            data-source="/sadmin/get/group/static/category-function/"
+                                            data-source="<?php echo A_URLh;?>get/group/static/category-function/"
                                             data-original-title="function"></a></td></tr>
                                 </tbody>
                             </table>
@@ -211,7 +211,7 @@ $categoryArray = json_decode($res->categoryArray->params, true);
                 if (list.nestable('serialize').length === 0) return;
                 $.ajax({
                         type: "POST",
-                        url: "/sadmin/save/",
+                        url: "<?php echo A_URLh;?>save/",
                         data: {
                             table: 'categorytype',
                             name: 'params',
@@ -244,7 +244,7 @@ $(function() {
     xEdit();
     $('.myeditable').editable();
     $('.xeditExt').editable({
-        url: '/sadmin/save/',
+        url: '<?php echo A_URLh;?>save/',
         success: function(response, newValue) {
             var q = $(this).data('pk');
             newValue = parseInt(newValue);
@@ -275,7 +275,7 @@ $(function() {
         event.preventDefault();
         $.ajax({
             type: "POST",
-            url: "/sadmin/get/translit/",
+            url: "<?php echo A_URLh;?>get/translit/",
             data: {params: $('#' + $this.data('source')).editable('getValue', true)}
         }).done(function(result) {
             $('#' + $this.data('target')).editable('setValue', result).editable('submit');
@@ -317,7 +317,7 @@ $(function() {
     });
     $('#save-btn').on('click', function() {
         $('#categoryAdd a.myeditable').editable('submit', {
-            url: '/sadmin/save/category/add/',
+            url: '<?php echo A_URLh;?>save/category/add/',
             ajaxOptions: {
                 dataType: 'json'
             },
@@ -368,7 +368,7 @@ $(function() {
             categorytype_id = $this.data('delCategoryType');
         $.ajax({
             type: 'POST',
-            url: '/sadmin/save/category/del/',
+            url: '<?php echo A_URLh;?>save/category/del/',
             data: {
                 id: id,
                 categorytype_id: categorytype_id
@@ -399,7 +399,7 @@ $(function() {
             id = $this.data('refreshCategoryItem');
         $.ajax({
             type: 'POST',
-            url: '/sadmin/save/category/refresh/',
+            url: '<?php echo A_URLh;?>save/category/refresh/',
             data: {id:id}
         })
         .done(function(result) {
@@ -410,8 +410,8 @@ $(function() {
     /* CategoryRefresh> */
 
     $('.thCategoryLinkId').editable({
-        url: '/sadmin/saveth/',
-        typeahead: {name: 'link_id', remote: {url: '/sadmin/get/typeahead/content/h1/h1/?q=%QUERY'}},
+        url: '<?php echo A_URLh;?>saveth/',
+        typeahead: {name: 'link_id', remote: {url: '<?php echo A_URLh;?>get/typeahead/content/h1/h1/?q=%QUERY'}},
         success: function(response, newValue) {
             // addElemA(this, response, newValue);
             sCMSAletr(response, 'success', newValue);

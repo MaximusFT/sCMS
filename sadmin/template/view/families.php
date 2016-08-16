@@ -73,7 +73,7 @@ $(function() {
         ],
         stateSave: true,
         "ajax": {
-            "url": "/sadmin/get/data/vfamilies/families/",
+            "url": "<?php echo A_URLh;?>get/data/vfamilies/families/",
             "type": "POST"
         },
         "columns": [

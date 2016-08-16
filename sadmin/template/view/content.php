@@ -5,13 +5,13 @@
                 <div class="col-md-3">
                     <div class="nav-active-border b-warn top box">
                         <div class="nav nav-md">
-                            <a href="/sadmin/content/mysql-to-csv/" class="nav-link">Мета в CSV</a>
+                            <a href="<?php echo A_URLh;?>content/mysql-to-csv/" class="nav-link">Мета в CSV</a>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-9">
                     <div class="nav-active-border b-warn top box">
-                        <form role="form" class="form-inline" enctype="multipart/form-data" action="/sadmin/content/csv-to-mysql/" method="post">
+                        <form role="form" class="form-inline" enctype="multipart/form-data" action="<?php echo A_URLh;?>content/csv-to-mysql/" method="post">
                             <div class="form-group">
                                 <input type="file" class="form-control no-b-a" name="csvfile">
                             </div>
@@ -84,7 +84,7 @@ $(function() {
         "pageLength": 25,
         "stateSave": true,
         "ajax": {
-            "url": "/sadmin/get/data/content/content-list/",
+            "url": "<?php echo A_URLh;?>get/data/content/content-list/",
             "type": "POST"
         },
         "columns": [
@@ -137,7 +137,7 @@ $(function() {
     $('#addArticle').on('click', function() {
         $.ajax({
             type: "POST",
-            url: '/sadmin/save/content/add/',
+            url: '<?php echo A_URLh;?>save/content/add/',
         }).done(function(result) {
             sCMSAletr(result, 'success');
             dt.draw();
@@ -148,7 +148,7 @@ $(function() {
         event.preventDefault();
         $.ajax({
             type: "POST",
-            url: "/sadmin/get/translit/",
+            url: "<?php echo A_URLh;?>get/translit/",
             data: {params: $('#' + $this.data('source')).editable('getValue', true)}
         }).done(function(result) {
             $('#' + $this.data('target')).editable('setValue', result).editable('submit');
@@ -165,7 +165,7 @@ $(function() {
             modal = $(this);
         $.ajax({
             type: 'POST',
-            url: '/sadmin/get/content/params/',
+            url: '<?php echo A_URLh;?>get/content/params/',
             data: {id: itemId}
         })
         .done(function(result) {

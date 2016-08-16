@@ -429,7 +429,7 @@ $columns = array(
                     data-pk="'.$row['id'].'"
                     data-type="select"
                     data-value="'.$d.'"
-                    data-source="/sadmin/get/group/static/sex/"
+                    data-source="'.A_URLh.'get/group/static/sex/"
                     data-params=\'{"name":"sex","table":"'.$table.'"}\'
                     data-title="Пол">'.$dval.'</a>';
         }

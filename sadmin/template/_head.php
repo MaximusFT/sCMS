@@ -12,7 +12,7 @@
 
 	<!-- for Chrome on Android, multi-resolution icon of 196x196 -->
 	<meta name="mobile-web-app-capable" content="yes">
-	<link rel="shortcut icon" sizes="196x196" href="/sadmin/images/test/logo.png">
+	<link rel="shortcut icon" sizes="196x196" href="<?php echo A_URLh;?>images/test/logo.png">
 
 	<!-- style -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">

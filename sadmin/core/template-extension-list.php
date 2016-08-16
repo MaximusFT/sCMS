@@ -25,7 +25,7 @@ $columns = array(
                     data-pk="'.$row['id'].'"
                     data-type="select"
                     data-value="'.$d.'"
-                    data-source="/sadmin/get/group/static/extension-type/"
+                    data-source="'.A_URLh.'get/group/static/extension-type/"
                     data-params=\'{"name":"type","table":"'.$table.'"}\'
                     data-title="Language"></a>';
         }

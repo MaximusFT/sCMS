@@ -422,7 +422,7 @@
                     <li class="list-item">
                         <a herf class="list-left">
                             <span class="w-40 avatar">
-                                <img src="/sadmin/images/test/a4.jpg" alt="...">
+                                <img src="<?php echo A_URLh;?>images/test/a4.jpg" alt="...">
                                 <i class="on b-white bottom"></i>
                             </span>
                         </a>
@@ -434,7 +434,7 @@
                     <li class="list-item">
                         <a herf class="list-left">
                             <span class="w-40 avatar">
-                                <img src="/sadmin/images/test/a5.jpg" alt="...">
+                                <img src="<?php echo A_URLh;?>images/test/a5.jpg" alt="...">
                                 <i class="on b-white bottom"></i>
                             </span>
                         </a>
@@ -446,7 +446,7 @@
                     <li class="list-item">
                         <a herf class="list-left">
                             <span class="w-40 avatar">
-                                <img src="/sadmin/images/test/a6.jpg" alt="...">
+                                <img src="<?php echo A_URLh;?>images/test/a6.jpg" alt="...">
                                 <i class="away b-white bottom"></i>
                             </span>
                         </a>
@@ -458,7 +458,7 @@
                     <li class="list-item">
                         <a herf class="list-left">
                             <span class="w-40 avatar">
-                                <img src="/sadmin/images/test/a7.jpg" alt="...">
+                                <img src="<?php echo A_URLh;?>images/test/a7.jpg" alt="...">
                                 <i class="busy b-white bottom"></i>
                             </span>
                         </a>
@@ -546,7 +546,7 @@
                     <div class="streamline b-l m-b m-l">
                         <div class="sl-item">
                             <div class="sl-left">
-                                <img src="/sadmin/images/test/a2.jpg" class="img-circle">
+                                <img src="<?php echo A_URLh;?>images/test/a2.jpg" class="img-circle">
                             </div>
                             <div class="sl-content">
                                 <a href class="text-info">Louis Elliott</a><span class="m-l-sm sl-date">5 min ago</span>
@@ -555,7 +555,7 @@
                         </div>
                         <div class="sl-item">
                             <div class="sl-left">
-                                <img src="/sadmin/images/test/a5.jpg" class="img-circle">
+                                <img src="<?php echo A_URLh;?>images/test/a5.jpg" class="img-circle">
                             </div>
                             <div class="sl-content">
                                 <a href class="text-info">Terry Moore</a><span class="m-l-sm sl-date">10 min ago</span>
@@ -564,7 +564,7 @@
                         </div>
                         <div class="sl-item">
                             <div class="sl-left">
-                                <img src="/sadmin/images/test/a8.jpg" class="img-circle">
+                                <img src="<?php echo A_URLh;?>images/test/a8.jpg" class="img-circle">
                             </div>
                             <div class="sl-content">
                                 <a href class="text-info">Walter Paler</a><span class="m-l-sm sl-date">1 hour ago</span>

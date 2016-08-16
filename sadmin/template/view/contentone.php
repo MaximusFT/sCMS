@@ -2,10 +2,10 @@
 session_start();
 $_SESSION['id'] = $res->qContent->id;
 ?>
-<div class="hide" ui-load="/sadmin/js/fileupload/jquery.fileupload.css"></div>
-<div class="hide" ui-load="/sadmin/js/fileupload/jquery.ui.widget.js"></div>
-<div class="hide" ui-load="/sadmin/js/fileupload/jquery.iframe-transport.js"></div>
-<div class="hide" ui-load="/sadmin/js/fileupload/jquery.fileupload.js"></div>
+<div class="hide" ui-load="<?php echo A_URLh;?>js/fileupload/jquery.fileupload.css"></div>
+<div class="hide" ui-load="<?php echo A_URLh;?>js/fileupload/jquery.ui.widget.js"></div>
+<div class="hide" ui-load="<?php echo A_URLh;?>js/fileupload/jquery.iframe-transport.js"></div>
+<div class="hide" ui-load="<?php echo A_URLh;?>js/fileupload/jquery.fileupload.js"></div>
 
 <div class="padding">
     <div class="row">
@@ -13,7 +13,7 @@ $_SESSION['id'] = $res->qContent->id;
 
             <div class="nav-active-border b-warn top box">
                 <div class="nav nav-md">
-                    <a class="nav-link dark m-r-sm" href="/sadmin/content/">Назад</a>
+                    <a class="nav-link dark m-r-sm" href="<?php echo A_URLh;?>content/">Назад</a>
                     <a class="nav-link sv-cont" data-cid="<?=$res->qContent->id;?>">Save&stay</a>
                     <a class="nav-link sv-exit">Save & close</a>
                 </div>
@@ -77,7 +77,7 @@ $(function() {
         };
         $.ajax({
             type: "POST",
-            url: "/sadmin/save/",
+            url: "<?php echo A_URLh;?>save/",
             data: {
                 value: text,
                 table: 'content',
@@ -102,7 +102,7 @@ $(function() {
         };
         $.ajax({
             type: "POST",
-            url: "/sadmin/save/",
+            url: "<?php echo A_URLh;?>save/",
             data: {
                 value: text,
                 table: 'content',
@@ -111,7 +111,7 @@ $(function() {
             }
         })
         .done(function(result) {
-            window.location = "http://<?=$_SERVER['SERVER_NAME'];?>" + "/sadmin/content/";
+            window.location = "http://<?=$_SERVER['SERVER_NAME'];?>" + "<?php echo A_URLh;?>content/";
         });
     });
     $('#fileupload').fileupload({
@@ -121,7 +121,7 @@ $(function() {
             $.each(data.result.files, function (index, file) {
                 $.ajax({
                     type: "POST",
-                    url: "/sadmin/save/",
+                    url: "<?php echo A_URLh;?>save/",
                     data: {
                         value: file.url,
                         table: 'content',
@@ -132,7 +132,7 @@ $(function() {
                 .done(function(result) {
                     $.ajax({
                         type: "POST",
-                        url: "/sadmin/save/",
+                        url: "<?php echo A_URLh;?>save/",
                         data: {
                             value: file.thumbnailUrl,
                             table: 'content',

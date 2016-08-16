@@ -81,7 +81,7 @@
                                         <td><a href="#" class="myeditable"
                                             data-type="select"
                                             data-name="sex"
-                                            data-source="/sadmin/get/group/static/sex/"
+                                            data-source="<?php echo A_URLh;?>get/group/static/sex/"
                                             data-title="Пол"></a></td></tr>
                                     <tr><td>Серия</td>
                                         <td><a href="#" class="myeditable"
@@ -256,7 +256,7 @@ $(function() {
         ],
         stateSave: true,
         "ajax": {
-            "url": "/sadmin/get/data/people/peoples/",
+            "url": "<?php echo A_URLh;?>get/data/people/peoples/",
             "type": "POST"
         },
         "columns": [
@@ -320,7 +320,7 @@ $(function() {
     $('#save-btn').click(function() {
         $('.myeditable').editable();
         $('#peopleAdd a').editable('submit', {
-            url: '/sadmin/save/people/add/',
+            url: '<?php echo A_URLh;?>save/people/add/',
             ajaxOptions: {
                 dataType: 'json' //assuming json response
             },
@@ -345,25 +345,25 @@ $(function() {
         $('.myeditable').editable();
     });
     $('.aExPlace').editable({
-        typeahead: {remote: {url: '/sadmin/get/typeahead/place/name/name_alt/?q=%QUERY'}},
+        typeahead: {remote: {url: '<?php echo A_URLh;?>get/typeahead/place/name/name_alt/?q=%QUERY'}},
         success: function(response, newValue) {addElemA(this)}});
     $('.aExStreet').editable({
-        typeahead: {remote: {url: '/sadmin/get/typeahead/street/name/name/?q=%QUERY'}},
+        typeahead: {remote: {url: '<?php echo A_URLh;?>get/typeahead/street/name/name/?q=%QUERY'}},
         success: function(response, newValue) {addElemA(this)}});
     $('.aExKinder').editable({
-        typeahead: {remote: {url: '/sadmin/get/typeahead/kindergarten/name/name/?q=%QUERY'}},
+        typeahead: {remote: {url: '<?php echo A_URLh;?>get/typeahead/kindergarten/name/name/?q=%QUERY'}},
         success: function(response, newValue) {addElemA(this)}});
     $('.aExSchool').editable({
-        typeahead: {remote: {url: '/sadmin/get/typeahead/school/name/name/?q=%QUERY'}},
+        typeahead: {remote: {url: '<?php echo A_URLh;?>get/typeahead/school/name/name/?q=%QUERY'}},
         success: function(response, newValue) {addElemA(this)}});
     $('.aExAcademy').editable({
-        typeahead: {remote: {url: '/sadmin/get/typeahead/academy/name/name/?q=%QUERY'}},
+        typeahead: {remote: {url: '<?php echo A_URLh;?>get/typeahead/academy/name/name/?q=%QUERY'}},
         success: function(response, newValue) {addElemA(this)}});
     $('.aExMother').editable({
-        typeahead: {remote: {url: '/sadmin/get/typeaheadmf/mother/?q=%QUERY'}},
+        typeahead: {remote: {url: '<?php echo A_URLh;?>get/typeaheadmf/mother/?q=%QUERY'}},
         success: function(response, newValue) {addElemA(this)}});
     $('.aExFather').editable({
-        typeahead: {remote: {url: '/sadmin/get/typeaheadmf/father/?q=%QUERY'}},
+        typeahead: {remote: {url: '<?php echo A_URLh;?>get/typeaheadmf/father/?q=%QUERY'}},
         success: function(response, newValue) {addElemA(this)}});
 });
 </script>
