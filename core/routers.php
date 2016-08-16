@@ -18,12 +18,25 @@ $resDecode = json_decode(json_encode($router->match()), FALSE);
 $res = ($resDecode == '')?(new stdClass()):$resDecode;
 $res->addToHead = '';
 
+$res->user = new User();
+$res->user->config->database->user = SQL_name;
+$res->user->config->database->password = SQL_pass;
+$res->user->config->database->name = SQL_db;
+$res->user->config->database->host = "localhost";
+$res->user->start();
+
+require_once P_CORE.'rules.php';
+
 /**
  * Тут можно вставлять кастомные роутеры
  * 	$router->map( 'GET', '/content/', 'ContentCrtl', 'content');
  *	$router->map( 'GET', '/module/', 'ModuleCrtl', 'module');
  */
 
+/**
+ * [comStaticPageCtrl description]
+ * @return [type] [description]
+ */
 function comStaticPageCtrl() {
     global $res;
     global $db;
@@ -32,6 +45,11 @@ function comStaticPageCtrl() {
 
     return;
 }
+
+/**
+ * [comArticleOnePageCtrl description]
+ * @return [type] [description]
+ */
 function comArticleOnePageCtrl() {
     global $res;
     global $db;
@@ -40,12 +58,22 @@ function comArticleOnePageCtrl() {
 
     return;
 }
+
+/**
+ * [comCategoryOnePageCtrl description]
+ * @return [type] [description]
+ */
 function comCategoryOnePageCtrl() {
     global $res;
     global $db;
 
-    $tId = ($res->extensionCurrent->id == 5)?$res->categoryCurrent->children_id:$res->categoryCurrent->id;
-    $tId[] = $res->categoryCurrent->id;
+    if ($res->extensionCurrent->id == 5){
+        $tId[] = $res->categoryCurrent->children_id;
+        $tId[] = $res->categoryCurrent->id;
+    } else {
+        $tId = $res->categoryCurrent->id;
+    }
+
     $qListContent = $db->select("content", '*', [
         "AND" => [
             "lang" => USER_LANG,
@@ -63,11 +91,21 @@ function comCategoryOnePageCtrl() {
     $res->articleList = json_decode(json_encode($qListContent), FALSE);
     return;
 }
+
+/**
+ * [comCategoryListPageCtrl description]
+ * @return [type] [description]
+ */
 function comCategoryListPageCtrl() {
     global $res;
     global $db;
     return;
 }
+
+/**
+ * [comOnlyFilePageCtrl description]
+ * @return [type] [description]
+ */
 function comOnlyFilePageCtrl() {
     global $res;
     global $db;
@@ -76,13 +114,178 @@ function comOnlyFilePageCtrl() {
 
     return;
 }
-function comPostRequestPageCtrl() {
-    global $res;
-    global $db;
+
+
+
+
+/**
+ * [comCoreUserAccessFalse description]
+ * @return [type] [description]
+ */
+function comCoreUserAccessFalse() {
+    global $res; global $db;
+
+    $res->extensionCurrent->fileName = P_HTML.'core_access_false.php';
 
     return;
 }
-function comSitemapXLMPageCtrl() {
+
+/**
+ * [comCoreUserAccountPanel description]
+ * @return [type] [description]
+ */
+function comCoreUserAccountPanel() {
+    global $res; global $db;
+
+    $res->extensionCurrent->fileName = P_HTML.'core_account.php';
+    return;
+}
+
+
+
+
+/**
+ * [comCoreUserLoginView description]
+ * @return [type] [description]
+ */
+function comCoreUserLoginView() {
+    global $res; global $db;
+
+    $res->extensionCurrent->fileName = P_HTML.'core_login.php';
+    return;
+}
+
+/**
+ * [comCoreUserRegisterView description]
+ * @return [type] [description]
+ */
+function comCoreUserRegisterView() {
+    global $res; global $db;
+
+    $res->extensionCurrent->fileName = P_HTML.'core_register.php';
+    return;
+}
+
+/**
+ * [comCoreUserForgotPassView description]
+ * @return [type] [description]
+ */
+function comCoreUserForgotPassView() {
+    global $res; global $db;
+
+    $res->extensionCurrent->fileName = P_HTML.'core_forgot.php';
+    return;
+}
+
+
+/**
+ * [comCoreUserLogin description]
+ * @return [type] [description]
+ */
+function comCoreUserLogin() {
+    global $res; global $db;
+
+    if(count($_POST)){
+        /*
+         * Covert POST into a Collection object
+         * for better value handling
+         */
+        $input = new Collection($_POST);
+
+        $res->user->login($input->Username, $input->Password, $input->auto);
+        $errMsg = '';
+
+        if($res->user->log->hasError()){
+            $errMsg = $res->user->log->getErrors();
+            $errMsg = $errMsg[0];
+        }
+
+        echo json_encode(array(
+            'error'    => $res->user->log->getErrors(),
+            'confirm'  => 'You are now login as <b>'.$res->user->Username.'</b>',
+            'form'     => $res->user->log->getFormErrors(),
+        ));
+    }
+
+    exit();
+}
+function comCoreUserRegister() {
+    global $res; global $db;
+
+    if (count($_POST)) {
+        $input = new Collection($_POST);
+
+        $res->user->register($input);
+
+        echo json_encode(
+            array(
+                'error'   => $res->user->log->getErrors(),
+                'confirm' => 'User Registered Successfully. You may login now!',
+                'form'    => $res->user->log->getFormErrors(),
+            )
+        );
+    }
+
+    exit();
+}
+
+/**
+ * [comCoreUserForgotPass description]
+ * @return [type] [description]
+ */
+function comCoreUserForgotPass() {
+    global $res; global $db;
+
+    if(count($_POST)){
+        /*
+         * Covert POST into a Collection object
+         * for better handling
+         */
+        $input = new Collection($_POST);
+
+        $reset = $res->user->resetPassword($input->Email);
+
+        $errorMessage = '';
+        $confirmMessage = '';
+
+        if($reset){
+            // Hash succesfully generated
+            // You would send an email to $reset['Email'] with the URL+HASH $reset['hash'] to enter the new Password
+            // In this demo we will just redirect the user directly
+            $url = 'account/update/password?c=' . $reset->Confirmation;
+            $confirmMessage = "Use the link below to change your password <a href='{$url}'>Change Password</a>";
+
+        }else{
+            $errorMessage = $res->user->log->getErrors();
+            $errorMessage = $errorMessage[0];
+        }
+
+        echo json_encode(array(
+            'error'    => $res->user->log->getErrors(),
+            'confirm'  => $confirmMessage,
+            'form'     => $res->user->log->getFormErrors(),
+        ));
+    }
+
+    exit();
+}
+
+/**
+ * [comCoreUserLogout description]
+ * @return [type] [description]
+ */
+function comCoreUserLogout() {
+    global $res; global $db;
+    $res->user->logout();
+    redirect("/");
+    exit();
+}
+
+/**
+ * [comSitemapXMLPageCtrl description]
+ * @return [type] [description]
+ */
+function comSitemapXMLPageCtrl() {
     global $res;
     global $db;
 
@@ -144,97 +347,11 @@ function comSitemapXLMPageCtrl() {
     exit();
 }
 
-function mainPageMoreCtrl() {
-    global $res;
-    global $db;
-
-    $qListContent = $db->select("menu", [
-        "[>]content" => ["link_id" => "id"]
-    ], [
-        "menu.id",
-        "menu.path",
-        "menu.alias",
-        "menu.title",
-        "menu.link_id",
-        "menu.published",
-        "content.id(content_id)",
-        "content.h1(content_h1)",
-        "content.h1Small(content_h1Small)",
-        "content.h1Description(content_h1Description)",
-        "content.alias(content_alias)",
-        "content.publish_up(content_publish_up)"
-    ], [
-        "AND" => [
-            "menu.published" => 1,
-            "menu.extension_id" => 2
-        ],
-        "ORDER" => "content.publish_up DESC",
-        "LIMIT" => array(3, 100)
-    ]);
-
-    // echo $db->last_query();
-    // var_dump($db->error());
-
-    $res->qListContent = json_decode(json_encode($qListContent), FALSE);
-
-    return;
-}
-
-function subscribeCtrl() {
-    global $res;
-    global $db;
-
-    $email = $_POST['sEmail'];
-    $param = $_POST['sParams'];
-
-    $qqq = explode('|', $param);
-
-    $qComment = $db->insert("comment", [
-        "url" => $qqq[0],
-        "content_id" => $qqq[1],
-        "email" => $email,
-        "type" => 'subscribe',
-    ]);
-
-    exit();
-}
-
-function unsubscribeCtrl() {
-    global $res;
-
-    $res->addToHead .= '<meta name="robots" content="noindex, follow" />';
-
-    return;
-}
-
-function askingCtrl() {
-    return;
-}
-function askingDoCtrl() {
-    global $res;
-    global $db;
-
-    $name = $_POST['aName'];
-    $email = $_POST['aEmail'];
-    $question = $_POST['aQuestion'];
-    @$print = $_POST['aPrint'];
-    $param = $_POST['aParams'];
-
-    $qComment = $db->insert("comment", [
-        "url" => $qqq[0],
-        "content_id" => $qqq[1],
-        "name" => $name,
-        "title" => $print,
-        "email" => $email,
-        "type" => 'asking',
-        "comment" => $question
-    ]);
-
-    echo '<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button><strong>Успех!</strong> Ваш вопрос был нами получин, как только специалист подготовит ответ на вопрос, мы сообщим вам на ваш электронный почтовый адрес</div>';
-    exit();
-}
-
-function sitemapCtrl() {
+/**
+ * [comSitemapPageCtrl description]
+ * @return [type] [description]
+ */
+function comSitemapPageCtrl() {
     global $res;
     global $db;
 
@@ -263,72 +380,12 @@ function sitemapCtrl() {
     return;
 }
 
-function sitemapXMLCtrl() {
-}
-
-function commentCtrl() {
-    global $res;
-    global $db;
-
-    $name = $_POST['qName'];
-    $email = $_POST['qEmail'];
-    $title = $_POST['qTitle'];
-    $question = $_POST['qQuestion'];
-    @$print = $_POST['qPrint'];
-    $param = $_POST['qParams'];
-    $subject = S_URLName." - Comment: ".$email."";
-
-    $qqq = explode('|', $param);
-
-    $qComment = $db->insert("comment", [
-        "url" => $qqq[0],
-        "content_id" => $qqq[1],
-        "name" => $name,
-        "title" => $title,
-        "email" => $email,
-        "type" => 'comment',
-        "comment" => $question
-    ]);
-
-    echo '<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button><strong>Спасибо!</strong> Ваш комментарий был нами получин, как только модератор проверит его, он будет опубликован</div>';
-    exit();
-}
-
-function commonPageCtrl() {
-    global $res;
-    global $db;
-
-    $qCom = $db->select("comment", [
-        "title",
-        "name",
-        "comment",
-        "timecreate"
-    ], [
-        "AND" => [
-            "content_id" => $res->contentCurrent->id,
-            "type" => 'comment',
-            "active" => 1
-        ]
-    ]);
-
-    $qCount = $db->count("comment", [
-        "AND" => [
-            "content_id" => $res->contentCurrent->id,
-            "type" => 'comment',
-            "active" => 1
-        ]
-    ]);
-
-    $res->qComm = json_decode(json_encode($qCom), FALSE);
-    $res->qCommCount = json_decode(json_encode($qCount), FALSE);
-
-    return;
-}
 
 /**
  * Обработка вызванного роутера
  */
 if($res && is_callable($res->target)) {
+    rulesGo($res->routerCurrent->target);
     Analyze();
     $res->header = 200;
     $resFunc = call_user_func_array($res->target, json_decode(json_encode($res->params), true));

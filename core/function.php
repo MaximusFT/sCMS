@@ -474,6 +474,18 @@ function frontMenuBuild($params, $res, $active, $addPar) {
             $i++;
             if($key == 'id') $tempId = $index;
             if ($res[$value['id']]['id'] == $value['id']) {
+                // Check on hidden menu item from Guest
+                if ($res[$value['id']]['extension_id'] == 21){
+                    if (signedCheck()) {
+                        if (guestOnlyCheck($res[$value['id']]['category_id'])) {
+                            continue;
+                        }
+                    } else {
+                        if (!guestOnlyCheck($res[$value['id']]['category_id'])) {
+                            continue;
+                        }
+                    }
+                }
                 if ($res[$value['id']]['extension_id'] == 19) {
                     $url = $res[$value['id']]['alias'];
                 } else {
@@ -575,4 +587,55 @@ function getShortText($text, $counttext = 10, $sep = ' ') {
     $text = rtrim($text, "!,.-");
     $text = $text."…";
     return $text;
+}
+
+/**
+ * Redirects the user
+ *
+ * @param bool|string $url
+ * @param int         $time
+ */
+function redirect($url = false, $time = 0)
+{
+    $url = $url ? $url : $_SERVER['HTTP_REFERER'];
+
+    if (!headers_sent()) {
+        if (!$time) {
+            header("Location: {$url}");
+        } else {
+            header("refresh: $time; {$url}");
+        }
+    } else {
+        echo "<script> setTimeout(function(){ window.location = '{$url}' }," . ($time * 1000) . ")</script>";
+    }
+}
+
+/**
+ * Prints an array in a readable form
+ * @param array $a
+ */
+function aPrint(array $a)
+{
+    echo "<pre>";
+    print_r($a);
+    echo "</pre>";
+}
+
+/**
+ * Gets a content of a GET variable either by name or position in the path
+ * @param $index
+ *
+ * @return mixed
+ */
+function getVar($index)
+{
+    $tree = explode("/", @$_GET['path']);
+    $tree = array_filter($tree);
+
+    if (is_int($index)) {
+        $res = @$tree[$index - 1];
+    } else {
+        $res = @$_GET[$index];
+    }
+    return $res;
 }

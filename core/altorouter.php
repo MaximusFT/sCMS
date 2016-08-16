@@ -343,6 +343,26 @@ class AltoRouter {
 			    }
 
 				$recursCatRoute = $this->recursCategory($catTypeResParams, $catRes, $articleRes, $catResFirstId, $menuValue);
+			} elseif ($menuValue['extension_id'] == 21) {
+				if ($menuValue['category_id'] == 31) $menuValue['extension_function'] = 'comCoreUserLoginView';
+			    elseif ($menuValue['category_id'] == 32) $menuValue['extension_function'] = 'comCoreUserRegisterView';
+			    elseif ($menuValue['category_id'] == 33) $menuValue['extension_function'] = 'comCoreUserForgotPassView';
+			    elseif ($menuValue['category_id'] == 34) $menuValue['extension_function'] = 'comCoreUserLogout';
+			    elseif ($menuValue['category_id'] == 35) $menuValue['extension_function'] = 'comCoreUserAccountPanel';
+			    // elseif ($menuValue['category_id'] == 36) $menuValue['extension_function'] = 'comCoreUserForgotPassView';
+			    $tempCoreRouter[$menuValue['extension_function']] = true;
+				$this->routes[] = [
+					$menuValue['method'],
+					$menuValue['path'],
+					$menuValue['extension_function'],
+					'',
+					$menuValue['id'],
+					'view',
+					$menuValue['id'],
+					$menuValue['category_id'],
+					'',
+					$menuValue['title']
+				];
 			} elseif ($menuValue['extension_id'] == 6) {
 				$this->routes[] = [
 					$menuValue['method'],
@@ -371,19 +391,36 @@ class AltoRouter {
 				];
 			}
 	    }
+	    /*
+	    1 $method
+	    2 $_route
+	    3 $target
+	    4 $name
+	    5 $id
+	    6 $fileType
+	    7 $menuId
+	    8 $catId
+	    9 $artId
+	    10 $itemTitle
+	    */
+		$this->routes[] = ['GET', '/sitemap/', 'comSitemapPageCtrl', '', '', 'view', '', '', '', ''];
+		$this->routes[] = ['GET', '/sitemap.xml', 'comSitemapXMLPageCtrl', '', '', 'view', '', '', '', ''];
 
-		$this->routes[] = [
-			'GET',
-			'/sitemap.xml',
-			'comSitemapXLMPageCtrl',
-			'',
-			'',
-			'view',
-			'',
-			'',
-			'',
-			''
-		];
+		/**
+		 * Core Routing
+		 */
+		$this->routes[] = ['POST', '/serv/login/', 'comCoreUserLogin', '', '', 'view', '', '', '', ''];
+		$this->routes[] = ['POST', '/serv/register/', 'comCoreUserRegister', '', '', 'view', '', '', '', ''];
+		$this->routes[] = ['POST', '/serv/forgot/', 'comCoreUserForgotPass', '', '', 'view', '', '', '', ''];
+		$this->routes[] = ['POST', '/serv/logout/', 'comCoreUserLogout', '', '', 'view', '', '', '', ''];
+
+		if (!$tempCoreRouter['comCoreUserLoginView']) $this->routes[] = ['GET', '/login/', 'comCoreUserLoginView', '', '', 'view', '', '', '', ''];
+		if (!$tempCoreRouter['comCoreUserRegisterView']) $this->routes[] = ['GET', '/register/', 'comCoreUserRegisterView', '', '', 'view', '', '', '', ''];
+		if (!$tempCoreRouter['comCoreUserForgotPassView']) $this->routes[] = ['GET', '/forgot/', 'comCoreUserForgotPassView', '', '', 'view', '', '', '', ''];
+		if (!$tempCoreRouter['comCoreUserLogout']) $this->routes[] = ['GET', '/logout/', 'comCoreUserLogout', '', '', 'view', '', '', '', ''];
+
+		if (!$tempCoreRouter['comCoreUserAccessFalse']) $this->routes[] = ['GET', '/serv/false/', 'comCoreUserAccessFalse', '', '', 'view', '', '', '', ''];
+		if (!$tempCoreRouter['comCoreUserAccountPanel']) $this->routes[] = ['GET', '/account/', 'comCoreUserAccountPanel', '', '', 'view', '', '', '', ''];
 
 		return;
 	}
@@ -605,6 +642,16 @@ class AltoRouter {
 				} elseif ($resMenu['extension_id'] == 4) {
 					$resMenu['category'] = $this->db->get("category", '*', ["id" => $catId]);
 					$resMenu['category']['params'] = json_decode($resMenu['category']['params']);
+				} elseif ($resMenu['extension_id'] == 21) {
+					$modId = $catId;
+					$catId = 1;
+					$resMenu['category'] = $this->db->get("category", '*', ["id" => $catId]);
+					$resMenu['category']['params'] = json_decode($resMenu['category']['params']);
+					if ($modId == 31) $artId = 1;
+				    elseif ($modId == 32) $artId = 2;
+				    elseif ($modId == 33) $artId = 3;
+				/*
+			    */
 				} else {
 					$resMenu['category'] = $this->db->get("category", '*', ["id" => $catId]);
 					$resMenu['category']['params'] = json_decode($resMenu['category']['params']);
