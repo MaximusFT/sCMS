@@ -13,6 +13,7 @@ function build_list($array, $res) {
                 $resHomeVal = ($res->$index->home == true)?'true':'false';
                 if ($i !== 1) $list .= '</li>';
                 $catStatic = 'style="display: none;"';
+                $catModule = 'style="display: none;"';
                 $catCategory = 'style="display: none;"';
                 $catCategoryType = 'style="display: none;"';
                 $catFileName = 'style="display: none;"';
@@ -21,6 +22,8 @@ function build_list($array, $res) {
 
                 if ($res->$index->extension_id == 1) {
                     $catStatic = '';
+                } elseif ($res->$index->extension_id == 21) {
+                    $catModule = '';
                 } elseif ($res->$index->extension_id == 3 || $res->$index->extension_id == 4) {
                     $catCategory = '';
                 } elseif ($res->$index->extension_id == 5) {
@@ -117,6 +120,19 @@ function build_list($array, $res) {
                                                 data-params=\'{"name":"extension_id","table":"menu"}\'
                                                 data-title="Тип расширения">'.$res->$index->extension_title.'</a>
                                         </dd>
+
+                                        <div id="extMod'.$res->$index->id.'" '.$catModule.'>
+                                            <dt><small>Модуль</small></dt>
+                                            <dd>
+                                                <a href="#" class="xedit"
+                                                    data-pk="'.$res->$index->id.'"
+                                                    data-type="select"
+                                                    data-value="'.$res->$index->category_id.'"
+                                                    data-source="/sadmin/get/group/module/title/extension_id/21/"
+                                                    data-params=\'{"name":"category_id","table":"menu"}\'
+                                                    data-title="Модуль">'.$res->$index->category_id_title.'</a>
+                                            </dd>
+                                        </div>
 
                                         <div id="extCat'.$res->$index->id.'" '.$catCategory.'>
                                             <dt><small>Категория</small></dt>
@@ -395,20 +411,26 @@ $(function() {
                 });
             } else if (newValue === 4) {
                 $('#extLink'+q).hide().find('a').editable('setValue', '').editable('submit');
-                // $('#fileName'+q).hide().find('a').editable('setValue', '').editable('submit');
                 $('#extCatType'+q).hide().find('a').editable('setValue', '').editable('submit');
                 $('#extCat'+q).show().find('a').editable('setValue', '').editable('submit');
+                $('#extMod'+q).hide();
             } else if (newValue === 5) {
                 $('#extCat'+q).hide().find('a').editable('setValue', '').editable('submit');
                 $('#extLink'+q).hide().find('a').editable('setValue', '').editable('submit');
-                // $('#fileName'+q).hide().find('a').editable('setValue', '').editable('submit');
                 $('#extCatType'+q).show().find('a').editable('setValue', '').editable('submit');
+                $('#extMod'+q).hide();
             } else if (newValue === 19) {
                 $('#extCat'+q).hide().find('a').editable('setValue', '').editable('submit');
                 $('#extCatType'+q).hide().find('a').editable('setValue', '').editable('submit');
                 $('#extLink'+q).hide().find('a').editable('setValue', '').editable('submit');
-                // $('#fileName'+q).show().find('a').editable('setValue', '').editable('submit');
+                $('#extMod'+q).hide();
+            } else if (newValue === 21) {
+                $('#extMod'+q).show().find('a').editable('setValue', '').editable('submit');
+                $('#extLink'+q).hide().find('a').editable('setValue', '').editable('submit');
+                $('#extCat'+q).hide();
+                $('#extCatType'+q).hide();
             } else if (newValue === 6) {
+                $('#extCat'+q).hide();
                 $('#extCat'+q).hide().find('a').editable('setValue', '').editable('submit');
                 $('#extCatType'+q).hide().find('a').editable('setValue', '').editable('submit');
                 $('#extLink'+q).show().find('a').editable('setValue', '').editable('submit');

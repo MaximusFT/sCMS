@@ -25,15 +25,17 @@ if ($res->menuItemCurrent->method === 'POST') {
 require_once P_TEMP."_template.php";
 
 /* Debuging */
-if (isset($_GET['d'])) {
+// if (isset($_GET['d'])) {
     echo '<div class="debug"><pre>';
     // print_r($router->getRoutesNamed());
     // print_r($router);
     // echo '<hr>';
     // print_r(get_defined_constants(true));
     echo '<hr>';
+    print_r($res->user->Username);
+    echo '<hr>';
     print_r($res);
     echo '</pre></div>';
-}
+// }
 /*
 */

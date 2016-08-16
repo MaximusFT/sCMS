@@ -191,7 +191,7 @@ INSERT INTO `extension` VALUES ('4', 'Category', 'component', 'category_one', 'c
 INSERT INTO `extension` VALUES ('5', 'CategoryType', 'component', 'category_list', 'comCategoryListPageCtrl', '1', '');
 INSERT INTO `extension` VALUES ('6', 'Only file', 'component', 'only_file', 'comOnlyFilePageCtrl', '1', '');
 INSERT INTO `extension` VALUES ('7', 'Post request', 'component', 'post_request', 'comPostRequestPageCtrl', '0', '');
-INSERT INTO `extension` VALUES ('8', 'SitemapXML', 'component', 'sitemap-xml', 'comSitemapXLMPageCtrl', '0', '');
+INSERT INTO `extension` VALUES ('8', 'SitemapXML', 'component', 'sitemap-xml', 'comSitemapXMLPageCtrl', '0', '');
 INSERT INTO `extension` VALUES ('9', 'Table of Content', 'module', 'toc', null, '1', '');
 INSERT INTO `extension` VALUES ('10', 'Полезные ссылки', 'module', 'link-useful', null, '1', '');
 INSERT INTO `extension` VALUES ('11', 'Советуем почитать', 'module', 'readmore', null, '0', '');
